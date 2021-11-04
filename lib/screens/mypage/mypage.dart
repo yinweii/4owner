@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:owner_app/constants/export.dart';
+import 'package:owner_app/screens/floor/room_screen.dart';
 import 'package:owner_app/screens/home/home_screen.dart';
 import 'package:owner_app/screens/income/icome_screen.dart';
 import 'package:owner_app/screens/manager/manager_screen.dart';
-import 'package:owner_app/screens/room/room_screen.dart';
 
 class MyPage extends StatefulWidget {
   const MyPage({Key? key}) : super(key: key);
@@ -16,7 +16,7 @@ class MyPage extends StatefulWidget {
 class _MyPageState extends State<MyPage> {
   List<Widget> tabs = [
     const HomeScreen(),
-    const Room(),
+    const FloorScreen(),
     const IncomeScreen(),
     const ManagerScreen(),
   ];
