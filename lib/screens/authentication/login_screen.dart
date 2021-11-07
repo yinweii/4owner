@@ -13,20 +13,20 @@ class LogIn extends StatefulWidget {
 }
 
 class _LogInState extends State<LogIn> {
-  final TextEditingController _emailEdtController = TextEditingController();
-  final TextEditingController _passwordEdtController = TextEditingController();
+  final TextEditingController _emailTextController = TextEditingController();
+  final TextEditingController _passwordTextController = TextEditingController();
 
   @override
   void dispose() {
-    _emailEdtController.dispose();
-    _passwordEdtController.dispose();
+    _emailTextController.dispose();
+    _passwordTextController.dispose();
     super.dispose();
   }
 
-  Future<void> _saveForm(BuildContext context) async {
+  Future<void> _submitLogin(BuildContext context) async {
     await Provider.of<AuthService>(context, listen: false).signIn(
-      _emailEdtController.text,
-      _passwordEdtController.text,
+      _emailTextController.text,
+      _passwordTextController.text,
     );
   }
 
@@ -45,7 +45,7 @@ class _LogInState extends State<LogIn> {
               ),
               const SizedBox(height: 50),
               TextFormField(
-                controller: _emailEdtController,
+                controller: _emailTextController,
                 decoration: const InputDecoration(
                   prefixIcon: Icon(Icons.account_box),
                   labelText: 'Email',
@@ -57,7 +57,7 @@ class _LogInState extends State<LogIn> {
               ),
               const SizedBox(height: 30),
               TextFormField(
-                controller: _passwordEdtController,
+                controller: _passwordTextController,
                 decoration: const InputDecoration(
                   prefixIcon: Icon(Icons.lock),
                   labelText: 'Mật khẩu',
@@ -76,7 +76,7 @@ class _LogInState extends State<LogIn> {
                 ),
                 child: TextButton(
                   onPressed: () {
-                    _saveForm(context);
+                    _submitLogin(context);
                   },
                   child: const Text(
                     'Đăng nhập',
