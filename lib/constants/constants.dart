@@ -1,4 +1,6 @@
 class Constants {
   Constants._();
-  static const userDb = 'user';
+  static const userDb = 'users';
+  static const floorsDb = 'floors';
+  static const serviceDb = 'services';
 }
