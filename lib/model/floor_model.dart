@@ -18,11 +18,3 @@ class FloorModel {
     return '''FLOOR:{ id: $id , name: $name , desc: $desc }''';
   }
 }
-
-List<FloorModel> listFloor = [
-  FloorModel(id: '1', name: 'Tang 1'),
-  FloorModel(id: '2', name: 'Tang 2'),
-  FloorModel(id: '3', name: 'Tang 3'),
-  FloorModel(id: '4', name: 'Tang 4'),
-  FloorModel(id: '5', name: 'Tang 5'),
-];
