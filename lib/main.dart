@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:min_id/min_id.dart';
 import 'package:owner_app/model/service_model.dart';
+import 'package:owner_app/provider/customer_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'provider/floor_provider.dart';
@@ -26,13 +27,14 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (ctx) => Floor()),
         Provider(create: (ctx) => AuthService()),
-        ChangeNotifierProvider(create: (ctx) => ServiceProvider())
+        ChangeNotifierProvider(create: (ctx) => ServiceProvider()),
+        ChangeNotifierProvider(create: (ctx) => Customer())
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primarySwatch: Colors.green,
         ),
         home: const WrapScreen(),
       ),

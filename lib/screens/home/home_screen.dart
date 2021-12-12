@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:owner_app/constants/export.dart';
-import 'package:owner_app/screens/indenture/indenture_screen.dart';
+import 'package:owner_app/screens/customer/customer_screen.dart';
 import 'package:owner_app/screens/room_services/service_screen.dart';
 import 'package:owner_app/utils/utils.dart';
 
