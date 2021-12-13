@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:min_id/min_id.dart';
 import 'package:owner_app/model/service_model.dart';
 import 'package:owner_app/provider/customer_provider.dart';
+import 'package:owner_app/provider/room_provide.dart';
 import 'package:provider/provider.dart';
 
 import 'provider/floor_provider.dart';
@@ -28,7 +29,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (ctx) => Floor()),
         Provider(create: (ctx) => AuthService()),
         ChangeNotifierProvider(create: (ctx) => ServiceProvider()),
-        ChangeNotifierProvider(create: (ctx) => Customer())
+        ChangeNotifierProvider(create: (ctx) => Customer()),
+        ChangeNotifierProvider(create: (ctx) => RoomProvider())
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

@@ -29,37 +29,38 @@ class _IndentureScreenState extends State<IndentureScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Người thuê'),
-          centerTitle: true,
-          bottom: TabBar(
-            indicatorColor: Colors.white,
-            controller: controller,
-            tabs: const <Tab>[
-              Tab(
-                  child: Text(
-                'Người thuê',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              )),
-              Tab(
-                child: Text(
-                  'Chuyển đi',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                ),
-              ),
-            ],
-          ),
-        ),
-        body: TabBarView(
+      appBar: AppBar(
+        title: const Text('Người thuê'),
+        centerTitle: true,
+        bottom: TabBar(
+          indicatorColor: Colors.white,
           controller: controller,
-          children: <Widget>[
-            CustomerList(),
-            Container(),
+          tabs: const <Tab>[
+            Tab(
+                child: Text(
+              'Người thuê',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            )),
+            Tab(
+              child: Text(
+                'Chuyển đi',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
+            ),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => Utils.navigatePage(context, AddCustomerScreen()),
-          child: Icon(Icons.add),
-        ));
+      ),
+      body: TabBarView(
+        controller: controller,
+        children: <Widget>[
+          CustomerList(),
+          Container(),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Utils.navigatePage(context, AddCustomerScreen()),
+        child: Icon(Icons.add),
+      ),
+    );
   }
 }
