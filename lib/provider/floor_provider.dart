@@ -3,15 +3,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:min_id/min_id.dart';
 import 'package:owner_app/constants/constants.dart';
+import 'package:owner_app/constants/loading_service.dart';
 import 'package:owner_app/model/floor_model.dart';
+
 import 'package:owner_app/utils/logger.dart';
 
-class Floor with ChangeNotifier {
+class Floor with ChangeNotifier, Helper {
   // process
-  bool _isLoading = false;
-  String? _errorMessage;
-  bool get isLoading => _isLoading;
-  String get errorMessage => _errorMessage ?? '';
+  // bool _isLoading = false;
+  // String? _errorMessage;
+  // bool get isLoading => _isLoading;
+  // String get errorMessage => _errorMessage ?? '';
   QuerySnapshot? snapshot;
   final devLog = logger;
   //list floor
@@ -32,7 +34,7 @@ class Floor with ChangeNotifier {
           .doc(userUID)
           .collection(Constants.floorsDb)
           .doc(newFloor.id)
-          .set(newFloor.toJson());
+          .set(newFloor.toMap());
     } catch (e) {
       print(e.toString());
     }
@@ -40,6 +42,7 @@ class Floor with ChangeNotifier {
   }
 
   Future<void> getFloor() async {
+    isLoading(true);
     try {
       snapshot = await _fireStore
           .collection(Constants.userDb)
@@ -49,10 +52,12 @@ class Floor with ChangeNotifier {
       List<FloorModel> listExtract = [];
       for (var doccument in snapshot!.docs) {
         listExtract
-            .add(FloorModel.fromJson(doccument.data() as Map<String, dynamic>));
+            .add(FloorModel.fromMap(doccument.data() as Map<String, dynamic>));
       }
       _floorList = listExtract;
+      isLoading(false);
     } catch (e) {
+      isLoading(false);
       print('FAILD: ${e.toString()}');
     }
 
@@ -62,13 +67,13 @@ class Floor with ChangeNotifier {
     }
   }
 
-  void setIsLoading(value) {
-    _isLoading = value;
-    notifyListeners();
-  }
+  // void setIsLoading(value) {
+  //   _isLoading = value;
+  //   notifyListeners();
+  // }
 
-  void setMessage(message) {
-    _errorMessage = message;
-    notifyListeners();
-  }
+  // void setMessage(message) {
+  //   _errorMessage = message;
+  //   notifyListeners();
+  // }
 }
