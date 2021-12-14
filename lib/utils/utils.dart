@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class Utils {
   static double sizeHeight(BuildContext context) =>
@@ -20,5 +21,11 @@ class Utils {
         .pushReplacement(MaterialPageRoute(
       builder: (context) => widget,
     ));
+  }
+
+  static String convertPrice(var price) {
+    var f = NumberFormat("#,###", "vi_VI");
+    price = f.format(price);
+    return price;
   }
 }

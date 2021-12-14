@@ -1,21 +1,19 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:min_id/min_id.dart';
-import 'package:owner_app/model/service_model.dart';
 import 'package:owner_app/provider/customer_provider.dart';
 import 'package:owner_app/provider/room_provide.dart';
 import 'package:provider/provider.dart';
-
 import 'provider/floor_provider.dart';
 import 'provider/service_provider.dart';
 import 'screens/authentication/authservice.dart';
 import 'screens/authentication/wrap_screen.dart';
 
 Future<void> main() async {
-  MinId.withPattern('{1{d}}{1{w}}{3{w}}{1{d}}{3{w}}{3{w}}{d}{w}');
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(const MyApp());
+  MinId.withPattern('{1{d}}{1{w}}{3{w}}{1{d}}{3{w}}{3{w}}{d}{w}');
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {

@@ -1,9 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:owner_app/provider/room_provide.dart';
 import 'package:owner_app/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'add_room_screen.dart';
+import 'edit_room_screen.dart';
 
 class RoomScreen extends StatefulWidget {
   final String? id;
@@ -79,9 +81,11 @@ class _RoomScreenState extends State<RoomScreen>
                     : 3),
         itemBuilder: (context, index) {
           return RoomItem(
+            id: roomData.listRoom[index].id,
             name: roomData.listRoom[index].romName,
-            price: roomData.listRoom[index].price.toString(),
-            person: roomData.listRoom[index].person.toString(),
+            price: double.parse(roomData.listRoom[index].price.toString()),
+            person: int.parse(roomData.listRoom[index].person.toString()),
+            area: roomData.listRoom[index].area.toString(),
           );
         },
       ),
@@ -90,81 +94,145 @@ class _RoomScreenState extends State<RoomScreen>
 }
 
 class RoomItem extends StatelessWidget {
+  final String? id;
   final String? name;
-  final String? price;
-  final String? person;
+  final double? price;
+  final int? person;
   final String? area;
-  const RoomItem({Key? key, this.name, this.price, this.person, this.area})
+  const RoomItem(
+      {Key? key, this.id, this.name, this.price, this.person, this.area})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => null,
+      onTap: () {
+        showCupertinoModalPopup<void>(
+          context: context,
+          builder: (BuildContext context) => CupertinoActionSheet(
+            actions: <CupertinoActionSheetAction>[
+              CupertinoActionSheetAction(
+                child: const Text('Chi tiết'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              CupertinoActionSheetAction(
+                child: const Text('Chỉnh sửa'),
+                onPressed: () {
+                  Navigator.pop(context);
+                  Utils.navigatePage(context, EditRoomScreen(id: id));
+                },
+              ),
+              CupertinoActionSheetAction(
+                child: const Text('Xoá'),
+                onPressed: () {
+                  context.read<RoomProvider>().deleteRoom(id!);
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+            cancelButton: CupertinoActionSheetAction(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Huỷ bỏ')),
+          ),
+        );
+      },
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(15),
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.grey,
-                blurRadius: 1, // soften the shadow
-                spreadRadius: 1, //extend the shadow
-                offset: Offset(
-                  1, // Move to right 10  horizontally
-                  1, // Move to bottom 10 Vertically
-                ),
-              )
-            ],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                height: 100,
-                child: Image.asset(
-                  'assets/room.png',
-                  fit: BoxFit.cover,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 5),
-                child: Column(
-                  children: [
-                    Text(
-                      name!,
-                      style: const TextStyle(fontSize: 18),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 6),
+        child: Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.grey,
+                    blurRadius: 1, // soften the shadow
+                    spreadRadius: 1, //extend the shadow
+                    offset: Offset(
+                      1, // Move to right 10  horizontally
+                      1, // Move to bottom 10 Vertically
                     ),
-                    Text(
-                      price ?? '',
-                      style: const TextStyle(fontSize: 18),
-                    ),
-                  ],
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  _buildRow(icon: Icon(Icons.group), number: '3'),
-                  _buildRow(icon: Icon(Icons.aspect_ratio), number: '3'),
-                  _buildRow(icon: Icon(Icons.warning), number: '3'),
+                  )
                 ],
-              )
-            ],
-          ),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(top: 15),
+                    height: 90,
+                    child: Image.asset(
+                      'assets/room_img.png',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 5),
+                    child: Column(
+                      children: [
+                        Text(
+                          name ?? '',
+                          style: const TextStyle(
+                              fontSize: 18,
+                              color: Colors.green,
+                              fontWeight: FontWeight.w700),
+                        ),
+                        Text(
+                          Utils.convertPrice(price),
+                          //style: const TextStyle(fontSize: 16),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      _buildRow(
+                          icon: Icon(Icons.group, size: 18), number: '$person'),
+                      _buildRow(
+                          icon: Icon(Icons.aspect_ratio, size: 18),
+                          number: area),
+                      _buildRow(
+                          icon: Icon(Icons.warning, size: 18), number: '1'),
+                    ],
+                  )
+                ],
+              ),
+            ),
+            Positioned(
+              top: 6,
+              right: 8,
+              child: person! < 1
+                  ? Text(
+                      'Chưa \n thuê',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red,
+                          fontSize: 10),
+                    )
+                  : SizedBox.shrink(),
+            ),
+          ],
         ),
       ),
     );
   }
 
   _buildRow({Icon? icon, String? number}) {
-    return Row(
-      children: [
-        icon!,
-        Text(number ?? '0'),
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(6.0),
+      child: Row(
+        children: [
+          icon!,
+          SizedBox(width: 5),
+          Text(number ?? '0'),
+        ],
+      ),
     );
   }
 }

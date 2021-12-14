@@ -1,24 +1,32 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
+
+import 'package:owner_app/model/room_model.dart';
+
 class FloorModel {
   final String? id;
   final String? name;
   final String? desc;
+  final List<RoomModel>? roomList;
   FloorModel({
     this.id,
     this.name,
     this.desc,
+    this.roomList,
   });
 
   FloorModel copyWith({
     String? id,
     String? name,
     String? desc,
+    List<RoomModel>? roomList,
   }) {
     return FloorModel(
       id: id ?? this.id,
       name: name ?? this.name,
       desc: desc ?? this.desc,
+      roomList: roomList ?? this.roomList,
     );
   }
 
@@ -27,6 +35,7 @@ class FloorModel {
       'id': id,
       'name': name,
       'desc': desc,
+      'roomList': roomList?.map((x) => x.toMap()).toList(),
     };
   }
 
@@ -35,6 +44,10 @@ class FloorModel {
       id: map['id'],
       name: map['name'],
       desc: map['desc'],
+      roomList: map['roomList'] != null
+          ? List<RoomModel>.from(
+              map['roomList']?.map((x) => RoomModel.fromMap(x)))
+          : null,
     );
   }
 
@@ -44,7 +57,9 @@ class FloorModel {
       FloorModel.fromMap(json.decode(source));
 
   @override
-  String toString() => 'FloorModel(id: $id, name: $name, desc: $desc)';
+  String toString() {
+    return 'FloorModel(id: $id, name: $name, desc: $desc, roomList: $roomList)';
+  }
 
   @override
   bool operator ==(Object other) {
@@ -53,9 +68,12 @@ class FloorModel {
     return other is FloorModel &&
         other.id == id &&
         other.name == name &&
-        other.desc == desc;
+        other.desc == desc &&
+        listEquals(other.roomList, roomList);
   }
 
   @override
-  int get hashCode => id.hashCode ^ name.hashCode ^ desc.hashCode;
+  int get hashCode {
+    return id.hashCode ^ name.hashCode ^ desc.hashCode ^ roomList.hashCode;
+  }
 }
