@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:min_id/min_id.dart';
 import 'package:owner_app/model/room_model.dart';
 
 class RoomProvider with ChangeNotifier {
@@ -8,7 +7,7 @@ class RoomProvider with ChangeNotifier {
   List<RoomModel> get listRoom => _listRoom;
 
   // add new room
-  void addNewRoom(RoomModel room) {
+  List<RoomModel> addNewRoom(RoomModel room) {
     var newRoom = RoomModel(
       id: room.id,
       romName: room.romName,
@@ -19,7 +18,7 @@ class RoomProvider with ChangeNotifier {
       imageUrl: '',
     );
     _listRoom.add(newRoom);
-    notifyListeners();
+    return _listRoom;
   }
 
   //find room by id

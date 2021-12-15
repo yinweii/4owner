@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:owner_app/model/floor_model.dart';
+import 'package:owner_app/provider/floor_provider.dart';
 
 import 'package:owner_app/provider/room_provide.dart';
 import 'package:owner_app/utils/utils.dart';
@@ -18,11 +20,16 @@ class RoomScreen extends StatefulWidget {
 
 class _RoomScreenState extends State<RoomScreen>
     with SingleTickerProviderStateMixin {
+  Future<void> getFloor() async {
+    await Provider.of<Floor>(context, listen: false).getFloorDetail(widget.id);
+  }
+
   TabController? controller;
 
   @override
   void initState() {
     super.initState();
+    getFloor();
     controller = TabController(length: 2, vsync: this);
   }
 
@@ -64,32 +71,69 @@ class _RoomScreenState extends State<RoomScreen>
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Utils.navigatePage(context, AddRoomScreen()),
+        onPressed: () =>
+            Utils.navigatePage(context, AddRoomScreen(id: widget.id)),
         child: Icon(Icons.add),
       ),
     );
   }
 
-  _buildListRoom() {
-    return Consumer<RoomProvider>(
-      builder: (ctx, roomData, _) => GridView.builder(
-        itemCount: roomData.listRoom.length,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount:
-                (MediaQuery.of(context).orientation == Orientation.portrait)
-                    ? 2
-                    : 3),
-        itemBuilder: (context, index) {
-          return RoomItem(
-            id: roomData.listRoom[index].id,
-            name: roomData.listRoom[index].romName,
-            price: double.parse(roomData.listRoom[index].price.toString()),
-            person: int.parse(roomData.listRoom[index].person.toString()),
-            area: roomData.listRoom[index].area.toString(),
+  Widget _buildListRoom() {
+    final floorItem = context.watch<Floor>().floorModel;
+    print('mmm: ${floorItem.toString()}');
+    //return Text('${floorItem?.roomList.toString()}');
+    return FutureBuilder(
+      future: getFloor(),
+      builder: (ctx, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: CircularProgressIndicator(),
           );
-        },
-      ),
+        } else if (snapshot.hasError) {
+          return Center(
+            child: Text('Errors'),
+          );
+        }
+        return GridView.builder(
+            itemCount: floorItem.roomList?.length,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount:
+                    (MediaQuery.of(context).orientation == Orientation.portrait)
+                        ? 2
+                        : 3),
+            itemBuilder: (ctx, index) {
+              return (floorItem.roomList ?? []).isEmpty
+                  ? Text('data')
+                  : RoomItem(
+                      id: floorItem.roomList?[index].id ?? '',
+                      name: floorItem.roomList?[index].romName ?? '',
+                      price: floorItem.roomList?[index].price,
+                      person: floorItem.roomList?[index].person,
+                      area: floorItem.roomList?[index].area.toString(),
+                    );
+            });
+      },
     );
+
+    // return Consumer<Floor>(
+    //   builder: (ctx, roomData, _) => GridView.builder(
+    //     itemCount: floorItem?.roomList?.length,
+    //     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+    //         crossAxisCount:
+    //             (MediaQuery.of(context).orientation == Orientation.portrait)
+    //                 ? 2
+    //                 : 3),
+    //     itemBuilder: (context, index) {
+    //       return RoomItem(
+    //         id: roomData.listRoom[index].id,
+    //         name: roomData.listRoom[index].romName,
+    //         price: double.parse(roomData.listRoom[index].price.toString()),
+    //         person: int.parse(roomData.listRoom[index].person.toString()),
+    //         area: roomData.listRoom[index].area.toString(),
+    //       );
+    //     },
+    //   ),
+    // );
   }
 }
 

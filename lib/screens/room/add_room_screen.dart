@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:min_id/min_id.dart';
 import 'package:owner_app/components/custom_textfield.dart';
 import 'package:owner_app/model/room_model.dart';
+import 'package:owner_app/provider/floor_provider.dart';
 import 'package:owner_app/provider/room_provide.dart';
 import 'package:provider/provider.dart';
 
 class AddRoomScreen extends StatefulWidget {
-  const AddRoomScreen({Key? key}) : super(key: key);
+  final String? id;
+  const AddRoomScreen({Key? key, this.id}) : super(key: key);
 
   @override
   State<AddRoomScreen> createState() => _AddRoomScreenState();
@@ -32,7 +34,8 @@ class _AddRoomScreenState extends State<AddRoomScreen> {
         person: int.parse(_personController.text),
         note: _noteController.text,
       );
-      context.read<RoomProvider>().addNewRoom(newRoom);
+      context.read<Floor>().addNewRoom(widget.id!, newRoom);
+
       Navigator.pop(context);
       print(newRoom.toString());
     }
