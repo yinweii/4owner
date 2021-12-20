@@ -11,64 +11,61 @@ import 'edit_room_screen.dart';
 
 class RoomScreen extends StatefulWidget {
   final String? id;
-  final String? name;
-  const RoomScreen({Key? key, this.id, this.name}) : super(key: key);
+
+  const RoomScreen({Key? key, this.id}) : super(key: key);
 
   @override
   _RoomScreenState createState() => _RoomScreenState();
 }
 
-class _RoomScreenState extends State<RoomScreen>
-    with SingleTickerProviderStateMixin {
-  Future<void> getFloor() async {
-    await Provider.of<Floor>(context, listen: false).getFloorDetail(widget.id);
-  }
-
-  TabController? controller;
+class _RoomScreenState extends State<RoomScreen> {
+  // Future<void> getFloorDetail() async {
+  //   Provider.of<Floor>(context, listen: false).getFloorDetail(widget.id!);
+  // }
 
   @override
   void initState() {
     super.initState();
-    getFloor();
-    controller = TabController(length: 2, vsync: this);
-  }
-
-  @override
-  void dispose() {
-    controller!.dispose();
-    super.dispose();
+    Provider.of<Floor>(context, listen: false).getFloorDetail(widget.id!);
   }
 
   @override
   Widget build(BuildContext context) {
+    final floorItem = context.watch<Floor>().floorModel;
+    print('mmm: ${floorItem.toString()}');
     return Scaffold(
       appBar: AppBar(
         title: const Text('Người thuê'),
         centerTitle: true,
-        bottom: TabBar(
-          indicatorColor: Colors.white,
-          controller: controller,
-          tabs: const <Tab>[
-            Tab(
-                child: Text(
-              'Danh sách phòng',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-            )),
-            Tab(
-              child: Text(
-                'Chi tiết',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              ),
-            ),
-          ],
-        ),
       ),
-      body: TabBarView(
-        controller: controller,
-        children: <Widget>[
-          _buildListRoom(),
-          Container(),
-        ],
+      body: FutureBuilder(
+        //future: getFloorDetail(),
+        builder: (ctx, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return floorItem.roomList == null
+              ? Center(child: Text('Không có phòng nào'))
+              : GridView.builder(
+                  itemCount: floorItem.roomList?.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: (MediaQuery.of(context).orientation ==
+                              Orientation.portrait)
+                          ? 2
+                          : 3),
+                  itemBuilder: (ctx, index) {
+                    return RoomItem(
+                      id: floorItem.roomList?[index].id ?? '',
+                      name: floorItem.roomList?[index].romName ?? '',
+                      price: floorItem.roomList?[index].price,
+                      person: floorItem.roomList?[index].person,
+                      area: floorItem.roomList?[index].area.toString(),
+                    );
+                  },
+                );
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () =>
@@ -76,64 +73,6 @@ class _RoomScreenState extends State<RoomScreen>
         child: Icon(Icons.add),
       ),
     );
-  }
-
-  Widget _buildListRoom() {
-    final floorItem = context.watch<Floor>().floorModel;
-    print('mmm: ${floorItem.toString()}');
-    //return Text('${floorItem?.roomList.toString()}');
-    return FutureBuilder(
-      future: getFloor(),
-      builder: (ctx, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        } else if (snapshot.hasError) {
-          return Center(
-            child: Text('Errors'),
-          );
-        }
-        return GridView.builder(
-            itemCount: floorItem.roomList?.length,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount:
-                    (MediaQuery.of(context).orientation == Orientation.portrait)
-                        ? 2
-                        : 3),
-            itemBuilder: (ctx, index) {
-              return (floorItem.roomList ?? []).isEmpty
-                  ? Text('data')
-                  : RoomItem(
-                      id: floorItem.roomList?[index].id ?? '',
-                      name: floorItem.roomList?[index].romName ?? '',
-                      price: floorItem.roomList?[index].price,
-                      person: floorItem.roomList?[index].person,
-                      area: floorItem.roomList?[index].area.toString(),
-                    );
-            });
-      },
-    );
-
-    // return Consumer<Floor>(
-    //   builder: (ctx, roomData, _) => GridView.builder(
-    //     itemCount: floorItem?.roomList?.length,
-    //     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-    //         crossAxisCount:
-    //             (MediaQuery.of(context).orientation == Orientation.portrait)
-    //                 ? 2
-    //                 : 3),
-    //     itemBuilder: (context, index) {
-    //       return RoomItem(
-    //         id: roomData.listRoom[index].id,
-    //         name: roomData.listRoom[index].romName,
-    //         price: double.parse(roomData.listRoom[index].price.toString()),
-    //         person: int.parse(roomData.listRoom[index].person.toString()),
-    //         area: roomData.listRoom[index].area.toString(),
-    //       );
-    //     },
-    //   ),
-    // );
   }
 }
 

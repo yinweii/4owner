@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:min_id/min_id.dart';
+import 'package:owner_app/constants/constants.dart';
 import 'package:owner_app/model/customer_model.dart';
+import 'package:owner_app/utils/firebase_path.dart';
 import 'package:owner_app/utils/logger.dart';
 
 class Customer with ChangeNotifier {
@@ -39,8 +41,34 @@ class Customer with ChangeNotifier {
     );
     setIsLoading(true);
     _listCustomer.add(newCustomer);
+    try {
+      _fireStore
+          .collection(Constants.userDb)
+          .doc(userUID)
+          .collection(Constants.customerDb)
+          .doc(customer.id)
+          .set(newCustomer.toMap());
+    } on Exception catch (e) {
+      // TODO
+      print(e.toString());
+    }
 
     setIsLoading(false);
+  }
+
+  Future<void> getListCustomer() async {
+    List<CustomerModel> listExtract = [];
+    snapshot = await _fireStore
+        .collection(Constants.userDb)
+        .doc(userUID)
+        .collection(Constants.customerDb)
+        .get();
+
+    for (var docs in snapshot!.docs) {
+      listExtract
+          .add(CustomerModel.fromMap(docs.data() as Map<String, dynamic>));
+    }
+    _listCustomer = listCustomer;
   }
 
   void setIsLoading(value) {

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:owner_app/provider/customer_provider.dart';
 import 'package:owner_app/utils/utils.dart';
 
 import 'add_customer_screen.dart';
 import 'components/customer_list.dart';
+import 'package:provider/provider.dart';
 
 class IndentureScreen extends StatefulWidget {
   const IndentureScreen({Key? key}) : super(key: key);
@@ -18,6 +20,7 @@ class _IndentureScreenState extends State<IndentureScreen>
   void initState() {
     super.initState();
     controller = TabController(length: 2, vsync: this);
+    context.read<Customer>().getListCustomer();
   }
 
   @override

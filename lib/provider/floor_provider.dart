@@ -25,8 +25,8 @@ class Floor with ChangeNotifier, Helper {
   List<FloorModel> get floorList => _floorList;
 
   //
-  FloorModel _floorModel = FloorModel();
-  FloorModel get floorModel => _floorModel;
+  FloorModel? _floorModel;
+  FloorModel get floorModel => _floorModel ?? FloorModel();
 
   //list
   List<RoomModel> _listRoom = [];
@@ -115,17 +115,22 @@ class Floor with ChangeNotifier, Helper {
   }
 
 // get floor infor detail
-  Future<void> getFloorDetail(String? idFloor) async {
-    documentSnapshot = await _fireStore
-        .collection(Constants.userDb) //
-        .doc(userUID)
-        .collection(Constants.floorsDb)
-        .doc(idFloor)
-        .get();
-    // print(
-    //     'DETAIL: ${FloorModel.fromMap(documentSnapshot!.data() as Map<String, dynamic>)}');
-    _floorModel =
-        FloorModel.fromMap(documentSnapshot!.data() as Map<String, dynamic>);
+  Future<FloorModel?> getFloorDetail(String idFloor) async {
+    try {
+      documentSnapshot = await _fireStore
+          .collection(Constants.userDb) //
+          .doc(userUID)
+          .collection(Constants.floorsDb)
+          .doc(idFloor)
+          .get();
+
+      _floorModel =
+          FloorModel.fromMap(documentSnapshot?.data() as Map<String, dynamic>);
+      notifyListeners();
+    } on Exception catch (e) {
+      // TODO
+      print('ERROR: ${e.toString()}');
+    }
   }
 
   // ignore: unused_element
