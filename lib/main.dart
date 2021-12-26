@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:min_id/min_id.dart';
+import 'package:owner_app/provider/contract_provider.dart';
 import 'package:owner_app/provider/customer_provider.dart';
 import 'package:owner_app/provider/room_provide.dart';
 import 'package:provider/provider.dart';
@@ -28,7 +29,8 @@ class MyApp extends StatelessWidget {
         Provider(create: (ctx) => AuthService()),
         ChangeNotifierProvider(create: (ctx) => ServiceProvider()),
         ChangeNotifierProvider(create: (ctx) => Customer()),
-        ChangeNotifierProvider(create: (ctx) => RoomProvider())
+        ChangeNotifierProvider(create: (ctx) => RoomProvider()),
+        ChangeNotifierProvider(create: (ctx) => Contract()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -10,7 +11,7 @@ class Utils {
   static Future navigatePage(BuildContext context, Widget widget,
       {bool rootNavigator = false}) async {
     return Navigator.of(context, rootNavigator: rootNavigator)
-        .push(MaterialPageRoute(
+        .push(CupertinoPageRoute(
       builder: (context) => widget,
     ));
   }

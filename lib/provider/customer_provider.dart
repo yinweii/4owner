@@ -3,16 +3,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:min_id/min_id.dart';
 import 'package:owner_app/constants/constants.dart';
+import 'package:owner_app/constants/loading_service.dart';
 import 'package:owner_app/model/customer_model.dart';
 import 'package:owner_app/utils/firebase_path.dart';
 import 'package:owner_app/utils/logger.dart';
 
-class Customer with ChangeNotifier {
+class Customer with ChangeNotifier, Helper {
   // process
   bool _isLoading = false;
-  String? _errorMessage;
-  bool get isLoading => _isLoading;
-  String get errorMessage => _errorMessage ?? '';
+  bool get showLoading => _isLoading;
+  // String? _errorMessage;
+  // String get errorMessage => _errorMessage ?? '';
   QuerySnapshot? snapshot;
   final devLog = logger;
   //list
@@ -37,9 +38,9 @@ class Customer with ChangeNotifier {
       gender: customer.gender,
       imageFirstUrl: customer.imageFirstUrl,
       imageLastUrl: customer.imageLastUrl,
-      status: customer.status,
+      status: true,
     );
-    setIsLoading(true);
+    // setIsLoading(true);
     _listCustomer.add(newCustomer);
     try {
       _fireStore
@@ -53,11 +54,12 @@ class Customer with ChangeNotifier {
       print(e.toString());
     }
 
-    setIsLoading(false);
+    //setIsLoading(false);
   }
 
   Future<void> getListCustomer() async {
     List<CustomerModel> listExtract = [];
+    _isLoading = isLoading(true);
     snapshot = await _fireStore
         .collection(Constants.userDb)
         .doc(userUID)
@@ -68,16 +70,21 @@ class Customer with ChangeNotifier {
       listExtract
           .add(CustomerModel.fromMap(docs.data() as Map<String, dynamic>));
     }
-    _listCustomer = listCustomer;
-  }
-
-  void setIsLoading(value) {
-    _isLoading = value;
+    _isLoading = isLoading(false);
+    _listCustomer = listExtract;
     notifyListeners();
   }
 
-  void setMessage(message) {
-    _errorMessage = message;
-    notifyListeners();
-  }
+  CustomerModel getCustomerByID(String id) =>
+      _listCustomer.firstWhere((element) => element.id == id);
+
+  // void setIsLoading(value) {
+  //   _isLoading = value;
+  //   notifyListeners();
+  // }
+
+  // void setMessage(message) {
+  //   _errorMessage = message;
+  //   notifyListeners();
+  // }
 }

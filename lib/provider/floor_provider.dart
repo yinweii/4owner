@@ -13,9 +13,9 @@ import 'package:owner_app/utils/logger.dart';
 
 class Floor with ChangeNotifier, Helper {
   // process
-  // bool _isLoading = false;
-  // String? _errorMessage;
-  // bool get isLoading => _isLoading;
+  // process
+  bool _isLoading = false;
+  bool get showLoading => _isLoading;
   // String get errorMessage => _errorMessage ?? '';
   QuerySnapshot? snapshot;
   DocumentSnapshot? documentSnapshot;
@@ -40,6 +40,7 @@ class Floor with ChangeNotifier, Helper {
 
   // add new floor
   Future<void> addNewFloor(FloorModel newFloor) async {
+    isLoading(true);
     newFloor = FloorModel(
       id: newFloor.id,
       name: newFloor.name,
@@ -89,8 +90,6 @@ class Floor with ChangeNotifier, Helper {
 
   Future<void> getFloor() async {
     isLoading(true);
-    documentSnapshot =
-        await _fireStore.collection(Constants.userDb).doc(userUID).get();
 
     try {
       snapshot = await _fireStore
@@ -117,6 +116,7 @@ class Floor with ChangeNotifier, Helper {
 // get floor infor detail
   Future<FloorModel?> getFloorDetail(String idFloor) async {
     try {
+      _isLoading = isLoading(true);
       documentSnapshot = await _fireStore
           .collection(Constants.userDb) //
           .doc(userUID)
@@ -126,6 +126,7 @@ class Floor with ChangeNotifier, Helper {
 
       _floorModel =
           FloorModel.fromMap(documentSnapshot?.data() as Map<String, dynamic>);
+      _isLoading = isLoading(false);
       notifyListeners();
     } on Exception catch (e) {
       // TODO

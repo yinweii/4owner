@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:owner_app/model/floor_model.dart';
+
 import 'package:owner_app/provider/floor_provider.dart';
 
 import 'package:owner_app/provider/room_provide.dart';
@@ -19,54 +19,53 @@ class RoomScreen extends StatefulWidget {
 }
 
 class _RoomScreenState extends State<RoomScreen> {
-  // Future<void> getFloorDetail() async {
-  //   Provider.of<Floor>(context, listen: false).getFloorDetail(widget.id!);
-  // }
-
-  @override
-  void initState() {
-    super.initState();
+  Future<void> getFloorDetail() async {
     Provider.of<Floor>(context, listen: false).getFloorDetail(widget.id!);
   }
 
   @override
+  void initState() {
+    super.initState();
+    getFloorDetail();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final floorItem = context.watch<Floor>().floorModel;
-    print('mmm: ${floorItem.toString()}');
     return Scaffold(
       appBar: AppBar(
         title: const Text('Người thuê'),
         centerTitle: true,
       ),
-      body: FutureBuilder(
-        //future: getFloorDetail(),
-        builder: (ctx, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
+      body: context.watch<Floor>().showLoading
+          ? Center(
               child: CircularProgressIndicator(),
-            );
-          }
-          return floorItem.roomList == null
-              ? Center(child: Text('Không có phòng nào'))
-              : GridView.builder(
-                  itemCount: floorItem.roomList?.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: (MediaQuery.of(context).orientation ==
-                              Orientation.portrait)
-                          ? 2
-                          : 3),
-                  itemBuilder: (ctx, index) {
-                    return RoomItem(
-                      id: floorItem.roomList?[index].id ?? '',
-                      name: floorItem.roomList?[index].romName ?? '',
-                      price: floorItem.roomList?[index].price,
-                      person: floorItem.roomList?[index].person,
-                      area: floorItem.roomList?[index].area.toString(),
-                    );
-                  },
-                );
-        },
-      ),
+            )
+          : Consumer<Floor>(
+              builder: (ctx, roomData, _) => (roomData.floorModel.roomList ??
+                          [])
+                      .isNotEmpty
+                  ? GridView.builder(
+                      itemCount: roomData.floorModel.roomList?.length,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: (MediaQuery.of(context).orientation ==
+                                  Orientation.portrait)
+                              ? 2
+                              : 3),
+                      itemBuilder: (ctx, index) {
+                        return RoomItem(
+                          id: roomData.floorModel.roomList?[index].id ?? '',
+                          name: roomData.floorModel.roomList?[index].romName ??
+                              '',
+                          price: roomData.floorModel.roomList?[index].price,
+                          person: roomData.floorModel.roomList?[index].person,
+                          area: roomData.floorModel.roomList?[index].area
+                              .toString(),
+                        );
+                      })
+                  : Center(
+                      child: Text('Không có phòng nào'),
+                    ),
+            ),
       floatingActionButton: FloatingActionButton(
         onPressed: () =>
             Utils.navigatePage(context, AddRoomScreen(id: widget.id)),
