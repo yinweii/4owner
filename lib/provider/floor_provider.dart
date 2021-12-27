@@ -25,8 +25,8 @@ class Floor with ChangeNotifier, Helper {
   List<FloorModel> get floorList => _floorList;
 
   //
-  FloorModel? _floorModel;
-  FloorModel get floorModel => _floorModel ?? FloorModel();
+  FloorModel _floorModel = FloorModel();
+  FloorModel get floorModel => _floorModel;
 
   //list
   List<RoomModel> _listRoom = [];
@@ -64,6 +64,7 @@ class Floor with ChangeNotifier, Helper {
   void addNewRoom(String idFloor, RoomModel room) {
     var newRoom = RoomModel(
       id: room.id,
+      idFloor: idFloor,
       romName: room.romName,
       area: room.area,
       price: room.price,
@@ -82,6 +83,13 @@ class Floor with ChangeNotifier, Helper {
           .update({
         'roomList': FieldValue.arrayUnion([newRoom.toMap()]),
       });
+      //save to other db
+      _fireStore
+          .collection(Constants.userDb)
+          .doc(userUID)
+          .collection(Constants.roomtDb)
+          .doc(room.id)
+          .set(newRoom.toMap());
     } catch (e) {
       print(e.toString());
     }
@@ -138,6 +146,9 @@ class Floor with ChangeNotifier, Helper {
   FloorModel findById(String id) {
     return _floorList.firstWhere((element) => element.id == id);
   }
+
+  RoomModel findRoomId(String id) =>
+      (floorModel.roomList ?? []).firstWhere((element) => element.id == id);
 
   // void setIsLoading(value) {
   //   _isLoading = value;

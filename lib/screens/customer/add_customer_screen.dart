@@ -50,6 +50,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen>
   bool uploading = false;
   double val = 0;
   List<RoomModel> room = [];
+  String? idRooms;
 
   // TODO(last code): get image
   // Future<void> chooseImage() async {
@@ -65,6 +66,8 @@ class _AddCustomerScreenState extends State<AddCustomerScreen>
     if (_formKey.currentState!.validate()) {
       var newCustomer = CustomerModel(
         id: MinId.getId(),
+        idFloor: _select ?? '',
+        idRoom: idRooms ?? '',
         name: _nameController.text,
         phoneNumber: _phoneNumberController.text,
         dateOfBirth: '',
@@ -158,14 +161,16 @@ class _AddCustomerScreenState extends State<AddCustomerScreen>
                                     );
                                   }).toList(),
                                   onChanged: (String? value) {
-                                    setState(() {
-                                      _select = value;
-                                      room = context
-                                              .read<Floor>()
-                                              .findById(_select!)
-                                              .roomList ??
-                                          [];
-                                    });
+                                    setState(
+                                      () {
+                                        _select = value;
+                                        room = context
+                                                .read<Floor>()
+                                                .findById(_select!)
+                                                .roomList ??
+                                            [];
+                                      },
+                                    );
                                   },
                                 ),
                               ),
@@ -189,6 +194,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen>
                                 ), // Not necessary for Option 1
 
                                 items: room.map((e) {
+                                  idRooms = e.id;
                                   return DropdownMenuItem<String>(
                                     value: e.romName,
                                     child: new Text(e.romName ?? ''),

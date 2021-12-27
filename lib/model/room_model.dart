@@ -2,6 +2,7 @@ import 'dart:convert';
 
 class RoomModel {
   final String? id;
+  final String? idFloor;
   final String? romName;
   final double? area;
   final double? price;
@@ -11,6 +12,7 @@ class RoomModel {
   final String? imageUrl;
   RoomModel({
     this.id,
+    this.idFloor,
     this.romName,
     this.area,
     this.price,
@@ -22,6 +24,7 @@ class RoomModel {
 
   RoomModel copyWith({
     String? id,
+    String? idFloor,
     String? romName,
     double? area,
     double? price,
@@ -32,6 +35,7 @@ class RoomModel {
   }) {
     return RoomModel(
       id: id ?? this.id,
+      idFloor: idFloor ?? this.idFloor,
       romName: romName ?? this.romName,
       area: area ?? this.area,
       price: price ?? this.price,
@@ -45,6 +49,7 @@ class RoomModel {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
+      'idFloor': idFloor,
       'romName': romName,
       'area': area,
       'price': price,
@@ -58,6 +63,7 @@ class RoomModel {
   factory RoomModel.fromMap(Map<String, dynamic> map) {
     return RoomModel(
       id: map['id'],
+      idFloor: map['idFloor'],
       romName: map['romName'],
       area: map['area']?.toDouble(),
       price: map['price']?.toDouble(),
@@ -75,7 +81,7 @@ class RoomModel {
 
   @override
   String toString() {
-    return 'RoomModel(id: $id, romName: $romName, area: $area, price: $price, status: $status, person: $person, note: $note, imageUrl: $imageUrl)';
+    return 'RoomModel(id: $id, idFloor: $idFloor, romName: $romName, area: $area, price: $price, status: $status, person: $person, note: $note, imageUrl: $imageUrl)';
   }
 
   @override
@@ -84,6 +90,7 @@ class RoomModel {
 
     return other is RoomModel &&
         other.id == id &&
+        other.idFloor == idFloor &&
         other.romName == romName &&
         other.area == area &&
         other.price == price &&
@@ -96,6 +103,7 @@ class RoomModel {
   @override
   int get hashCode {
     return id.hashCode ^
+        idFloor.hashCode ^
         romName.hashCode ^
         area.hashCode ^
         price.hashCode ^

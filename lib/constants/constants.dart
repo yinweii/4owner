@@ -5,4 +5,5 @@ class Constants {
   static const serviceDb = 'SERVICES_DB';
   static const customerDb = 'CUSTOMER_DB';
   static const contractDb = 'CONTRACT_DB';
+  static const roomtDb = 'ROOM_DB';
 }

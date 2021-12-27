@@ -28,6 +28,8 @@ class Customer with ChangeNotifier, Helper {
     var newCustomer = CustomerModel(
       id: customer.id,
       name: customer.name,
+      idFloor: customer.idFloor,
+      idRoom: customer.idRoom,
       phoneNumber: customer.phoneNumber,
       dateOfBirth: customer.dateOfBirth,
       cardNumber: customer.cardNumber,

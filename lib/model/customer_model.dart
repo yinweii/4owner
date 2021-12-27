@@ -2,6 +2,8 @@ import 'dart:convert';
 
 class CustomerModel {
   final String? id;
+  final String? idFloor;
+  final String? idRoom;
   final String? name;
   final String? phoneNumber;
   final String? dateOfBirth;
@@ -16,6 +18,8 @@ class CustomerModel {
   final bool? status;
   CustomerModel({
     this.id,
+    this.idFloor,
+    this.idRoom,
     this.name,
     this.phoneNumber,
     this.dateOfBirth,
@@ -32,6 +36,8 @@ class CustomerModel {
 
   CustomerModel copyWith({
     String? id,
+    String? idFloor,
+    String? idRoom,
     String? name,
     String? phoneNumber,
     String? dateOfBirth,
@@ -47,6 +53,8 @@ class CustomerModel {
   }) {
     return CustomerModel(
       id: id ?? this.id,
+      idFloor: idFloor ?? this.idFloor,
+      idRoom: idRoom ?? this.idRoom,
       name: name ?? this.name,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       dateOfBirth: dateOfBirth ?? this.dateOfBirth,
@@ -65,6 +73,8 @@ class CustomerModel {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
+      'idFloor': idFloor,
+      'idRoom': idRoom,
       'name': name,
       'phoneNumber': phoneNumber,
       'dateOfBirth': dateOfBirth,
@@ -83,6 +93,8 @@ class CustomerModel {
   factory CustomerModel.fromMap(Map<String, dynamic> map) {
     return CustomerModel(
       id: map['id'],
+      idFloor: map['idFloor'],
+      idRoom: map['idRoom'],
       name: map['name'],
       phoneNumber: map['phoneNumber'],
       dateOfBirth: map['dateOfBirth'],
@@ -105,7 +117,7 @@ class CustomerModel {
 
   @override
   String toString() {
-    return 'CustomerModel(id: $id, name: $name, phoneNumber: $phoneNumber, dateOfBirth: $dateOfBirth, cardNumber: $cardNumber, email: $email, address: $address, roomNumber: $roomNumber, floorNumber: $floorNumber, imageFirstUrl: $imageFirstUrl, imageLastUrl: $imageLastUrl, gender: $gender, status: $status)';
+    return 'CustomerModel(id: $id, idFloor: $idFloor, idRoom: $idRoom, name: $name, phoneNumber: $phoneNumber, dateOfBirth: $dateOfBirth, cardNumber: $cardNumber, email: $email, address: $address, roomNumber: $roomNumber, floorNumber: $floorNumber, imageFirstUrl: $imageFirstUrl, imageLastUrl: $imageLastUrl, gender: $gender, status: $status)';
   }
 
   @override
@@ -114,6 +126,8 @@ class CustomerModel {
 
     return other is CustomerModel &&
         other.id == id &&
+        other.idFloor == idFloor &&
+        other.idRoom == idRoom &&
         other.name == name &&
         other.phoneNumber == phoneNumber &&
         other.dateOfBirth == dateOfBirth &&
@@ -131,6 +145,8 @@ class CustomerModel {
   @override
   int get hashCode {
     return id.hashCode ^
+        idFloor.hashCode ^
+        idRoom.hashCode ^
         name.hashCode ^
         phoneNumber.hashCode ^
         dateOfBirth.hashCode ^

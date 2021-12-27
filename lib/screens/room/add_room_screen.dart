@@ -28,6 +28,7 @@ class _AddRoomScreenState extends State<AddRoomScreen> {
     if (_formKey.currentState!.validate()) {
       var newRoom = RoomModel(
         id: MinId.getId(),
+        idFloor: widget.id ?? '',
         romName: _nameController.text,
         area: double.parse(_areaController.text),
         price: double.parse(_priceController.text),
