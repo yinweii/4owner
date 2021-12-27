@@ -75,21 +75,18 @@ class _EditContractScreenState extends State<EditContractScreen> {
   void _submitContract() async {
     if (_formKey.currentState!.validate()) {
       var newContract = _contractEdit.copyWith(
-        id: MinId.getId(),
-        createAt: DateTime.now(),
         updateAt: DateTime.now(),
         customer: customer,
         dateFrom: selectedFirstDate,
         dateTo: selectedSecondDate,
         startPay: selectedDateStart,
-        price: _priceController.text.isEmpty
-            ? double.parse(_priceController.text)
-            : 0,
+        price: double.parse(_priceController.text),
         deposit: double.parse(_depositController.text),
       );
+      print('NEW CONTRACT: ${newContract.toString()}');
       await context
           .read<Contract>()
-          .addContract(newContract)
+          .editContract(widget.id!, newContract)
           .then((value) => Navigator.of(context).pop());
     }
   }

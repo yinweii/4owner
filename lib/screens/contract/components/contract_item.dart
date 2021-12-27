@@ -2,8 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+import 'package:owner_app/provider/contract_provider.dart';
 import 'package:owner_app/screens/contract/components/edit_contract_screen.dart';
 import 'package:owner_app/utils/utils.dart';
+import 'package:provider/src/provider.dart';
 
 class ContractItem extends StatelessWidget {
   const ContractItem(
@@ -48,8 +50,10 @@ class ContractItem extends StatelessWidget {
               CupertinoActionSheetAction(
                 child: const Text('Xoá'),
                 onPressed: () {
-                  //context.read<RoomProvider>().deleteRoom(id!);
-                  Navigator.pop(context);
+                  context
+                      .read<Contract>()
+                      .deleteContract(id ?? '')
+                      .then((value) => Navigator.pop(context));
                 },
               ),
             ],

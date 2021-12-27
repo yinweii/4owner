@@ -77,9 +77,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
         dateFrom: selectedFirstDate,
         dateTo: selectedSecondDate,
         startPay: selectedDateStart,
-        price: _priceController.text.isEmpty
-            ? double.parse(_priceController.text)
-            : 0,
+        price: double.parse(_priceController.text),
         deposit: double.parse(_depositController.text),
       );
       await context
