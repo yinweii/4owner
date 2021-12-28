@@ -109,7 +109,8 @@ class RoomItem extends StatelessWidget {
               CupertinoActionSheetAction(
                 child: const Text('Xoá'),
                 onPressed: () {
-                  context.read<RoomProvider>().deleteRoom(id!);
+                  //TODO (lam sau):
+                  //context.read<RoomProvider>().deleteRoom(id!);
                   Navigator.pop(context);
                 },
               ),

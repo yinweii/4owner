@@ -28,7 +28,7 @@ class _EditRoomScreenState extends State<EditRoomScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _editRoom = context.read<RoomProvider>().findRoomById(widget.id);
+    _editRoom = context.read<RoomProvider>().findRoomById(widget.id ?? '');
   }
 
   // save form
@@ -41,7 +41,8 @@ class _EditRoomScreenState extends State<EditRoomScreen> {
         person: int.parse(_personController.text),
         note: _noteController.text,
       );
-      context.read<RoomProvider>().editRoom(widget.id ?? '', newRoom);
+      //TODO (lam sau):
+      //context.read<RoomProvider>().editRoom(widget.id ?? '', newRoom);
       print('New Room: ${newRoom.toString()}');
       Navigator.pop(context);
     }

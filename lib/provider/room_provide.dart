@@ -1,53 +1,43 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:owner_app/constants/constants.dart';
+import 'package:owner_app/constants/loading_service.dart';
 import 'package:owner_app/model/room_model.dart';
 
-class RoomProvider with ChangeNotifier {
+class RoomProvider with ChangeNotifier, Helper {
+  // process
+  bool _isLoading = false;
+  bool get showLoading => _isLoading;
   //list
   List<RoomModel> _listRoom = [];
   List<RoomModel> get listRoom => _listRoom;
 
-  // add new room
-  List<RoomModel> addNewRoom(RoomModel room) {
-    var newRoom = RoomModel(
-      id: room.id,
-      romName: room.romName,
-      area: room.area,
-      price: room.price,
-      person: room.person,
-      note: room.note,
-      imageUrl: '',
-    );
-    _listRoom.add(newRoom);
-    return _listRoom;
+  //
+  QuerySnapshot? snapshot;
+
+  final userUID = FirebaseAuth.instance.currentUser?.uid;
+  //firebase
+  final _fireStore = FirebaseFirestore.instance;
+  Future<void> getAllRoom() async {
+    List<RoomModel> listExtract = [];
+    _isLoading = isLoading(true);
+    snapshot = await _fireStore
+        .collection(Constants.userDb)
+        .doc(userUID)
+        .collection(Constants.roomtDb)
+        .get();
+
+    for (var docs in snapshot!.docs) {
+      listExtract.add(RoomModel.fromMap(docs.data() as Map<String, dynamic>));
+    }
+    _isLoading = isLoading(false);
+    _listRoom = listExtract;
+    print('LIST ROOM: ${_listRoom.toString()}');
+    notifyListeners();
   }
 
   //find room by id
-  RoomModel findRoomById(String? id) {
-    return _listRoom.firstWhere((element) => element.id == id);
-  }
-
-  void editRoom(String id, RoomModel room) {
-    final roomIndex = _listRoom.indexWhere((element) => element.id == id);
-    var editRoom = RoomModel(
-      id: id,
-      romName: room.romName,
-      area: room.area,
-      price: room.price,
-      person: room.person,
-      note: room.note,
-      imageUrl: '',
-    );
-    if (roomIndex >= 0) {
-      _listRoom[roomIndex] = editRoom;
-      notifyListeners();
-    } else {
-      return;
-    }
-  }
-
-  void deleteRoom(String id) {
-    final roomIndex = _listRoom.indexWhere((element) => element.id == id);
-    _listRoom.removeAt(roomIndex);
-    notifyListeners();
-  }
+  RoomModel findRoomById(String id) =>
+      _listRoom.firstWhere((element) => element.id == id);
 }
