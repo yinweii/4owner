@@ -19,6 +19,7 @@ class RoomProvider with ChangeNotifier, Helper {
   final userUID = FirebaseAuth.instance.currentUser?.uid;
   //firebase
   final _fireStore = FirebaseFirestore.instance;
+
   Future<void> getAllRoom() async {
     List<RoomModel> listExtract = [];
     _isLoading = isLoading(true);
@@ -33,7 +34,6 @@ class RoomProvider with ChangeNotifier, Helper {
     }
     _isLoading = isLoading(false);
     _listRoom = listExtract;
-    print('LIST ROOM: ${_listRoom.toString()}');
     notifyListeners();
   }
 

@@ -7,6 +7,7 @@ import 'package:owner_app/model/room_model.dart';
 import 'package:owner_app/provider/customer_provider.dart';
 import 'package:owner_app/provider/room_provide.dart';
 import 'package:owner_app/utils/utils.dart';
+import 'package:provider/provider.dart';
 import 'package:provider/src/provider.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
 
@@ -29,9 +30,8 @@ class _AddInvoiceState extends State<AddInvoice> {
   DateTime? selectedFirstDate;
   DateTime? selectedSecondDate;
   DateTime? _selectedDate;
-  String? price = '';
 
-  double? gia = 0;
+  RoomModel? roomModel;
 
   Future<void> getCustommer() async {
     await context.read<Customer>().getListCustomer();
@@ -72,14 +72,13 @@ class _AddInvoiceState extends State<AddInvoice> {
   @override
   void initState() {
     super.initState();
+    //_priceController.addListener();
     getCustommer();
   }
 
   void _submitContract() async {}
   @override
   Widget build(BuildContext context) {
-    print(
-        "ROOM: ${context.watch<RoomProvider>().findRoomById('4ZaAS0Qonvia1A').toString()}");
     return Scaffold(
       appBar: AppBar(),
       body: context.watch<Customer>().showLoading
@@ -104,7 +103,7 @@ class _AddInvoiceState extends State<AddInvoice> {
                             topRight: Radius.circular(5),
                           ),
                         ),
-                        child: Center(child: Text('Thong tin')),
+                        child: Center(child: Text('Thông tin')),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(
@@ -123,15 +122,15 @@ class _AddInvoiceState extends State<AddInvoice> {
                                   customerUser = context
                                       .read<Customer>()
                                       .getCustomerByID(selectedValue!);
+                                  roomModel = context
+                                      .read<RoomProvider>()
+                                      .findRoomById(customerUser?.idRoom ?? '');
                                 });
                               },
                               items: context
                                   .read<Customer>()
                                   .listCustomer
                                   .map((CustomerModel customer) {
-                                price = customerUser?.idRoom;
-                                print('ID ROOM: $price');
-
                                 return DropdownMenuItem<String>(
                                   value: customer.id,
                                   child: new Text(customer.name ?? ''),
@@ -181,42 +180,33 @@ class _AddInvoiceState extends State<AddInvoice> {
                         ),
                       ),
                       SizedBox(height: 20),
-                      Container(
-                        width: Utils.sizeWidth(context),
-                        height: 35,
-                        decoration: BoxDecoration(
-                          color: Colors.green,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(5),
-                            topRight: Radius.circular(5),
-                          ),
-                        ),
-                        child: Center(
-                          child: Text('Tien phong'),
-                        ),
-                      ),
+                      _buildHeader('Tiền phòng'),
                       Padding(
                         padding: const EdgeInsets.symmetric(
                             vertical: 5, horizontal: 8),
                         child: Column(
                           children: [
                             TextFieldCustom(
-                              controller: _priceController..text = 'fgdf',
+                              controller: _priceController
+                                ..text = roomModel?.price.toString() ?? '',
                               lable: 'Tiền phòng',
                               requied: true,
                               type: TextInputType.number,
                             ),
                             SizedBox(height: 6),
-                            TextFieldCustom(
-                              controller: null,
-                              lable: 'Tiền cọc',
-                              hintext: 'Tiền cọc',
-                              requied: true,
-                              type: TextInputType.number,
-                            ),
                           ],
                         ),
-                      )
+                      ),
+                      _buildHeader('Dịch vụ'),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 8),
+                        child: Column(
+                          children: [
+                            SizedBox(height: 6),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -265,6 +255,23 @@ class _AddInvoiceState extends State<AddInvoice> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildHeader(String title) {
+    return Container(
+      width: Utils.sizeWidth(context),
+      height: 35,
+      decoration: BoxDecoration(
+        color: Colors.green,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(5),
+          topRight: Radius.circular(5),
+        ),
+      ),
+      child: Center(
+        child: Text(title),
       ),
     );
   }
