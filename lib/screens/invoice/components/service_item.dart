@@ -9,37 +9,91 @@ class ServiceItem extends StatefulWidget {
 }
 
 class _ServiceItemState extends State<ServiceItem> {
-  bool? isCheck;
-  final String? name;
-  final double? priceService;
-  final String? note;
-  final double? amount;
+  String? name;
+  TextEditingController _controllerElectLast = TextEditingController();
+  TextEditingController _controllerElectCurent = TextEditingController();
+  TextEditingController _controllerElectPrice = TextEditingController();
+  TextEditingController _controllerAmount = TextEditingController();
+  double? amount;
 
-  _ServiceItemState(
-      {this.isCheck = false,
-      this.name,
-      this.priceService,
-      this.note,
-      this.amount});
+  // tinh tong
+
+  // double _amountTotal() {
+  //   // double tong = (double.parse(_controllerElectCurent.text) -
+  //   //         double.parse(_controllerElectCurent.text)) *
+  //   //     double.parse(_controllerElectPrice.text);
+  //   if (_controllerElectPrice.text.isNotEmpty) {
+  //     print('TONG: ${_controllerElectPrice.text}');
+  //     return double.parse(_controllerElectPrice.text);
+  //   }
+  //   return 7;
+  // }
+
+  @override
+  void initState() {
+    super.initState();
+    _controllerElectLast.addListener(_amountPrint);
+  }
+
+  void _amountPrint() {
+    var dd = _controllerElectLast.text;
+    print('AMUNT: ${dd}');
+  }
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Checkbox(
-                value: isCheck,
-                onChanged: (value) {
-                  setState(() {
-                    isCheck = value;
-                  });
-                },
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Dien'),
+            SizedBox(height: 10),
+            SizedBox(
+              height: 35,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _controllerElectLast,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Chỉ số cũ',
+                      ),
+                      keyboardType: TextInputType.number,
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Expanded(
+                    child: TextField(
+                      controller: _controllerElectCurent,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Chỉ số mới',
+                      ),
+                      keyboardType: TextInputType.number,
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Expanded(
+                    child: TextField(
+                      controller: _controllerElectPrice,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Đơn giá',
+                      ),
+                      keyboardType: TextInputType.number,
+                    ),
+                  ),
+                ],
               ),
-            ],
-          )
-        ],
+            ),
+            SizedBox(height: 10),
+            Text('Thành tiền: ${0}')
+          ],
+        ),
       ),
     );
   }

@@ -1,15 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:month_picker_dialog/month_picker_dialog.dart';
 import 'package:owner_app/components/custom_textfield.dart';
 import 'package:owner_app/model/customer_model.dart';
 import 'package:owner_app/model/room_model.dart';
 import 'package:owner_app/provider/customer_provider.dart';
 import 'package:owner_app/provider/room_provide.dart';
+import 'package:owner_app/screens/invoice/components/service_item.dart';
 import 'package:owner_app/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/src/provider.dart';
-import 'package:month_picker_dialog/month_picker_dialog.dart';
 
 class AddInvoice extends StatefulWidget {
   const AddInvoice({Key? key}) : super(key: key);
@@ -86,6 +87,7 @@ class _AddInvoiceState extends State<AddInvoice> {
               child: CircularProgressIndicator(),
             )
           : SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 3),
                 child: Form(
@@ -204,6 +206,7 @@ class _AddInvoiceState extends State<AddInvoice> {
                         child: Column(
                           children: [
                             SizedBox(height: 6),
+                            ServiceItem(),
                           ],
                         ),
                       ),
