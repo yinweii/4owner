@@ -23,10 +23,22 @@ class _AddInvoiceState extends State<AddInvoice> {
   CustomerModel? customerUser;
   final _formKey = GlobalKey<FormState>();
 
+  //Electricity controller
+  TextEditingController _controllerElectLast = TextEditingController();
+  TextEditingController _controllerElectCurent = TextEditingController();
+  TextEditingController _controllerElectPrice = TextEditingController();
+
+  //water
+  TextEditingController _controllerWaterLast = TextEditingController();
+  TextEditingController _controllerWaterCurent = TextEditingController();
+  TextEditingController _controllerWaterPrice = TextEditingController();
+
+  double? amount;
+  double? amountWater;
+
   //controller
   TextEditingController _priceController = TextEditingController();
-  // TextEditingController _priceController = TextEditingController();
-  // TextEditingController _priceController = TextEditingController();
+
   String? selectedValue = null;
   DateTime? selectedFirstDate;
   DateTime? selectedSecondDate;
@@ -75,6 +87,31 @@ class _AddInvoiceState extends State<AddInvoice> {
     super.initState();
     //_priceController.addListener();
     getCustommer();
+
+    //add listener eclectric controller
+    _controllerElectLast.addListener(_totalElectric);
+    _controllerElectCurent.addListener(_totalElectric);
+    _controllerElectPrice.addListener(_totalElectric);
+
+    //add listener water controller
+    _controllerWaterLast.addListener(_amountWater);
+    _controllerWaterCurent.addListener(_amountWater);
+    _controllerWaterPrice.addListener(_amountWater);
+  }
+
+  void _amountWater() {
+    var last = _controllerWaterLast.text;
+    var current = _controllerWaterCurent.text;
+    var price = _controllerWaterPrice.text;
+    amountWater =
+        (double.parse(current) - double.parse(last)) * double.parse(price);
+  }
+
+  void _totalElectric() {
+    var last = _controllerElectLast.text;
+    var current = _controllerElectCurent.text;
+    var price = _controllerElectPrice.text;
+    amount = (double.parse(current) - double.parse(last)) * double.parse(price);
   }
 
   void _submitContract() async {}
@@ -206,7 +243,20 @@ class _AddInvoiceState extends State<AddInvoice> {
                         child: Column(
                           children: [
                             SizedBox(height: 6),
-                            ServiceItem(),
+                            BuildCard(
+                              controllerLast: _controllerElectLast,
+                              controllerCurent: _controllerElectCurent,
+                              controllerPrice: _controllerElectPrice,
+                              amount: amount,
+                              name: 'Điện',
+                            ),
+                            BuildCard(
+                              controllerLast: _controllerWaterLast,
+                              controllerCurent: _controllerWaterCurent,
+                              controllerPrice: _controllerWaterPrice,
+                              amount: amountWater,
+                              name: 'Nước',
+                            ),
                           ],
                         ),
                       ),
@@ -277,5 +327,18 @@ class _AddInvoiceState extends State<AddInvoice> {
         child: Text(title),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controllerElectLast.dispose();
+    _controllerElectCurent.dispose();
+    _controllerElectPrice.dispose();
+
+    //disponse
+    _controllerWaterLast.dispose();
+    _controllerWaterCurent.dispose();
+    _controllerWaterPrice.dispose();
   }
 }
