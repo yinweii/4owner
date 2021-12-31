@@ -1,26 +1,24 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:owner_app/provider/customer_provider.dart';
 import 'package:owner_app/utils/utils.dart';
 
-import 'add_customer_screen.dart';
-import 'components/customer_list.dart';
-import 'package:provider/provider.dart';
+import 'activity_screen.dart';
+import 'components/add_contract_screen.dart';
 
-class IndentureScreen extends StatefulWidget {
-  const IndentureScreen({Key? key}) : super(key: key);
+class ContractScreen extends StatefulWidget {
+  const ContractScreen({Key? key}) : super(key: key);
 
   @override
-  _IndentureScreenState createState() => _IndentureScreenState();
+  _ContractScreenState createState() => _ContractScreenState();
 }
 
-class _IndentureScreenState extends State<IndentureScreen>
+class _ContractScreenState extends State<ContractScreen>
     with SingleTickerProviderStateMixin {
   TabController? controller;
   @override
   void initState() {
     super.initState();
-    controller = TabController(length: 2, vsync: this);
-    context.read<Customer>().getListCustomer();
+    controller = TabController(length: 3, vsync: this);
   }
 
   @override
@@ -33,7 +31,7 @@ class _IndentureScreenState extends State<IndentureScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Người thuê'),
+        title: const Text('Hợp đồng'),
         centerTitle: true,
         bottom: TabBar(
           indicatorColor: Colors.white,
@@ -41,12 +39,18 @@ class _IndentureScreenState extends State<IndentureScreen>
           tabs: const <Tab>[
             Tab(
                 child: Text(
-              'Người thuê',
+              'Hoạt động',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             )),
             Tab(
               child: Text(
-                'Chuyển đi',
+                'Quá hạn',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
+            ),
+            Tab(
+              child: Text(
+                'Đã thanh lý',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
             ),
@@ -56,12 +60,13 @@ class _IndentureScreenState extends State<IndentureScreen>
       body: TabBarView(
         controller: controller,
         children: <Widget>[
-          CustomerList(),
+          ActivityScreen(),
+          Container(),
           Container(),
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Utils.navigatePage(context, AddCustomerScreen()),
+        onPressed: () => Utils.navigatePage(context, AddContractScreen()),
         child: Icon(Icons.add),
       ),
     );

@@ -23,7 +23,17 @@ class CustomerCard extends StatelessWidget {
             '$name',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
           ),
-          subtitle: Text("$roomNumber - $floorName"),
+          subtitle: Row(
+            children: [
+              Text(
+                "$floorName ",
+                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
+              ),
+              SizedBox(width: 3),
+              Text('$roomNumber',
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
+            ],
+          ),
           trailing: Text(
             '$phoneNumber',
             style: TextStyle(color: Colors.green),

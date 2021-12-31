@@ -4,9 +4,11 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
+import 'package:min_id/min_id.dart';
 import 'package:owner_app/components/custom_textfield.dart';
 import 'package:owner_app/model/customer_model.dart';
 import 'package:owner_app/model/floor_model.dart';
+import 'package:owner_app/model/room_model.dart';
 import 'package:owner_app/provider/customer_provider.dart';
 import 'package:owner_app/provider/floor_provider.dart';
 import 'package:owner_app/utils/logger.dart';
@@ -44,8 +46,11 @@ class _AddCustomerScreenState extends State<AddCustomerScreen>
   }
 
   String? _select;
+  String? _selectRoom;
   bool uploading = false;
   double val = 0;
+  List<RoomModel> room = [];
+  String? idRooms;
 
   // TODO(last code): get image
   // Future<void> chooseImage() async {
@@ -60,13 +65,16 @@ class _AddCustomerScreenState extends State<AddCustomerScreen>
   void _saveForm() async {
     if (_formKey.currentState!.validate()) {
       var newCustomer = CustomerModel(
+        id: MinId.getId(),
+        idFloor: _select ?? '',
+        idRoom: idRooms ?? '',
         name: _nameController.text,
         phoneNumber: _phoneNumberController.text,
         dateOfBirth: '',
         cardNumber: _cardNunberController.text,
         email: _emailController.text,
-        roomNumber: '',
-        floorNumber: _select,
+        roomNumber: _selectRoom,
+        floorNumber: context.read<Floor>().findById(_select ?? '').name,
         address: _addressController.text,
         gender: '',
         imageFirstUrl: '',
@@ -122,46 +130,86 @@ class _AddCustomerScreenState extends State<AddCustomerScreen>
                     hintext: 'Email...',
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 6),
+                    padding: const EdgeInsets.all(8.0),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Khu/tầng'),
-                        Text(
-                          '*',
-                          style: TextStyle(color: Colors.red),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _buildLable('Khu/tầng'),
+                              FutureBuilder(
+                                future: getFloor(),
+                                builder: (ctx, snapshort) => DropdownButton(
+                                  hint: Container(
+                                    width: Utils.sizeWidth(context) * 0.4,
+                                    child: Text(
+                                      "${(_select ?? '').isNotEmpty ? context.watch<Floor>().findById(_select!).name : ''}",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w800),
+                                    ),
+                                  ), // Not necessary for Option 1
+
+                                  items: context
+                                      .read<Floor>()
+                                      .floorList
+                                      .map((FloorModel floorItem) {
+                                    return DropdownMenuItem<String>(
+                                      value: floorItem.id,
+                                      child: new Text(floorItem.name ?? ''),
+                                    );
+                                  }).toList(),
+                                  onChanged: (String? value) {
+                                    setState(
+                                      () {
+                                        _select = value;
+                                        room = context
+                                                .read<Floor>()
+                                                .findById(_select!)
+                                                .roomList ??
+                                            [];
+                                      },
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _buildLable('Phòng'),
+                              DropdownButton(
+                                hint: Container(
+                                  width: Utils.sizeWidth(context) * 0.4,
+                                  child: Text(
+                                    "${(_selectRoom ?? '').isNotEmpty ? _selectRoom : ''}",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w800),
+                                  ),
+                                ), // Not necessary for Option 1
+
+                                items: room.map((e) {
+                                  idRooms = e.id;
+                                  return DropdownMenuItem<String>(
+                                    value: e.romName,
+                                    child: new Text(e.romName ?? ''),
+                                  );
+                                }).toList(),
+                                onChanged: (String? value) {
+                                  setState(() {
+                                    _selectRoom = value;
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
                         ),
                       ],
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 3, vertical: 6),
-                    child: Container(
-                      alignment: Alignment.center,
-                      child: DropdownButton(
-                        hint: Container(
-                          width: Utils.sizeWidth(context) * 0.9,
-                          child: Text(
-                            "${(_select ?? '').isNotEmpty ? _select : 'Vui long chon'}",
-                            style: TextStyle(fontWeight: FontWeight.w800),
-                          ),
-                        ), // Not necessary for Option 1
-
-                        items: context
-                            .read<Floor>()
-                            .floorList
-                            .map((FloorModel floorItem) {
-                          return DropdownMenuItem<String>(
-                            value: floorItem.name,
-                            child: new Text(floorItem.name ?? ''),
-                          );
-                        }).toList(),
-                        onChanged: (String? value) {
-                          setState(() {
-                            _select = value;
-                          });
-                        },
-                      ),
                     ),
                   ),
                   TextFieldCustom(
@@ -260,6 +308,19 @@ class _AddCustomerScreenState extends State<AddCustomerScreen>
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildLable(String title) {
+    return Row(
+      children: [
+        Text(title),
+        SizedBox(width: 5),
+        Text(
+          '*',
+          style: TextStyle(color: Colors.red),
+        ),
+      ],
     );
   }
 }

@@ -1,10 +1,11 @@
+import 'package:min_id/min_id.dart';
 import 'package:owner_app/provider/floor_provider.dart';
+import 'package:owner_app/screens/room/room_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'package:flutter/material.dart';
 import 'package:owner_app/constants/export.dart';
 import 'package:owner_app/model/floor_model.dart';
-import 'package:owner_app/room/room_screen.dart';
 import 'package:owner_app/utils/utils.dart';
 
 class FloorScreen extends StatefulWidget {
@@ -37,8 +38,10 @@ class _FloorScreenState extends State<FloorScreen> {
   }
 
   Future<void> saveForm() async {
-    var newFloor =
-        FloorModel(name: _nameController.text, desc: _descController.text);
+    var newFloor = FloorModel(
+        id: MinId.getId(),
+        name: _nameController.text,
+        desc: _descController.text);
     await Provider.of<Floor>(context, listen: false)
         .addNewFloor(newFloor)
         .then((value) => cleanForm());
@@ -81,6 +84,7 @@ class _FloorScreenState extends State<FloorScreen> {
                             : 3),
                     itemBuilder: (context, index) {
                       return BuildFloorItem(
+                        idFloor: floorData.floorList[index].id,
                         name: floorData.floorList[index].name,
                       );
                     },
@@ -152,14 +156,19 @@ class _FloorScreenState extends State<FloorScreen> {
 }
 
 class BuildFloorItem extends StatelessWidget {
+  final String? idFloor;
   final String? name;
   final String? desc;
-  const BuildFloorItem({Key? key, this.name, this.desc}) : super(key: key);
+  const BuildFloorItem({Key? key, this.idFloor, this.name, this.desc})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Utils.navigatePage(context, const RoomScreen()),
+      onTap: () {
+        print('IDD: $idFloor');
+        Utils.navigatePage(context, RoomScreen(id: idFloor));
+      },
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(

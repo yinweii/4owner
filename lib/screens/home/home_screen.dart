@@ -1,6 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:owner_app/constants/export.dart';
+import 'package:owner_app/screens/contract/contract_screen.dart';
 import 'package:owner_app/screens/customer/customer_screen.dart';
+import 'package:owner_app/screens/invoice/invoice_screen.dart';
 import 'package:owner_app/screens/room_services/service_screen.dart';
 import 'package:owner_app/utils/utils.dart';
 
@@ -123,6 +126,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           context, const RoomServiceScreen()),
                     ),
                     BuildItem(
+                      onPress: () =>
+                          Utils.navigatePage(context, ContractScreen()),
                       icon: Icon(
                         Icons.thumbs_up_down_outlined,
                         size: 40,
@@ -131,6 +136,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       text: 'Hợp đồng',
                     ),
                     BuildItem(
+                      onPress: () =>
+                          Utils.navigatePage(context, InvoiceScreen()),
                       icon: Icon(
                         Icons.assignment_outlined,
                         size: 40,

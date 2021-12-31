@@ -48,7 +48,7 @@ class ServiceProvider with ChangeNotifier {
           .doc(userUID)
           .collection(Constants.serviceDb)
           .doc(newService.id)
-          .set(newService.toJson());
+          .set(newService.toMap());
     } catch (e) {
       print(e.toString());
     }
@@ -72,7 +72,7 @@ class ServiceProvider with ChangeNotifier {
             .doc(userUID)
             .collection(Constants.serviceDb)
             .doc(newService.id)
-            .update(newService.toJson());
+            .update(newService.toMap());
       } catch (e) {
         print('ERROR:' + e.toString());
       }
@@ -90,8 +90,8 @@ class ServiceProvider with ChangeNotifier {
           .get();
       List<RoomService> listExtract = [];
       for (var doccument in snapshot!.docs) {
-        listExtract.add(
-            RoomService.fromJson(doccument.data() as Map<String, dynamic>));
+        listExtract
+            .add(RoomService.fromMap(doccument.data() as Map<String, dynamic>));
       }
       _serviceAll = listExtract;
 
@@ -112,8 +112,8 @@ class ServiceProvider with ChangeNotifier {
           .get();
       List<RoomService> listExtract = [];
       for (var doccument in snapshot!.docs) {
-        listExtract.add(
-            RoomService.fromJson(doccument.data() as Map<String, dynamic>));
+        listExtract
+            .add(RoomService.fromMap(doccument.data() as Map<String, dynamic>));
       }
       setIsLoading(false);
       _serviceList = listExtract;
@@ -135,8 +135,8 @@ class ServiceProvider with ChangeNotifier {
           .get();
       List<RoomService> listExtract = [];
       for (var doccument in snapshot!.docs) {
-        listExtract.add(
-            RoomService.fromJson(doccument.data() as Map<String, dynamic>));
+        listExtract
+            .add(RoomService.fromMap(doccument.data() as Map<String, dynamic>));
       }
       _serviceListFee = listExtract;
 
