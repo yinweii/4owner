@@ -1,8 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:min_id/min_id.dart';
+import 'package:owner_app/model/more_service_model.dart';
 import 'package:owner_app/provider/contract_provider.dart';
 import 'package:owner_app/provider/customer_provider.dart';
+import 'package:owner_app/provider/invoice_provider.dart';
 import 'package:owner_app/provider/room_provide.dart';
 import 'package:provider/provider.dart';
 import 'provider/floor_provider.dart';
@@ -31,6 +33,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (ctx) => Customer()),
         ChangeNotifierProvider(create: (ctx) => RoomProvider()),
         ChangeNotifierProvider(create: (ctx) => Contract()),
+        ChangeNotifierProvider(create: (ctx) => MoreService()),
+        ChangeNotifierProvider(create: (ctx) => Invoice()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

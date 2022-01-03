@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:owner_app/screens/invoice/components/add_invoice_screen.dart';
+import 'package:owner_app/screens/invoice/payment_screen.dart';
 import 'package:owner_app/utils/utils.dart';
+
+import 'outdate_screen.dart';
+import 'unpayment_screen.dart';
 
 class InvoiceScreen extends StatefulWidget {
   const InvoiceScreen({Key? key}) : super(key: key);
@@ -50,9 +54,9 @@ class _InvoiceScreenState extends State<InvoiceScreen>
       body: TabBarView(
         controller: controller,
         children: <Widget>[
-          Container(),
-          Container(),
-          Container(),
+          UnPaymentScreen(),
+          OutDateScreen(),
+          PaymentScreen(),
         ],
       ),
       floatingActionButton: FloatingActionButton(

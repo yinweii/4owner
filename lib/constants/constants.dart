@@ -6,4 +6,5 @@ class Constants {
   static const customerDb = 'CUSTOMER_DB';
   static const contractDb = 'CONTRACT_DB';
   static const roomtDb = 'ROOM_DB';
+  static const invoiceDb = 'INVOICE_DB';
 }
