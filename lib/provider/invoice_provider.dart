@@ -95,17 +95,14 @@ class Invoice with ChangeNotifier, Helper {
     }
   } //get all invoice
 
-  Future<void> getAllInvoiceOutDate() async {
+  Future<void> getAllInvoiceOutDate({bool isPay = false}) async {
     try {
       _isLoading = isLoading(true);
       snapshot = await _fireStore
           .collection(Constants.userDb) //
           .doc(userUID)
           .collection(Constants.invoiceDb)
-          .where('isPayment', isEqualTo: false)
-          .where('dateTo',
-              isGreaterThanOrEqualTo:
-                  DateTime.now().millisecondsSinceEpoch.toString())
+          .where('dateTo', isLessThanOrEqualTo: DateTime.now())
           .get();
 
       List<InvoiceModel> listExtract = [];
@@ -114,6 +111,7 @@ class Invoice with ChangeNotifier, Helper {
         listExtract.add(
             InvoiceModel.fromMap(doccument.data() as Map<String, dynamic>));
       }
+      print('DATA: ${snapshot!.docs}');
       _isLoading = isLoading(false);
       _invoiceList = listExtract;
       notifyListeners();

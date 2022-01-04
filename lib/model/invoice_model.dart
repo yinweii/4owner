@@ -102,9 +102,9 @@ class InvoiceModel {
       'idRoom': idRoom,
       'roomName': roomName,
       'name': name,
-      'invoiceDate': invoiceDate?.millisecondsSinceEpoch,
-      'dateFrom': dateFrom?.millisecondsSinceEpoch,
-      'dateTo': dateTo?.millisecondsSinceEpoch,
+      'invoiceDate': invoiceDate,
+      'dateFrom': dateFrom,
+      'dateTo': dateTo,
       'roomCost': roomCost,
       'electUse': electUse?.toMap(),
       'priceEclect': priceEclect,
@@ -127,15 +127,10 @@ class InvoiceModel {
       idRoom: map['idRoom'],
       roomName: map['roomName'],
       name: map['name'],
-      invoiceDate: map['invoiceDate'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['invoiceDate'])
-          : null,
-      dateFrom: map['dateFrom'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['dateFrom'])
-          : null,
-      dateTo: map['dateTo'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['dateTo'])
-          : null,
+      invoiceDate:
+          map['invoiceDate'] != null ? map['invoiceDate'].toDate() : null,
+      dateFrom: map['dateFrom'] != null ? map['dateFrom'].toDate() : null,
+      dateTo: map['dateTo'] != null ? map['dateTo'].toDate() : null,
       roomCost: map['roomCost']?.toDouble(),
       electUse:
           map['electUse'] != null ? ElectModel.fromMap(map['electUse']) : null,

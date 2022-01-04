@@ -5,6 +5,8 @@ import 'package:owner_app/screens/invoice/components/update_invoice_screen.dart'
 import 'package:owner_app/utils/utils.dart';
 import 'package:provider/src/provider.dart';
 
+import 'invoice_detail.dart';
+
 class InvoiceItem extends StatelessWidget {
   const InvoiceItem(
       {Key? key,
@@ -36,6 +38,7 @@ class InvoiceItem extends StatelessWidget {
               child: const Text('Chi tiết'),
               onPressed: () {
                 Navigator.pop(context);
+                Utils.navigatePage(context, InvoiceDetail(id: id));
               },
             ),
             CupertinoActionSheetAction(
