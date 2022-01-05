@@ -23,7 +23,7 @@ class EditContractScreen extends StatefulWidget {
 
 class _EditContractScreenState extends State<EditContractScreen> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController _priceController = TextEditingController();
+  TextEditingController _numberPersonController = TextEditingController();
   TextEditingController _depositController = TextEditingController();
 
   CustomerModel? customer;
@@ -40,6 +40,12 @@ class _EditContractScreenState extends State<EditContractScreen> {
     super.initState();
     context.read<Customer>().getListCustomer();
     _contractEdit = context.read<Contract>().fintContractByID(widget.id ?? '');
+    initData();
+  }
+
+  void initData() {
+    _numberPersonController.text = _contractEdit.numberPerson.toString();
+    _depositController.text = _contractEdit.deposit.toString();
   }
 
   // get date
@@ -80,10 +86,9 @@ class _EditContractScreenState extends State<EditContractScreen> {
         dateFrom: selectedFirstDate,
         dateTo: selectedSecondDate,
         startPay: selectedDateStart,
-        price: double.parse(_priceController.text),
+        numberPerson: int.parse(_numberPersonController.text),
         deposit: double.parse(_depositController.text),
       );
-      print('NEW CONTRACT: ${newContract.toString()}');
       await context
           .read<Contract>()
           .editContract(widget.id!, newContract)
@@ -135,7 +140,7 @@ class _EditContractScreenState extends State<EditContractScreen> {
                             DropdownButtonFormField(
                               validator: (value) =>
                                   value == null ? "Chọn người thuê " : null,
-                              //dropdownColor: Colors.blueAccent,
+                              hint: Text(_contractEdit.customer!.name!),
                               value: selectedValue,
                               onChanged: (String? newValue) {
                                 setState(() {
@@ -151,7 +156,7 @@ class _EditContractScreenState extends State<EditContractScreen> {
                                   .map((CustomerModel customer) {
                                 return DropdownMenuItem<String>(
                                   value: customer.id,
-                                  child: new Text(customer.name ?? ''),
+                                  child: Text(customer.name ?? ''),
                                 );
                               }).toList(),
                             ),
@@ -184,7 +189,7 @@ class _EditContractScreenState extends State<EditContractScreen> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      "${selectedDateStart != null ? DateFormat('dd-MM-yyyy').format(selectedDateStart!) : 'Ngày bắt đầu tính tiền'} ",
+                                      "${selectedDateStart != null ? DateFormat('dd-MM-yyyy').format(selectedDateStart!) : DateFormat('dd-MM-yyyy').format(_contractEdit.startPay!)} ",
                                     ),
                                     GestureDetector(
                                       onTap: _selectDateStart,
@@ -218,9 +223,8 @@ class _EditContractScreenState extends State<EditContractScreen> {
                         child: Column(
                           children: [
                             TextFieldCustom(
-                              controller: _priceController,
-                              lable: 'Tiền phòng',
-                              hintext: 'Họ và tên...',
+                              controller: _numberPersonController,
+                              lable: 'Số lượng người ',
                               requied: true,
                               type: TextInputType.number,
                             ),
@@ -272,10 +276,10 @@ class _EditContractScreenState extends State<EditContractScreen> {
           children: [
             isFirst
                 ? Text(
-                    "${selectedFirstDate != null ? DateFormat('dd-MM-yyyy').format(selectedFirstDate!) : 'Từ ngày'} ",
+                    "${selectedFirstDate != null ? DateFormat('dd-MM-yyyy').format(selectedFirstDate!) : DateFormat('dd-MM-yyyy').format(_contractEdit.dateFrom!)} ",
                   )
                 : Text(
-                    "${selectedSecondDate != null ? DateFormat('dd-MM-yyyy').format(selectedSecondDate!) : 'Đến ngày'} ",
+                    "${selectedSecondDate != null ? DateFormat('dd-MM-yyyy').format(selectedSecondDate!) : DateFormat('dd-MM-yyyy').format(_contractEdit.dateTo!)} ",
                   ),
             GestureDetector(
               onTap: () => isFirst ? _selectDate(true) : _selectDate(false),

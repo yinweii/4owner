@@ -77,7 +77,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
         dateFrom: selectedFirstDate,
         dateTo: selectedSecondDate,
         startPay: selectedDateStart,
-        price: double.parse(_priceController.text),
+        numberPerson: int.parse(_priceController.text),
         deposit: double.parse(_depositController.text),
       );
       await context
@@ -215,8 +215,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
                           children: [
                             TextFieldCustom(
                               controller: _priceController,
-                              lable: 'Tiền phòng',
-                              hintext: 'Họ và tên...',
+                              lable: 'Số lượng người ',
                               requied: true,
                               type: TextInputType.number,
                             ),

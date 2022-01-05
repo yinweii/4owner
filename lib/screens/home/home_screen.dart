@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:owner_app/constants/export.dart';
 import 'package:owner_app/screens/contract/contract_screen.dart';
 import 'package:owner_app/screens/customer/customer_screen.dart';
+import 'package:owner_app/screens/holdroom/holdroom_screen.dart';
 import 'package:owner_app/screens/invoice/invoice_screen.dart';
 import 'package:owner_app/screens/room_services/service_screen.dart';
 import 'package:owner_app/utils/utils.dart';
@@ -170,6 +171,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         color: Colors.deepOrangeAccent,
                       ),
                       text: 'Giữ phòng',
+                      onPress: () => Utils.navigatePage(
+                        context,
+                        HoldRoomScreen(),
+                      ),
                     ),
                     BuildItem(
                       icon: Icon(
