@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:owner_app/components/loading_widget.dart';
 
 import 'package:owner_app/provider/floor_provider.dart';
 
@@ -19,14 +20,14 @@ class RoomScreen extends StatefulWidget {
 }
 
 class _RoomScreenState extends State<RoomScreen> {
-  Future<void> getFloorDetail() async {
-    Provider.of<Floor>(context, listen: false).getFloorDetail(widget.id!);
+  Future<void> getRoom() async {
+    Provider.of<RoomProvider>(context, listen: false).getRoom(widget.id);
   }
 
   @override
   void initState() {
     super.initState();
-    getFloorDetail();
+    getRoom();
   }
 
   @override
@@ -36,16 +37,15 @@ class _RoomScreenState extends State<RoomScreen> {
         title: const Text('Người thuê'),
         centerTitle: true,
       ),
-      body: context.watch<Floor>().showLoading
+      body: context.watch<RoomProvider>().showLoading
           ? Center(
-              child: CircularProgressIndicator(),
+              child: circularProgress(),
             )
-          : Consumer<Floor>(
-              builder: (ctx, roomData, _) => (roomData.floorModel.roomList ??
-                          [])
+          : Consumer<RoomProvider>(
+              builder: (ctx, roomData, _) => (roomData.listRoom ?? [])
                       .isNotEmpty
                   ? GridView.builder(
-                      itemCount: roomData.floorModel.roomList?.length,
+                      itemCount: roomData.listRoom?.length,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: (MediaQuery.of(context).orientation ==
                                   Orientation.portrait)
@@ -53,13 +53,13 @@ class _RoomScreenState extends State<RoomScreen> {
                               : 3),
                       itemBuilder: (ctx, index) {
                         return RoomItem(
-                          id: roomData.floorModel.roomList?[index].id ?? '',
-                          name: roomData.floorModel.roomList?[index].romName ??
-                              '',
-                          price: roomData.floorModel.roomList?[index].price,
-                          person: roomData.floorModel.roomList?[index].person,
-                          area: roomData.floorModel.roomList?[index].area
-                              .toString(),
+                          id: roomData.listRoom?[index].id ?? '',
+                          name: roomData.listRoom?[index].romName ?? '',
+                          price: roomData.listRoom?[index].price,
+                          area: roomData.listRoom?[index].area.toString(),
+                          person:
+                              roomData.listRoom?[index].listCustomer?.length ??
+                                  0,
                         );
                       })
                   : Center(
@@ -187,19 +187,19 @@ class RoomItem extends StatelessWidget {
                 ],
               ),
             ),
-            Positioned(
-              top: 6,
-              right: 8,
-              child: person! < 1
-                  ? Text(
-                      'Chưa \n thuê',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.red,
-                          fontSize: 10),
-                    )
-                  : SizedBox.shrink(),
-            ),
+            // Positioned(
+            //   top: 6,
+            //   right: 8,
+            //   child: person! < 1
+            //       ? Text(
+            //           'Chưa \n thuê',
+            //           style: TextStyle(
+            //               fontWeight: FontWeight.bold,
+            //               color: Colors.red,
+            //               fontSize: 10),
+            //         )
+            //       : SizedBox.shrink(),
+            // ),
           ],
         ),
       ),

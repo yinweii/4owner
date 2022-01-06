@@ -2,15 +2,18 @@ import 'dart:io';
 
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
 import 'package:min_id/min_id.dart';
 import 'package:owner_app/components/custom_textfield.dart';
+import 'package:owner_app/constants/export.dart';
 import 'package:owner_app/model/customer_model.dart';
 import 'package:owner_app/model/floor_model.dart';
 import 'package:owner_app/model/room_model.dart';
 import 'package:owner_app/provider/customer_provider.dart';
 import 'package:owner_app/provider/floor_provider.dart';
+import 'package:owner_app/provider/room_provide.dart';
 import 'package:owner_app/utils/logger.dart';
 import 'package:owner_app/utils/utils.dart';
 import 'package:provider/provider.dart';
@@ -25,7 +28,8 @@ class AddCustomerScreen extends StatefulWidget {
 class _AddCustomerScreenState extends State<AddCustomerScreen>
     with SingleTickerProviderStateMixin {
   Future<void> getFloor() async {
-    await Provider.of<Floor>(context, listen: false).getFloor();
+    context.read<Floor>().getFloor();
+    context.read<RoomProvider>().getAllRoom();
   }
 
   TextEditingController _nameController = TextEditingController();
@@ -42,7 +46,8 @@ class _AddCustomerScreenState extends State<AddCustomerScreen>
   @override
   void initState() {
     super.initState();
-    getFloor();
+
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) => getFloor());
   }
 
   String? _select;
@@ -51,6 +56,8 @@ class _AddCustomerScreenState extends State<AddCustomerScreen>
   double val = 0;
   List<RoomModel> room = [];
   String? idRooms;
+
+  bool isDeposit = false;
 
   // TODO(last code): get image
   // Future<void> chooseImage() async {
@@ -62,25 +69,28 @@ class _AddCustomerScreenState extends State<AddCustomerScreen>
   //   );
   //   if (pickedFile?.path == null) retrieveLostData();
   // }
+
   void _saveForm() async {
     if (_formKey.currentState!.validate()) {
       var newCustomer = CustomerModel(
         id: MinId.getId(),
-        idFloor: _select ?? '',
-        idRoom: idRooms ?? '',
+        idFloor: isDeposit ? '' : (_select ?? ''),
+        idRoom: isDeposit ? '' : (idRooms ?? ''),
         name: _nameController.text,
         phoneNumber: _phoneNumberController.text,
         dateOfBirth: '',
         cardNumber: _cardNunberController.text,
         email: _emailController.text,
-        roomNumber: _selectRoom,
-        floorNumber: context.read<Floor>().findById(_select ?? '').name,
+        roomNumber: _selectRoom ?? '',
+        floorNumber: isDeposit
+            ? ''
+            : (context.read<Floor>().findById(_select ?? '').name),
         address: _addressController.text,
         gender: '',
         imageFirstUrl: '',
         imageLastUrl: '',
       );
-      context.read<Customer>().addNewCustomer(newCustomer).then(
+      context.read<Customer>().addNewCustomer(newCustomer, idRooms ?? '').then(
             (value) => Navigator.of(context).pop(),
           );
       print('CUSTOMER: ${newCustomer.toString()}');
@@ -89,7 +99,9 @@ class _AddCustomerScreenState extends State<AddCustomerScreen>
 
   @override
   Widget build(BuildContext context) {
+    //room = context.read<RoomProvider?>()?.findListRoom(_select) ?? [];
     return Scaffold(
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: Text('Add'),
         actions: [
@@ -101,35 +113,49 @@ class _AddCustomerScreenState extends State<AddCustomerScreen>
           ),
         ],
       ),
-      body: RefreshIndicator(
-        onRefresh: getFloor,
-        child: Form(
-          key: _formKey,
-          child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TextFieldCustom(
-                    controller: _nameController,
-                    lable: 'Họ và tên',
-                    hintext: 'Họ và tên...',
-                    requied: true,
-                  ),
-                  TextFieldCustom(
-                    controller: _phoneNumberController,
-                    lable: 'Số điện thoại',
-                    hintext: 'Số điện thoại...',
-                    type: TextInputType.number,
-                  ),
-                  TextFieldCustom(
-                    controller: _emailController,
-                    lable: 'Email',
-                    hintext: 'Email...',
-                  ),
-                  Padding(
+      body: Form(
+        key: _formKey,
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextFieldCustom(
+                  controller: _nameController,
+                  lable: 'Họ và tên',
+                  hintext: 'Họ và tên...',
+                  requied: true,
+                ),
+                TextFieldCustom(
+                  controller: _phoneNumberController,
+                  lable: 'Số điện thoại',
+                  hintext: 'Số điện thoại...',
+                  type: TextInputType.number,
+                ),
+                TextFieldCustom(
+                  controller: _emailController,
+                  lable: 'Email',
+                  hintext: 'Email...',
+                ),
+                Row(
+                  children: [
+                    Checkbox(
+                      value: this.isDeposit,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          this.isDeposit = value!;
+                          print('VALUE: ${this.isDeposit}');
+                        });
+                      },
+                    ),
+                    Text('Chưa có phòng(đặt cọc)'),
+                  ],
+                ),
+                Visibility(
+                  visible: this.isDeposit ? false : true,
+                  child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -160,15 +186,10 @@ class _AddCustomerScreenState extends State<AddCustomerScreen>
                                       child: new Text(floorItem.name ?? ''),
                                     );
                                   }).toList(),
-                                  onChanged: (String? value) {
+                                  onChanged: (String? value) async {
                                     setState(
                                       () {
                                         _select = value;
-                                        room = context
-                                                .read<Floor>()
-                                                .findById(_select!)
-                                                .roomList ??
-                                            [];
                                       },
                                     );
                                   },
@@ -193,7 +214,10 @@ class _AddCustomerScreenState extends State<AddCustomerScreen>
                                   ),
                                 ), // Not necessary for Option 1
 
-                                items: room.map((e) {
+                                items: context
+                                    .read<RoomProvider>()
+                                    .findListRoom(_select)
+                                    .map((e) {
                                   idRooms = e.id;
                                   return DropdownMenuItem<String>(
                                     value: e.romName,
@@ -212,73 +236,51 @@ class _AddCustomerScreenState extends State<AddCustomerScreen>
                       ],
                     ),
                   ),
-                  TextFieldCustom(
-                    controller: _cardNunberController,
-                    lable: 'Số CMND/CCCD',
-                    hintext: 'Số CMND/CCCD...',
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 6),
-                    child: Text('Địa chỉ'),
-                  ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
-                    child: TextFormField(
-                      controller: _addressController,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                      ),
-                      maxLines: 4,
+                ),
+                TextFieldCustom(
+                  controller: _cardNunberController,
+                  lable: 'Số CMND/CCCD',
+                  hintext: 'Số CMND/CCCD...',
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 6),
+                  child: Text('Địa chỉ'),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
+                  child: TextFormField(
+                    controller: _addressController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
                     ),
+                    maxLines: 4,
                   ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
-                    child: Text('Ảnh CMND/CCCD'),
-                  ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(left: 6, right: 6, bottom: 50),
-                    child: Container(
-                      width: Utils.sizeWidth(context),
-                      height: 150,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: Colors.grey),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            DottedBorder(
-                              color: Colors.red,
-                              dashPattern: [3, 5],
-                              strokeWidth: 2,
-                              child: Container(
-                                  height: 100,
-                                  width: 140,
-                                  child: _listFile.isEmpty
-                                      ? Center(
-                                          child: IconButton(
-                                            onPressed: () {},
-                                            icon: Icon(
-                                                Icons.add_a_photo_outlined),
-                                          ),
-                                        )
-                                      : SizedBox(
-                                          child: Image.file(
-                                            _listFile[0],
-                                            fit: BoxFit.cover,
-                                          ),
-                                        )),
-                            ),
-                            DottedBorder(
-                              color: Colors.red,
-                              dashPattern: [3, 5],
-                              strokeWidth: 2,
-                              child: Container(
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
+                  child: Text('Ảnh CMND/CCCD'),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 6, right: 6, bottom: 50),
+                  child: Container(
+                    width: Utils.sizeWidth(context),
+                    height: 150,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Colors.grey),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          DottedBorder(
+                            color: Colors.red,
+                            dashPattern: [3, 5],
+                            strokeWidth: 2,
+                            child: Container(
                                 height: 100,
                                 width: 140,
                                 child: _listFile.isEmpty
@@ -291,19 +293,39 @@ class _AddCustomerScreenState extends State<AddCustomerScreen>
                                       )
                                     : SizedBox(
                                         child: Image.file(
-                                          _listFile[1],
+                                          _listFile[0],
                                           fit: BoxFit.cover,
                                         ),
+                                      )),
+                          ),
+                          DottedBorder(
+                            color: Colors.red,
+                            dashPattern: [3, 5],
+                            strokeWidth: 2,
+                            child: Container(
+                              height: 100,
+                              width: 140,
+                              child: _listFile.isEmpty
+                                  ? Center(
+                                      child: IconButton(
+                                        onPressed: () {},
+                                        icon: Icon(Icons.add_a_photo_outlined),
                                       ),
-                              ),
+                                    )
+                                  : SizedBox(
+                                      child: Image.file(
+                                        _listFile[1],
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

@@ -1,5 +1,10 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
+
+import 'package:owner_app/model/customer_model.dart';
+import 'package:owner_app/provider/customer_provider.dart';
+
 class RoomModel {
   final String? id;
   final String? idFloor;
@@ -7,9 +12,9 @@ class RoomModel {
   final double? area;
   final double? price;
   final String? status;
-  final int? person;
   final String? note;
   final String? imageUrl;
+  final List<CustomerModel>? listCustomer;
   RoomModel({
     this.id,
     this.idFloor,
@@ -17,9 +22,9 @@ class RoomModel {
     this.area,
     this.price,
     this.status,
-    this.person,
     this.note,
     this.imageUrl,
+    this.listCustomer,
   });
 
   RoomModel copyWith({
@@ -29,9 +34,9 @@ class RoomModel {
     double? area,
     double? price,
     String? status,
-    int? person,
     String? note,
     String? imageUrl,
+    List<CustomerModel>? listCustomer,
   }) {
     return RoomModel(
       id: id ?? this.id,
@@ -40,9 +45,9 @@ class RoomModel {
       area: area ?? this.area,
       price: price ?? this.price,
       status: status ?? this.status,
-      person: person ?? this.person,
       note: note ?? this.note,
       imageUrl: imageUrl ?? this.imageUrl,
+      listCustomer: listCustomer ?? this.listCustomer,
     );
   }
 
@@ -54,9 +59,9 @@ class RoomModel {
       'area': area,
       'price': price,
       'status': status,
-      'person': person,
       'note': note,
       'imageUrl': imageUrl,
+      'listCustomer': listCustomer?.map((x) => x.toMap()).toList(),
     };
   }
 
@@ -68,9 +73,12 @@ class RoomModel {
       area: map['area']?.toDouble(),
       price: map['price']?.toDouble(),
       status: map['status'],
-      person: map['person']?.toInt(),
       note: map['note'],
       imageUrl: map['imageUrl'],
+      listCustomer: map['listCustomer'] != null
+          ? List<CustomerModel>.from(
+              map['listCustomer']?.map((x) => CustomerModel.fromMap(x)))
+          : null,
     );
   }
 
@@ -81,7 +89,7 @@ class RoomModel {
 
   @override
   String toString() {
-    return 'RoomModel(id: $id, idFloor: $idFloor, romName: $romName, area: $area, price: $price, status: $status, person: $person, note: $note, imageUrl: $imageUrl)';
+    return 'RoomModel(id: $id, idFloor: $idFloor, romName: $romName, area: $area, price: $price, status: $status, note: $note, imageUrl: $imageUrl, listCustomer: $listCustomer)';
   }
 
   @override
@@ -95,9 +103,9 @@ class RoomModel {
         other.area == area &&
         other.price == price &&
         other.status == status &&
-        other.person == person &&
         other.note == note &&
-        other.imageUrl == imageUrl;
+        other.imageUrl == imageUrl &&
+        listEquals(other.listCustomer, listCustomer);
   }
 
   @override
@@ -108,8 +116,8 @@ class RoomModel {
         area.hashCode ^
         price.hashCode ^
         status.hashCode ^
-        person.hashCode ^
         note.hashCode ^
-        imageUrl.hashCode;
+        imageUrl.hashCode ^
+        listCustomer.hashCode;
   }
 }

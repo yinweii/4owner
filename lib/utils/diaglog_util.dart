@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class DialogUtil {
+  DialogUtil._();
   static void showLoading(BuildContext context) {
     showDialog<void>(
         context: context,
@@ -33,6 +35,37 @@ class DialogUtil {
               },
               child: const Text('Ok'),
             ),
+          ],
+        );
+      },
+    );
+  }
+
+  static void cupertioDialog({
+    BuildContext? context,
+    String? title,
+    String? content,
+    VoidCallback? yesAction,
+  }) {
+    showCupertinoDialog(
+      context: context!,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: Text(title ?? ''),
+          content: Text(content ?? ''),
+          actions: [
+            CupertinoDialogAction(
+              child: Text("YES"),
+              onPressed: () {
+                yesAction!();
+                Navigator.of(context).pop();
+              },
+            ),
+            CupertinoDialogAction(
+                child: Text("NO"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                })
           ],
         );
       },

@@ -19,7 +19,7 @@ class _IndentureScreenState extends State<IndentureScreen>
   @override
   void initState() {
     super.initState();
-    controller = TabController(length: 2, vsync: this);
+    controller = TabController(length: 3, vsync: this);
     context.read<Customer>().getListCustomer();
   }
 
@@ -36,19 +36,23 @@ class _IndentureScreenState extends State<IndentureScreen>
         title: const Text('Người thuê'),
         centerTitle: true,
         bottom: TabBar(
+          isScrollable: true,
           indicatorColor: Colors.white,
           controller: controller,
-          tabs: const <Tab>[
+          tabs: <Tab>[
             Tab(
-                child: Text(
-              'Người thuê',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-            )),
+              child: _buildLable(
+                  title: 'Đã có phòng',
+                  number: '${context.watch<Customer>().customerHas().length}'),
+            ),
             Tab(
-              child: Text(
-                'Chuyển đi',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              ),
+              child: _buildLable(
+                  title: 'Chưa có phòng',
+                  number:
+                      '${context.watch<Customer>().customerDeposit().length}'),
+            ),
+            Tab(
+              child: _buildLable(title: 'Đã thanh lý', number: '0'),
             ),
           ],
         ),
@@ -56,14 +60,27 @@ class _IndentureScreenState extends State<IndentureScreen>
       body: TabBarView(
         controller: controller,
         children: <Widget>[
-          CustomerList(),
-          Container(),
+          CustomerList(type: 1),
+          CustomerList(type: 2),
+          CustomerList(type: 3),
         ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => Utils.navigatePage(context, AddCustomerScreen()),
         child: Icon(Icons.add),
       ),
+    );
+  }
+
+  Widget _buildLable({String? title, String? number}) {
+    return Column(
+      children: [
+        Text(
+          title ?? '',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+        ),
+        Text(number ?? '0')
+      ],
     );
   }
 }

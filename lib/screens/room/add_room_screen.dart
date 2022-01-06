@@ -32,10 +32,9 @@ class _AddRoomScreenState extends State<AddRoomScreen> {
         romName: _nameController.text,
         area: double.parse(_areaController.text),
         price: double.parse(_priceController.text),
-        person: int.parse(_personController.text),
         note: _noteController.text,
       );
-      context.read<Floor>().addNewRoom(widget.id!, newRoom);
+      context.read<RoomProvider>().addNewRoom(widget.id!, newRoom);
 
       Navigator.pop(context);
       print(newRoom.toString());

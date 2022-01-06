@@ -7,7 +7,10 @@ import 'package:owner_app/provider/customer_provider.dart';
 import 'package:owner_app/provider/invoice_provider.dart';
 import 'package:owner_app/provider/room_provide.dart';
 import 'package:provider/provider.dart';
+import 'constants/app_colors.dart';
+import 'constants/app_text.dart';
 import 'provider/floor_provider.dart';
+import 'provider/roomholder_provider.dart';
 import 'provider/service_provider.dart';
 import 'screens/authentication/authservice.dart';
 import 'screens/authentication/wrap_screen.dart';
@@ -35,12 +38,32 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (ctx) => Contract()),
         ChangeNotifierProvider(create: (ctx) => MoreService()),
         ChangeNotifierProvider(create: (ctx) => Invoice()),
+        ChangeNotifierProvider(create: (ctx) => RoomHolder()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primarySwatch: Colors.green,
+          primaryColorBrightness: Brightness.dark,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+          primaryColor: AppColors.primary,
+          appBarTheme: const AppBarTheme(
+            color: AppColors.primary,
+            iconTheme: IconThemeData(
+              color: AppColors.white,
+            ),
+            elevation: 0,
+          ),
+          scaffoldBackgroundColor: AppColors.background,
+          textTheme: TextTheme(
+            subtitle1: AppTextStyles.defaultBold,
+          ),
+          buttonTheme: const ButtonThemeData(
+            buttonColor: AppColors.primary,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(100)),
+            ),
+          ),
         ),
         home: const WrapScreen(),
       ),

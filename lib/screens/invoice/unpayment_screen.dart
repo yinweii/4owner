@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:owner_app/components/loading_widget.dart';
 import 'package:owner_app/provider/invoice_provider.dart';
 import 'package:owner_app/screens/invoice/components/invoice_item.dart';
 import 'package:owner_app/utils/utils.dart';
@@ -24,7 +25,7 @@ class _UnPaymentScreenState extends State<UnPaymentScreen> {
     final listInvoice = context.watch<Invoice>().invoiceList;
     return context.watch<Invoice>().showLoading
         ? Center(
-            child: CircularProgressIndicator(),
+            child: circularProgress(),
           )
         : listInvoice.isNotEmpty
             ? ListView.builder(

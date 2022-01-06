@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:min_id/min_id.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
 import 'package:owner_app/components/custom_textfield.dart';
+import 'package:owner_app/components/loading_widget.dart';
 import 'package:owner_app/constants/export.dart';
 import 'package:owner_app/model/customer_model.dart';
 import 'package:owner_app/model/invoice_model.dart';
@@ -67,7 +68,7 @@ class _UpdateInvoiceScreenState extends State<UpdateInvoiceScreen> {
 
   Future<void> getCustommer() async {
     await context.read<Customer>().getListCustomer();
-    await context.read<RoomProvider>().getAllRoom();
+    //await context.read<RoomProvider>().getRoom();
   }
 
   // get date
@@ -246,7 +247,7 @@ class _UpdateInvoiceScreenState extends State<UpdateInvoiceScreen> {
       appBar: AppBar(),
       body: context.watch<Customer>().showLoading
           ? Center(
-              child: CircularProgressIndicator(),
+              child: circularProgress(),
             )
           : SingleChildScrollView(
               physics: BouncingScrollPhysics(),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:owner_app/components/loading_widget.dart';
 import 'package:owner_app/provider/invoice_provider.dart';
 import 'package:owner_app/utils/utils.dart';
 import 'package:provider/src/provider.dart';
@@ -24,7 +25,7 @@ class _OutDateScreenState extends State<OutDateScreen> {
     final listInvoice = context.watch<Invoice>().invoiceList;
     return context.watch<Invoice>().showLoading
         ? Center(
-            child: CircularProgressIndicator(),
+            child: circularProgress(),
           )
         : ListView.builder(
             itemCount: listInvoice.length,
