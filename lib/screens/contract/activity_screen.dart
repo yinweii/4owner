@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:owner_app/components/loading_widget.dart';
 import 'package:owner_app/provider/contract_provider.dart';
 import 'package:owner_app/screens/contract/components/contract_item.dart';
 import 'package:owner_app/utils/utils.dart';
@@ -23,7 +24,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
   Widget build(BuildContext context) {
     return context.watch<Contract>().showLoading
         ? Center(
-            child: CircularProgressIndicator(),
+            child: circularProgress(),
           )
         : SingleChildScrollView(
             physics: const NeverScrollableScrollPhysics(),

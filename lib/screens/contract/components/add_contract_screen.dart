@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:min_id/min_id.dart';
 import 'package:owner_app/components/custom_textfield.dart';
+import 'package:owner_app/components/loading_widget.dart';
 import 'package:owner_app/model/contract_model.dart';
 import 'package:owner_app/model/customer_model.dart';
 import 'package:owner_app/provider/contract_provider.dart';
@@ -77,7 +78,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
         dateFrom: selectedFirstDate,
         dateTo: selectedSecondDate,
         startPay: selectedDateStart,
-        price: double.parse(_priceController.text),
+        numberPerson: int.parse(_priceController.text),
         deposit: double.parse(_depositController.text),
       );
       await context
@@ -100,7 +101,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
       ),
       body: context.watch<Customer>().showLoading
           ? Center(
-              child: CircularProgressIndicator(),
+              child: circularProgress(),
             )
           : SingleChildScrollView(
               child: Padding(
@@ -215,8 +216,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
                           children: [
                             TextFieldCustom(
                               controller: _priceController,
-                              lable: 'Tiền phòng',
-                              hintext: 'Họ và tên...',
+                              lable: 'Số lượng người ',
                               requied: true,
                               type: TextInputType.number,
                             ),

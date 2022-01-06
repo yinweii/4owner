@@ -24,7 +24,7 @@ class Customer with ChangeNotifier, Helper {
   //firebase
   final _fireStore = FirebaseFirestore.instance;
   // add new customer
-  Future<void> addNewCustomer(CustomerModel customer) async {
+  Future<void> addNewCustomer(CustomerModel customer, String idRoom) async {
     var newCustomer = CustomerModel(
       id: customer.id,
       name: customer.name,
@@ -51,6 +51,21 @@ class Customer with ChangeNotifier, Helper {
           .collection(Constants.customerDb)
           .doc(customer.id)
           .set(newCustomer.toMap());
+      if (idRoom.isNotEmpty) {
+        _fireStore
+            .collection(Constants.userDb)
+            .doc(userUID)
+            .collection(Constants.roomtDb)
+            .doc(idRoom)
+            .update({
+          'status': Constants.status_has,
+          'listCustomer': FieldValue.arrayUnion(
+            [newCustomer.toMap()],
+          )
+        });
+      } else {
+        return;
+      }
     } on Exception catch (e) {
       // TODO
       print(e.toString());
@@ -79,6 +94,39 @@ class Customer with ChangeNotifier, Helper {
 
   CustomerModel getCustomerByID(String id) =>
       _listCustomer.firstWhere((element) => element.id == id);
+
+  //get list customer have contract
+  List<CustomerModel> customerHas() {
+    List<CustomerModel> list = [];
+    for (var customer in _listCustomer) {
+      if (customer.status == true && (customer.idFloor ?? '').isNotEmpty) {
+        list.add(customer);
+      }
+    }
+    return list;
+  }
+  //get list customer have contract
+
+  List<CustomerModel> customerDeposit() {
+    List<CustomerModel> list = [];
+    for (var customer in _listCustomer) {
+      if ((customer.idFloor ?? '').isEmpty ||
+          (customer.idFloor ?? '').isEmpty) {
+        list.add(customer);
+      }
+    }
+    return list;
+  } //get list customer have contract
+
+  List<CustomerModel> customerOut() {
+    List<CustomerModel> list = [];
+    for (var customer in _listCustomer) {
+      if (customer.status == false) {
+        list.add(customer);
+      }
+    }
+    return list;
+  }
 
   // void setIsLoading(value) {
   //   _isLoading = value;

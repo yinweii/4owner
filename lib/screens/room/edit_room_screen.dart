@@ -38,7 +38,6 @@ class _EditRoomScreenState extends State<EditRoomScreen> {
         romName: _nameController.text,
         area: double.parse(_areaController.text),
         price: double.parse(_priceController.text),
-        person: int.parse(_personController.text),
         note: _noteController.text,
       );
       //TODO (lam sau):
@@ -80,13 +79,6 @@ class _EditRoomScreenState extends State<EditRoomScreen> {
                 TextFieldCustom(
                   controller: _areaController..text = _editRoom.area.toString(),
                   lable: 'Diện tích',
-                  requied: true,
-                  type: TextInputType.number,
-                ),
-                TextFieldCustom(
-                  controller: _personController
-                    ..text = _editRoom.person.toString(),
-                  lable: 'Giới hạn người thuê',
                   requied: true,
                   type: TextInputType.number,
                 ),

@@ -1,4 +1,5 @@
 import 'package:min_id/min_id.dart';
+import 'package:owner_app/components/loading_widget.dart';
 import 'package:owner_app/provider/floor_provider.dart';
 import 'package:owner_app/screens/room/room_screen.dart';
 import 'package:provider/provider.dart';
@@ -64,8 +65,8 @@ class _FloorScreenState extends State<FloorScreen> {
           future: getFloor(),
           builder: (ctx, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
+              return Center(
+                child: circularProgress(),
               );
             } else if (snapshot.error != null) {
               return const Center(

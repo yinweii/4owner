@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:owner_app/constants/export.dart';
 import 'package:owner_app/screens/invoice/components/add_invoice_screen.dart';
-import 'package:owner_app/screens/invoice/payment_screen.dart';
 import 'package:owner_app/utils/utils.dart';
 
-import 'outdate_screen.dart';
-import 'unpayment_screen.dart';
+import 'add_screen.dart';
+import 'components/list_holder.dart';
 
-class InvoiceScreen extends StatefulWidget {
-  const InvoiceScreen({Key? key}) : super(key: key);
+class HoldRoomScreen extends StatefulWidget {
+  const HoldRoomScreen({Key? key}) : super(key: key);
 
   @override
-  _InvoiceScreenState createState() => _InvoiceScreenState();
+  _HoldRoomScreenState createState() => _HoldRoomScreenState();
 }
 
-class _InvoiceScreenState extends State<InvoiceScreen>
+class _HoldRoomScreenState extends State<HoldRoomScreen>
     with SingleTickerProviderStateMixin {
   TabController? controller;
   @override
   void initState() {
     super.initState();
-    controller = TabController(length: 3, vsync: this);
+    controller = TabController(length: 4, vsync: this);
   }
 
   @override
@@ -32,35 +32,39 @@ class _InvoiceScreenState extends State<InvoiceScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Hợp đồng'),
-        centerTitle: true,
         bottom: TabBar(
-          indicatorColor: Colors.white,
+          isScrollable: true,
+          indicatorColor: Colors.red,
           automaticIndicatorColorAdjustment: true,
           controller: controller,
           tabs: <Tab>[
             Tab(
-              text: 'Chưa thanh toán',
+              text: 'Chờ phòng',
             ),
             Tab(
               text: 'Quá hạn',
             ),
             Tab(
-              text: 'Đã thanh toán',
+              text: 'Đã hủy',
+            ),
+            Tab(
+              text: 'Đã tạo hợp đồng',
             ),
           ],
         ),
       ),
       body: TabBarView(
         controller: controller,
-        children: <Widget>[
-          UnPaymentScreen(),
-          OutDateScreen(),
-          PaymentScreen(),
+        children: [
+          ListHolder(),
+          Container(),
+          Container(),
+          Container(),
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Utils.navigatePage(context, AddInvoice()),
+        backgroundColor: AppColors.primary,
+        onPressed: () => Utils.navigatePage(context, AddHoldScreen()),
         child: Icon(Icons.add),
       ),
     );

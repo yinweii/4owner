@@ -30,7 +30,8 @@ class Contract with ChangeNotifier, Helper {
       dateFrom: contract.dateFrom,
       dateTo: contract.dateTo,
       startPay: contract.startPay,
-      price: contract.price,
+      numberPerson: contract.numberPerson,
+      status: false,
       deposit: contract.deposit,
     );
     _contractList.add(newContract);
@@ -45,6 +46,10 @@ class Contract with ChangeNotifier, Helper {
       print(e.toString());
     }
     notifyListeners();
+  }
+
+  Future<void> onRefresh() async {
+    getAllContract();
   }
 
   Future<void> getAllContract() async {
@@ -80,7 +85,8 @@ class Contract with ChangeNotifier, Helper {
       dateFrom: contract.dateFrom,
       dateTo: contract.dateTo,
       startPay: contract.startPay,
-      price: contract.price,
+      numberPerson: contract.numberPerson,
+      status: false,
       deposit: contract.deposit,
     );
     if (indexEdit >= 0) {
@@ -120,6 +126,20 @@ class Contract with ChangeNotifier, Helper {
     } catch (e) {
       _isLoading = isLoading(false);
       devLog.e(e.toString());
+    }
+    notifyListeners();
+  }
+
+  Future<void> updateStatus(String id) async {
+    try {
+      _fireStore
+          .collection(Constants.userDb)
+          .doc(userUID)
+          .collection(Constants.contractDb)
+          .doc(id)
+          .update({'status': true});
+    } catch (e) {
+      print(e.toString());
     }
     notifyListeners();
   }

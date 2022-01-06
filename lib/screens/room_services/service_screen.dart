@@ -2,6 +2,7 @@
 //todo:
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:owner_app/components/loading_widget.dart';
 import 'package:owner_app/constants/export.dart';
 import 'package:owner_app/model/service_model.dart';
 import 'package:owner_app/provider/service_provider.dart';
@@ -109,8 +110,8 @@ class _RoomServiceScreenState extends State<RoomServiceScreen> {
         title: const Text('Dịch vụ'),
       ),
       body: context.watch<ServiceProvider>().isLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
+          ? Center(
+              child: circularProgress(),
             )
           : SingleChildScrollView(
               child: Padding(

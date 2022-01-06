@@ -1,12 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:min_id/min_id.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
 import 'package:owner_app/components/custom_textfield.dart';
-import 'package:owner_app/components/footer_button.dart';
 import 'package:owner_app/components/loading_widget.dart';
-import 'package:owner_app/constants/app_colors.dart';
+import 'package:owner_app/constants/export.dart';
 import 'package:owner_app/model/customer_model.dart';
 import 'package:owner_app/model/invoice_model.dart';
 import 'package:owner_app/model/more_service_model.dart';
@@ -17,17 +15,17 @@ import 'package:owner_app/provider/invoice_provider.dart';
 import 'package:owner_app/provider/room_provide.dart';
 import 'package:owner_app/screens/invoice/components/service_item.dart';
 import 'package:owner_app/utils/utils.dart';
-import 'package:provider/provider.dart';
 import 'package:provider/src/provider.dart';
 
-class AddInvoice extends StatefulWidget {
-  const AddInvoice({Key? key}) : super(key: key);
+class UpdateInvoiceScreen extends StatefulWidget {
+  final String? idInvoice;
+  const UpdateInvoiceScreen({Key? key, this.idInvoice}) : super(key: key);
 
   @override
-  _AddInvoiceState createState() => _AddInvoiceState();
+  _UpdateInvoiceScreenState createState() => _UpdateInvoiceScreenState();
 }
 
-class _AddInvoiceState extends State<AddInvoice> {
+class _UpdateInvoiceScreenState extends State<UpdateInvoiceScreen> {
   CustomerModel? customerUser;
   final _formKey = GlobalKey<FormState>();
 
@@ -63,11 +61,10 @@ class _AddInvoiceState extends State<AddInvoice> {
 
   RoomModel? roomModel;
   List<MoreServiceModel> moreService = [];
-  // List<MoreServiceModel> moreService() {
-  //   list = context.watch<MoreService>().moreServiceList;
-  //   print('LIST: ${list.toString()}');
-  //   return list ?? [];
-  // }
+
+  // invoice edit
+  var invoiceEdit = InvoiceModel(isPayment: false);
+  var _editRoom = RoomModel();
 
   Future<void> getCustommer() async {
     await context.read<Customer>().getListCustomer();
@@ -105,12 +102,35 @@ class _AddInvoiceState extends State<AddInvoice> {
     });
   }
 
+  void initData() {
+    _controllerElectLast = TextEditingController(
+        text: invoiceEdit.electUse?.lastNumber.toString());
+    _controllerElectCurent = TextEditingController(
+        text: invoiceEdit.electUse?.currentNumber.toString());
+    _controllerElectPrice =
+        TextEditingController(text: invoiceEdit.electUse?.unitPrice.toString());
+
+    //
+    _controllerWaterLast = TextEditingController(
+        text: invoiceEdit.waterUse?.lastNumber.toString());
+    _controllerWaterCurent = TextEditingController(
+        text: invoiceEdit.waterUse?.currentNumber.toString());
+    _controllerWaterPrice =
+        TextEditingController(text: invoiceEdit.waterUse?.unitPrice.toString());
+
+    //
+    _tienPhat = TextEditingController(text: invoiceEdit.punishPrice.toString());
+    _giamGia = TextEditingController(text: invoiceEdit.discount.toString());
+  }
+
   @override
   void initState() {
     super.initState();
     //_priceController.addListener();
     getCustommer();
-
+    invoiceEdit =
+        context.read<Invoice>().findInvoiceById(widget.idInvoice ?? '');
+    initData();
     //add listener eclectric controller
     _controllerElectLast.addListener(_totalElectric);
     _controllerElectCurent.addListener(_totalElectric);
@@ -174,7 +194,7 @@ class _AddInvoiceState extends State<AddInvoice> {
       note: _serviceNote.text,
       price: double.parse(_servicePrice.text),
     );
-    context.read<MoreService>().addNewService(newService);
+    //context.read<Invoice>().addNewService(newService);
   }
 
   double? nn;
@@ -219,8 +239,9 @@ class _AddInvoiceState extends State<AddInvoice> {
   @override
   Widget build(BuildContext context) {
     moreService = context.watch<MoreService>().moreServiceList;
-    //print('LIST MORESERVICE: ${moreService.toString()}');
     nn = context.watch<MoreService>().total;
+
+    print(invoiceEdit.toString());
 
     return Scaffold(
       appBar: AppBar(),
@@ -260,14 +281,15 @@ class _AddInvoiceState extends State<AddInvoice> {
                                   value == null ? "Chọn người thuê " : null,
                               //dropdownColor: Colors.blueAccent,
                               value: selectedValue,
+                              hint: Text(invoiceEdit.name ?? ''),
                               onChanged: (String? newValue) {
                                 setState(() {
                                   selectedValue = newValue!;
-                                  print('CUSTOMMER ID: ${selectedValue}');
+
                                   customerUser = context
                                       .read<Customer>()
                                       .getCustomerByID(selectedValue!);
-                                  print('CUSTOMER NAME: ${customerUser?.name}');
+
                                   roomModel = context
                                       .read<RoomProvider>()
                                       .findRoomById(customerUser?.idRoom ?? '');
@@ -301,7 +323,7 @@ class _AddInvoiceState extends State<AddInvoice> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      "${_selectedDate != null ? DateFormat('MM-yyyy').format(_selectedDate!) : 'Hoá đơn tháng'} ",
+                                      "${_selectedDate != null ? DateFormat('MM-yyyy').format(_selectedDate!) : DateFormat('MM-yyyy').format(invoiceEdit.invoiceDate!)} ",
                                     ),
                                     GestureDetector(
                                       onTap: _selectMonth,
@@ -334,7 +356,7 @@ class _AddInvoiceState extends State<AddInvoice> {
                           children: [
                             TextFieldCustom(
                               controller: _priceController
-                                ..text = roomModel?.price.toString() ?? '',
+                                ..text = invoiceEdit.roomCost.toString(),
                               lable: 'Tiền phòng',
                               requied: true,
                               type: TextInputType.number,
@@ -371,8 +393,7 @@ class _AddInvoiceState extends State<AddInvoice> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                              'Dịch vụ khác: ${context.watch<MoreService>().total}'),
+                          Text('Dịch vụ khác: ${invoiceEdit.priceMoreService}'),
                           IconButton(
                             onPressed: () {
                               showDialogService(context, '');
@@ -383,11 +404,11 @@ class _AddInvoiceState extends State<AddInvoice> {
                       ),
                       Column(
                         children: [
-                          moreService.length != 0
+                          invoiceEdit.moreService!.length != 0
                               ? Container(
                                   height: 200,
                                   child: ListView.builder(
-                                    itemCount: moreService.length,
+                                    itemCount: invoiceEdit.moreService!.length,
                                     itemBuilder: (ctx, index) {
                                       return Card(
                                           margin: EdgeInsets.all(8),
@@ -399,10 +420,12 @@ class _AddInvoiceState extends State<AddInvoice> {
                                                   MainAxisAlignment
                                                       .spaceBetween,
                                               children: [
-                                                Text(moreService[index].name ??
+                                                Text(invoiceEdit
+                                                        .moreService![index]
+                                                        .name ??
                                                     ''),
                                                 Text(
-                                                    "${moreService[index].price ?? ''}"),
+                                                    "${invoiceEdit.moreService![index].price ?? ''}"),
                                               ],
                                             ),
                                           ));
@@ -613,10 +636,10 @@ class _AddInvoiceState extends State<AddInvoice> {
           children: [
             isFirst
                 ? Text(
-                    "${selectedFirstDate != null ? DateFormat('dd-MM-yyyy').format(selectedFirstDate!) : 'Từ ngày'} ",
+                    "${selectedFirstDate != null ? DateFormat('dd-MM-yyyy').format(selectedFirstDate!) : DateFormat('dd-MM-yyyy').format(invoiceEdit.dateFrom!)} ",
                   )
                 : Text(
-                    "${selectedSecondDate != null ? DateFormat('dd-MM-yyyy').format(selectedSecondDate!) : 'Đến ngày'} ",
+                    "${selectedSecondDate != null ? DateFormat('dd-MM-yyyy').format(selectedSecondDate!) : DateFormat('dd-MM-yyyy').format(invoiceEdit.dateTo!)} ",
                   ),
             GestureDetector(
               onTap: () => isFirst ? _selectDate(true) : _selectDate(false),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:owner_app/components/loading_widget.dart';
 
 import 'package:owner_app/model/user_model.dart';
 
@@ -26,9 +27,9 @@ class _WrapScreenState extends State<WrapScreen> {
           final UserModel? user = snapShort.data;
           return user == null ? const LogIn() : const MyPage();
         } else {
-          return const Scaffold(
+          return Scaffold(
             body: Center(
-              child: CircularProgressIndicator(),
+              child: circularProgress(),
             ),
           );
         }
