@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:owner_app/api_service/api_service.dart';
 import 'package:owner_app/constants/constants.dart';
 import 'package:owner_app/constants/loading_service.dart';
 import 'package:owner_app/model/invoice_model.dart';
@@ -25,6 +26,8 @@ class Invoice with ChangeNotifier, Helper {
   final _fireStore = FirebaseFirestore.instance;
   QuerySnapshot? snapshot;
   final devLog = logger;
+
+  final _apiService = ApiService();
 
   Future<void> addInvoice(InvoiceModel invoice) async {
     var newInvoice = InvoiceModel(
@@ -52,12 +55,10 @@ class Invoice with ChangeNotifier, Helper {
     _invoiceList.add(newInvoice);
 
     try {
-      _fireStore
-          .collection(Constants.userDb)
-          .doc(userUID)
-          .collection(Constants.invoiceDb)
-          .doc(invoice.id)
-          .set(newInvoice.toMap());
+      await _apiService.create(
+          colect: Constants.invoiceDb,
+          dataID: invoice.id ?? '',
+          data: newInvoice.toMap());
     } catch (e) {
       print(e.toString());
     }
@@ -153,12 +154,8 @@ class Invoice with ChangeNotifier, Helper {
       _isLoading = isLoading(true);
       _invoiceList[indexEdit] = newInvoice;
       try {
-        _fireStore
-            .collection(Constants.userDb)
-            .doc(userUID)
-            .collection(Constants.invoiceDb)
-            .doc(id)
-            .update(newInvoice.toMap());
+        await _apiService.update(
+            colect: Constants.invoiceDb, dataID: id, data: newInvoice.toMap());
       } catch (e) {
         print(e.toString());
       }
@@ -169,12 +166,16 @@ class Invoice with ChangeNotifier, Helper {
 
   Future<void> updateStatus(String? id) async {
     try {
-      _fireStore
-          .collection(Constants.userDb)
-          .doc(userUID)
-          .collection(Constants.invoiceDb)
-          .doc(id)
-          .update({'isPayment': true});
+      await _apiService.update(
+          colect: Constants.invoiceDb,
+          dataID: id ?? '',
+          data: {'isPayment': true});
+      // _fireStore
+      //     .collection(Constants.userDb)
+      //     .doc(userUID)
+      //     .collection(Constants.invoiceDb)
+      //     .doc(id)
+      //     .update({'isPayment': true});
     } catch (e) {
       print(e.toString());
     }

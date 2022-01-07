@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:owner_app/components/loading_widget.dart';
-import 'package:owner_app/constants/constants.dart';
-
 import 'package:owner_app/provider/roomholder_provider.dart';
 import 'package:owner_app/screens/roomholder/components/hold_item.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/src/provider.dart';
 
-class ListHolder extends StatefulWidget {
-  final int type;
-  const ListHolder({Key? key, required this.type}) : super(key: key);
+class ListHolderOut extends StatefulWidget {
+  const ListHolderOut({Key? key}) : super(key: key);
 
   @override
-  _ListHolderState createState() => _ListHolderState();
+  _ListHolderOutState createState() => _ListHolderOutState();
 }
 
-class _ListHolderState extends State<ListHolder> {
+class _ListHolderOutState extends State<ListHolderOut> {
   @override
   void initState() {
     super.initState();
@@ -32,15 +29,7 @@ class _ListHolderState extends State<ListHolder> {
           )
         : Consumer<RoomHolder>(
             builder: (ctx, customerData, _) {
-              String mapType = '';
-              if (widget.type == 1) {
-                mapType = Constants.holder_waitting;
-              } else if (widget.type == 2) {
-                mapType = Constants.holder_cancel;
-              } else {
-                mapType = Constants.holder_readly;
-              }
-              var list = customerData.getHolderByStatus(status: mapType);
+              var list = customerData.getHolderOutdate();
 
               return list.length == 0
                   ? Center(child: Text('Không có dữ liệu'))

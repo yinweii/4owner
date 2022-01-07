@@ -13,4 +13,9 @@ class Constants {
   static const status_null = 'null';
   static const status_hold = 'hold';
   static const status_has = 'has';
+  //holder room status
+  static const holder_waitting = 'waitting';
+  static const holder_outdate = 'outdate';
+  static const holder_cancel = 'cancel';
+  static const holder_readly = 'readly';
 }

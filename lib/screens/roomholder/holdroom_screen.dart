@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:owner_app/constants/export.dart';
 import 'package:owner_app/screens/invoice/components/add_invoice_screen.dart';
+import 'package:owner_app/screens/roomholder/components/list_outdate.dart';
 import 'package:owner_app/utils/utils.dart';
 
 import 'add_screen.dart';
@@ -56,10 +57,10 @@ class _HoldRoomScreenState extends State<HoldRoomScreen>
       body: TabBarView(
         controller: controller,
         children: [
-          ListHolder(),
-          Container(),
-          Container(),
-          Container(),
+          ListHolder(type: 1),
+          ListHolderOut(),
+          ListHolder(type: 2),
+          ListHolder(type: 3),
         ],
       ),
       floatingActionButton: FloatingActionButton(

@@ -96,7 +96,7 @@ class _AddHoldScreenState extends State<AddHoldScreen>
       );
       print(newHoler.toString());
       context.read<RoomHolder>().addNewHolder(newHoler);
-      Navigator.of(context);
+      Navigator.of(context).pop();
     }
   }
 

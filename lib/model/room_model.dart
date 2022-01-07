@@ -13,6 +13,7 @@ class RoomModel {
   final double? price;
   final String? status;
   final String? note;
+
   final String? imageUrl;
   final List<CustomerModel>? listCustomer;
   RoomModel({

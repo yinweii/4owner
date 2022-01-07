@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:owner_app/api_service/api_service.dart';
 
 import 'package:owner_app/constants/constants.dart';
 import 'package:owner_app/constants/loading_service.dart';
@@ -20,6 +21,9 @@ class RoomProvider with ChangeNotifier, Helper {
 
   //
   QuerySnapshot? snapshot;
+
+  //api service
+  final _apiService = ApiService();
 
   final userUID = FirebaseAuth.instance.currentUser?.uid;
   //firebase
@@ -46,22 +50,24 @@ class RoomProvider with ChangeNotifier, Helper {
 
   Future<void> getAllRoom() async {
     List<RoomModel> listExtract = [];
-    _isLoading = isLoading(true);
-    snapshot = await _fireStore
-        .collection(Constants.userDb)
-        .doc(userUID)
-        .collection(Constants.roomtDb)
-        .get();
+    try {
+      _isLoading = isLoading(true);
+      snapshot = await _apiService.getData(colect: Constants.roomtDb);
 
-    for (var docs in snapshot!.docs) {
-      listExtract.add(RoomModel.fromMap(docs.data() as Map<String, dynamic>));
+      for (var docs in snapshot!.docs) {
+        listExtract.add(RoomModel.fromMap(docs.data() as Map<String, dynamic>));
+      }
+      _isLoading = isLoading(false);
+    } catch (e) {
+      _isLoading = isLoading(false);
+      print('ERROR: ${e.toString()}');
     }
-    _isLoading = isLoading(false);
+
     _listRoom = listExtract;
     notifyListeners();
   }
 
-  void addNewRoom(String idFloor, RoomModel room) {
+  Future<void> addNewRoom(String idFloor, RoomModel room) async {
     var newRoom = RoomModel(
       id: room.id,
       idFloor: idFloor,
@@ -73,27 +79,14 @@ class RoomProvider with ChangeNotifier, Helper {
       status: Constants.status_null,
       listCustomer: [],
     );
-    //_listRoom.add(newRoom.toMap());
+    _listRoom.add(newRoom);
 
     try {
-      //save to other db
       _isLoading = isLoading(true);
-      _fireStore
-          .collection(Constants.userDb)
-          .doc(userUID)
-          .collection(Constants.roomtDb)
-          .doc(room.id)
-          .set(newRoom.toMap());
+      await _apiService.create(
+          colect: Constants.roomtDb, dataID: room.id!, data: newRoom.toMap());
+
       _isLoading = isLoading(false);
-      // update in floor
-      // _fireStore
-      //     .collection(Constants.userDb)
-      //     .doc(userUID)
-      //     .collection(Constants.floorsDb)
-      //     .doc(idFloor)
-      //     .update({
-      //   'roomList': FieldValue.arrayUnion([newRoom.toMap()]),
-      // });
     } catch (e) {
       print(e.toString());
     }

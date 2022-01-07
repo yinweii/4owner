@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:min_id/min_id.dart';
+import 'package:owner_app/api_service/api_service.dart';
 import 'package:owner_app/constants/constants.dart';
 import 'package:owner_app/constants/loading_service.dart';
 import 'package:owner_app/model/floor_model.dart';
@@ -37,6 +38,9 @@ class Floor with ChangeNotifier, Helper {
   //firebase
   final _fireStore = FirebaseFirestore.instance;
 
+  //
+  final _apiService = ApiService();
+
   // add new floor
   Future<void> addNewFloor(FloorModel newFloor) async {
     isLoading(true);
@@ -47,12 +51,17 @@ class Floor with ChangeNotifier, Helper {
     );
     _floorList.add(newFloor);
     try {
-      _fireStore
-          .collection(Constants.userDb)
-          .doc(userUID)
-          .collection(Constants.floorsDb)
-          .doc(newFloor.id)
-          .set(newFloor.toMap());
+      await _apiService.create(
+          colect: Constants.floorsDb,
+          dataID: newFloor.id ?? '',
+          data: newFloor.toMap());
+
+      // _fireStore
+      //     .collection(Constants.userDb)
+      //     .doc(userUID)
+      //     .collection(Constants.floorsDb)
+      //     .doc(newFloor.id)
+      //     .set(newFloor.toMap());
     } catch (e) {
       print(e.toString());
     }
@@ -64,11 +73,13 @@ class Floor with ChangeNotifier, Helper {
   Future<void> getFloor() async {
     try {
       // _isLoading = isLoading(true);
-      snapshot = await _fireStore
-          .collection(Constants.userDb) //
-          .doc(userUID)
-          .collection(Constants.floorsDb)
-          .get();
+      snapshot = await _apiService.getData(colect: Constants.floorsDb);
+
+      //  = await _fireStore
+      //     .collection(Constants.userDb) //
+      //     .doc(userUID)
+      //     .collection(Constants.floorsDb)
+      //     .get();
       //_isLoading = isLoading(false);
 
       List<FloorModel> listExtract = [];
