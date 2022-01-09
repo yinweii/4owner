@@ -52,7 +52,9 @@ class _IndentureScreenState extends State<IndentureScreen>
                       '${context.watch<Customer>().customerDeposit().length}'),
             ),
             Tab(
-              child: _buildLable(title: 'Đã thanh lý', number: '0'),
+              child: _buildLable(
+                  title: 'Đã thanh lý',
+                  number: '${context.watch<Customer>().customerOut().length}'),
             ),
           ],
         ),
