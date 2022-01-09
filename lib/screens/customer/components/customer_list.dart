@@ -47,13 +47,12 @@ class _CustomerListState extends State<CustomerList> {
                       physics: const BouncingScrollPhysics(),
                       shrinkWrap: true,
                       separatorBuilder: (context, index) {
-                        return Divider(
-                          thickness: 2,
-                        );
+                        return SizedBox.shrink();
                       },
                       itemCount: temp.length,
                       itemBuilder: (context, index) {
                         return CustomerCard(
+                          id: temp[index].id,
                           name: temp[index].name,
                           phoneNumber: temp[index].phoneNumber,
                           floorName: temp[index].floorNumber,

@@ -52,12 +52,7 @@ class Customer with ChangeNotifier, Helper {
           colect: Constants.customerDb,
           dataID: customer.id ?? '',
           data: newCustomer.toMap());
-      // _fireStore
-      //     .collection(Constants.userDb)
-      //     .doc(userUID)
-      //     .collection(Constants.customerDb)
-      //     .doc(customer.id)
-      //     .set();
+
       if (idRoom.isNotEmpty) {
         _apiService.update(colect: Constants.roomtDb, dataID: idRoom, data: {
           'status': Constants.status_has,
@@ -123,7 +118,8 @@ class Customer with ChangeNotifier, Helper {
   List<CustomerModel> customerHas() {
     List<CustomerModel> list = [];
     for (var customer in _listCustomer) {
-      if ((customer.idFloor ?? '').isNotEmpty) {
+      if ((customer.idFloor ?? '').isNotEmpty &&
+          customer.status != Constants.out_contract) {
         list.add(customer);
       }
     }
@@ -158,7 +154,7 @@ class Customer with ChangeNotifier, Helper {
   List<CustomerModel> customerOut() {
     List<CustomerModel> list = [];
     for (var customer in _listCustomer) {
-      if (customer.status == false) {
+      if (customer.status == Constants.out_contract) {
         list.add(customer);
       }
     }
