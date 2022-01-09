@@ -68,6 +68,13 @@ class RoomHolder with ChangeNotifier, Helper {
     notifyListeners();
   }
 
+  //update status
+  Future<void> updateStatus(String id, String? status) async {
+    await _apiService.update(colect: Constants.holdRoom, dataID: id, data: {
+      'status': status,
+    });
+  }
+
   Future<void> getHolder() async {
     try {
       _isLoading = isLoading(true);
@@ -89,26 +96,39 @@ class RoomHolder with ChangeNotifier, Helper {
   }
 
   // get hold by status
-  List<RoomHolderModel> getHolderByStatus({required String status}) {
+  List<RoomHolderModel> getHolderByStatus(
+      {required String status, bool isCancel = false}) {
     List<RoomHolderModel> getHolderByStatus = [];
     for (var holder in _listHolder) {
-      var date = DateTime.now().subtract(Duration(days: 1));
-      if (holder.status == status && date.isBefore(holder.startTime!)) {
-        getHolderByStatus.add(holder);
+      if (isCancel) {
+        if (holder.status == status) {
+          getHolderByStatus.add(holder);
+        }
+      } else {
+        var date = DateTime.now().subtract(Duration(days: 1));
+        if (holder.status == status && date.isBefore(holder.startTime!)) {
+          getHolderByStatus.add(holder);
+        }
       }
     }
     return getHolderByStatus;
   } // get hold by status
 
   List<RoomHolderModel> getHolderOutdate() {
-    var date = DateTime.now().subtract(Duration(days: 1));
+    var date = DateTime.now().subtract(Duration(days: 1, hours: 0));
     List<RoomHolderModel> getHolderOutdate = [];
     for (var holder in _listHolder) {
-      if (date.compareTo(holder.startTime!) == 1) {
+      if (date.compareTo(holder.startTime!) == 1 &&
+          holder.status == Constants.holder_waitting) {
         getHolderOutdate.add(holder);
       }
     }
 
     return getHolderOutdate;
   }
+
+  RoomHolderModel findHolderById(String id) => _listHolder.firstWhere(
+        (element) => element.id == id,
+        orElse: null,
+      );
 }

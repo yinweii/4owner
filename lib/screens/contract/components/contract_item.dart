@@ -11,21 +11,25 @@ import 'package:owner_app/utils/utils.dart';
 import 'package:provider/src/provider.dart';
 
 class ContractItem extends StatefulWidget {
-  const ContractItem(
-      {Key? key,
-      this.id,
-      this.roomNumber,
-      this.floorNumber,
-      this.dateFrom,
-      this.dateTo,
-      this.customerName})
-      : super(key: key);
+  const ContractItem({
+    Key? key,
+    this.id,
+    this.roomNumber,
+    this.floorNumber,
+    this.dateFrom,
+    this.dateTo,
+    this.customerName,
+    required this.typeItem,
+    this.customerId,
+  }) : super(key: key);
   final String? id;
+  final int typeItem;
   final String? roomNumber;
   final String? floorNumber;
   final DateTime? dateFrom;
   final DateTime? dateTo;
   final String? customerName;
+  final String? customerId;
 
   @override
   State<ContractItem> createState() => _ContractItemState();
@@ -97,58 +101,79 @@ class _ContractItemState extends State<ContractItem> {
                 Visibility(
                   visible: _isShow ? true : false,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      BuildButton(
-                        name: 'Xóa',
-                        color: Colors.red[300],
-                        onPress: () {
-                          // DialogUtil.cupertioDialog(
-                          //     context,
-                          //     'Thanh lý hợp đồng',
-                          //     'Bạn có chắc thanh lý hợp đồng này!', () {
-                          //   context
-                          //       .read<Contract>()
-                          //       .deleteContract(widget.id ?? '')
-                          //       .then((value) => Navigator.pop(context));
-                          // });
-                        },
+                      Expanded(
+                        child: Visibility(
+                          visible: widget.typeItem == 2 ? false : true,
+                          child: BuildButton(
+                            name: 'Xóa',
+                            color: Colors.red[300],
+                            onPress: () {
+                              // DialogUtil.cupertioDialog(
+                              //     context,
+                              //     'Thanh lý hợp đồng',
+                              //     'Bạn có chắc thanh lý hợp đồng này!', () {
+                              //   context
+                              //       .read<Contract>()
+                              //       .deleteContract(widget.id ?? '')
+                              //       .then((value) => Navigator.pop(context));
+                              // });
+                            },
+                          ),
+                        ),
                       ),
-                      BuildButton(
-                        name: 'Chi tiết',
-                        onPress: () {},
-                        color: AppColors.greenFF79AF91,
+                      SizedBox(width: 15),
+                      Expanded(
+                        child: BuildButton(
+                          name: 'Chi tiết',
+                          onPress: () {},
+                          color: AppColors.greenFF79AF91,
+                        ),
                       ),
-                      BuildButton(
-                        name: 'Chỉnh sửa',
-                        onPress: () {
-                          Utils.navigatePage(
-                              context, EditContractScreen(id: widget.id));
-                        },
-                        color: AppColors.yellowFFE5D26A,
+                      SizedBox(width: 15),
+                      Expanded(
+                        child: Visibility(
+                          visible: widget.typeItem == 3 ? false : true,
+                          child: BuildButton(
+                            name: widget.typeItem == 2 ? 'Ra hạn' : 'Chỉnh sửa',
+                            onPress: () {
+                              Utils.navigatePage(
+                                  context, EditContractScreen(id: widget.id));
+                            },
+                            color: AppColors.yellowFFE5D26A,
+                          ),
+                        ),
                       ),
-                      BuildButton(
-                        name: 'Thanh lý',
-                        onPress: () {
-                          DialogUtil.cupertioDialog(
-                              context: context,
-                              title: 'Thanh lý hợp đồng',
-                              content: 'Bạn có chắc thanh lý hợp đồng này!',
-                              yesAction: () => context
-                                  .read<Contract>()
-                                  .updateStatus(widget.id ?? '')
-                                  .then((value) =>
-                                      context.read<Contract>().onRefresh()));
-                          // DialogUtil.cupertioDialog(
-                          //     context,
-                          //     'Thanh lý hợp đồng',
-                          //     'Bạn có chắc thanh lý hợp đồng này!',
-                          //     () =>
+                      SizedBox(width: 15),
+                      Expanded(
+                        child: Visibility(
+                          visible: widget.typeItem == 3 ? false : true,
+                          child: BuildButton(
+                            name: 'Thanh lý',
+                            onPress: () {
+                              DialogUtil.cupertioDialog(
+                                  context: context,
+                                  title: 'Thanh lý hợp đồng',
+                                  content: 'Bạn có chắc thanh lý hợp đồng này!',
+                                  yesAction: () => context
+                                      .read<Contract>()
+                                      .updateStatus(widget.id ?? '',
+                                          widget.customerId ?? '')
+                                      .then((value) => context
+                                          .read<Contract>()
+                                          .onRefresh()));
+                              // DialogUtil.cupertioDialog(
+                              //     context,
+                              //     'Thanh lý hợp đồng',
+                              //     'Bạn có chắc thanh lý hợp đồng này!',
+                              //     () =>
 
-                          //         .then((value) =>
-                          //             context.read<Contract>().onRefresh()));
-                        },
-                        color: AppColors.grey757575,
+                              //         .then((value) =>
+                              //             context.read<Contract>().onRefresh()));
+                            },
+                            color: AppColors.grey757575,
+                          ),
+                        ),
                       ),
                     ],
                   ),

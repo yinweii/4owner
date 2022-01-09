@@ -15,7 +15,8 @@ class CustomerModel {
   final String? imageFirstUrl;
   final String? imageLastUrl;
   final String? gender;
-  final bool? status;
+  final String? status;
+  final bool? isHolder;
   CustomerModel({
     this.id,
     this.idFloor,
@@ -32,6 +33,7 @@ class CustomerModel {
     this.imageLastUrl,
     this.gender,
     this.status,
+    this.isHolder,
   });
 
   CustomerModel copyWith({
@@ -49,7 +51,8 @@ class CustomerModel {
     String? imageFirstUrl,
     String? imageLastUrl,
     String? gender,
-    bool? status,
+    String? status,
+    bool? isHolder,
   }) {
     return CustomerModel(
       id: id ?? this.id,
@@ -67,6 +70,7 @@ class CustomerModel {
       imageLastUrl: imageLastUrl ?? this.imageLastUrl,
       gender: gender ?? this.gender,
       status: status ?? this.status,
+      isHolder: isHolder ?? this.isHolder,
     );
   }
 
@@ -87,6 +91,7 @@ class CustomerModel {
       'imageLastUrl': imageLastUrl,
       'gender': gender,
       'status': status,
+      'isHolder': isHolder,
     };
   }
 
@@ -107,6 +112,7 @@ class CustomerModel {
       imageLastUrl: map['imageLastUrl'],
       gender: map['gender'],
       status: map['status'],
+      isHolder: map['isHolder'],
     );
   }
 

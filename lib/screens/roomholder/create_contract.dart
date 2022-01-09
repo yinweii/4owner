@@ -1,42 +1,40 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:min_id/min_id.dart';
 import 'package:owner_app/components/custom_textfield.dart';
 import 'package:owner_app/components/loading_widget.dart';
+import 'package:owner_app/components/two_buttons.dart';
+import 'package:owner_app/constants/constants.dart';
 import 'package:owner_app/model/contract_model.dart';
 import 'package:owner_app/model/customer_model.dart';
+import 'package:owner_app/model/room_holder.dart';
 import 'package:owner_app/provider/contract_provider.dart';
+
 import 'package:owner_app/provider/customer_provider.dart';
+import 'package:owner_app/provider/roomholder_provider.dart';
+import 'package:owner_app/utils/diaglog_util.dart';
 import 'package:owner_app/utils/utils.dart';
-import 'package:provider/provider.dart';
 import 'package:provider/src/provider.dart';
 
-class AddContractScreen extends StatefulWidget {
-  const AddContractScreen({Key? key}) : super(key: key);
+import 'holdroom_screen.dart';
+
+class CreateContractScreen extends StatefulWidget {
+  final String? id;
+  const CreateContractScreen({Key? key, this.id}) : super(key: key);
 
   @override
-  _AddContractScreenState createState() => _AddContractScreenState();
+  _CreateContractScreenState createState() => _CreateContractScreenState();
 }
 
-class _AddContractScreenState extends State<AddContractScreen> {
-  @override
-  void initState() {
-    super.initState();
-    context.read<Customer>().getListCustomer();
-  }
-
-  final _formKey = GlobalKey<FormState>();
-  TextEditingController _priceController = TextEditingController();
-  TextEditingController _depositController = TextEditingController();
-
-  CustomerModel? customer;
-
-  String? selectedValue = null;
-
+class _CreateContractScreenState extends State<CreateContractScreen> {
+  //
+  CustomerModel? customerModel;
+  RoomHolderModel? holderModel;
   DateTime? selectedFirstDate;
   DateTime? selectedSecondDate;
   DateTime? selectedDateStart;
+  TextEditingController _numberPersonController = TextEditingController();
+  // TextEditingController _depositController = TextEditingController();
 
   // get date
   void _selectDate(bool isFirstDate) async {
@@ -68,33 +66,46 @@ class _AddContractScreenState extends State<AddContractScreen> {
       });
   }
 
+  @override
+  void initState() {
+    super.initState();
+    context.read<Customer>().getListCustomer();
+    holderModel = context.read<RoomHolder>().findHolderById(widget.id ?? '');
+  }
+
   void _submitContract() async {
     if (_formKey.currentState!.validate()) {
       var newContract = ContractModel(
         id: MinId.getId(),
         createAt: DateTime.now(),
         updateAt: DateTime.now(),
-        customer: customer,
-        dateFrom: selectedFirstDate,
+        customer: context
+            .read<Customer>()
+            .getCustomerByID(holderModel?.customerId ?? ''),
+        dateFrom: selectedFirstDate ?? holderModel?.startTime,
         dateTo: selectedSecondDate,
         startPay: selectedDateStart,
-        numberPerson: int.parse(_priceController.text),
-        deposit: double.parse(_depositController.text),
+        numberPerson: int.parse(_numberPersonController.text),
+        deposit: holderModel?.depositCost,
       );
+
+      await context.read<Contract>().addContract(newContract).then((value) {
+        Utils.navigateReplace(context, HoldRoomScreen());
+      }, onError: (error) => DialogUtil.showError(context, error.toString()));
       await context
-          .read<Contract>()
-          .addContract(newContract)
-          .then((value) => Navigator.of(context).pop());
+          .read<RoomHolder>()
+          .updateStatus(widget.id ?? '', Constants.holder_readly);
     }
   }
 
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         actions: [
           IconButton(
-            onPressed: _submitContract,
+            onPressed: () {},
             icon: Icon(Icons.save),
           ),
         ],
@@ -128,29 +139,10 @@ class _AddContractScreenState extends State<AddContractScreen> {
                             vertical: 5, horizontal: 8),
                         child: Column(
                           children: [
-                            _buildLable('Người thuê'),
-                            DropdownButtonFormField(
-                              validator: (value) =>
-                                  value == null ? "Chọn người thuê " : null,
-                              //dropdownColor: Colors.blueAccent,
-                              value: selectedValue,
-                              onChanged: (String? newValue) {
-                                setState(() {
-                                  selectedValue = newValue!;
-                                  customer = context
-                                      .read<Customer>()
-                                      .getCustomerByID(selectedValue!);
-                                });
-                              },
-                              items: context
-                                  .read<Customer>()
-                                  .customerNoContract()
-                                  .map((CustomerModel customer) {
-                                return DropdownMenuItem<String>(
-                                  value: customer.id,
-                                  child: new Text(customer.name ?? ''),
-                                );
-                              }).toList(),
+                            Text(
+                              '${holderModel?.customerName}',
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.w700),
                             ),
                             SizedBox(height: 6),
                             _buildLable('Thời hạn'),
@@ -206,28 +198,28 @@ class _AddContractScreenState extends State<AddContractScreen> {
                           ),
                         ),
                         child: Center(
-                          child: Text('Tien phong'),
+                          child: Text('Tiền phòng'),
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(
                             vertical: 5, horizontal: 8),
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            SizedBox(height: 10),
+                            Text(
+                              'Tiền cọc: ${holderModel?.depositCost}',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                            SizedBox(height: 10),
                             TextFieldCustom(
-                              controller: _priceController,
+                              controller: _numberPersonController,
                               lable: 'Số lượng người ',
                               requied: true,
                               type: TextInputType.number,
                             ),
                             SizedBox(height: 6),
-                            TextFieldCustom(
-                              controller: _depositController,
-                              lable: 'Tiền cọc',
-                              hintext: 'Tiền cọc',
-                              requied: true,
-                              type: TextInputType.number,
-                            ),
                           ],
                         ),
                       )
@@ -236,6 +228,17 @@ class _AddContractScreenState extends State<AddContractScreen> {
                 ),
               ),
             ),
+      bottomNavigationBar: Container(
+        margin: EdgeInsets.only(bottom: 10),
+        child: TwoButtonsFooter(
+          leftButtonLabel: 'Hủy bỏ',
+          rightButtonLabel: 'Tạo hợp đồng',
+          leftButtonColor: Colors.grey,
+          onLeftButtonPressed: () => Navigator.pop(context),
+          rightButtonColor: Colors.green,
+          onRightButtonPressed: _submitContract,
+        ),
+      ),
     );
   }
 
@@ -268,7 +271,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
           children: [
             isFirst
                 ? Text(
-                    "${selectedFirstDate != null ? DateFormat('dd-MM-yyyy').format(selectedFirstDate!) : 'Từ ngày'} ",
+                    "${selectedFirstDate != null ? DateFormat('dd-MM-yyyy').format(selectedFirstDate!) : '${DateFormat('dd-MM-yyyy').format(holderModel!.startTime!)}'} ",
                   )
                 : Text(
                     "${selectedSecondDate != null ? DateFormat('dd-MM-yyyy').format(selectedSecondDate!) : 'Đến ngày'} ",

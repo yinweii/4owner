@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:owner_app/constants/export.dart';
 import 'package:owner_app/utils/utils.dart';
 
+import '../detail_holder_screen.dart';
+
 class HolderItem extends StatelessWidget {
   const HolderItem(
       {Key? key,
@@ -22,34 +24,37 @@ class HolderItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 5,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            _buildRow(
-              icon: Icon(
-                Icons.person,
+    return GestureDetector(
+      onTap: () => _showPopup(context),
+      child: Card(
+        elevation: 5,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              _buildRow(
+                icon: Icon(
+                  Icons.person,
+                ),
+                title: name,
+                lastTitle: Utils.convertPrice(number),
+                isPerson: true,
               ),
-              title: name,
-              lastTitle: Utils.convertPrice(number),
-              isPerson: true,
-            ),
-            SizedBox(height: 8),
-            _buildRow(
-              icon: Icon(Icons.home),
-              title: '$floorName | $roomName',
-            ),
-            SizedBox(height: 8),
-            _buildRow(
-              icon: Icon(
-                Icons.date_range_outlined,
+              SizedBox(height: 8),
+              _buildRow(
+                icon: Icon(Icons.home),
+                title: '$floorName | $roomName',
               ),
-              title: 'Hẹn ngày vào',
-              lastTitle: dateTime,
-            ),
-          ],
+              SizedBox(height: 8),
+              _buildRow(
+                icon: Icon(
+                  Icons.date_range_outlined,
+                ),
+                title: 'Hẹn ngày vào',
+                lastTitle: dateTime,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -81,6 +86,43 @@ class HolderItem extends StatelessWidget {
               color: isPerson ? AppColors.greenFF79AF91 : null),
         ),
       ],
+    );
+  }
+
+  void _showPopup(BuildContext context) {
+    showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) => CupertinoActionSheet(
+        actions: <CupertinoActionSheetAction>[
+          CupertinoActionSheetAction(
+            child: const Text('Chi tiết'),
+            onPressed: () {
+              Navigator.pop(context);
+              Utils.navigatePage(context, DetailHolderScreen(id: id));
+            },
+          ),
+          CupertinoActionSheetAction(
+            child: const Text('Chỉnh sửa'),
+            onPressed: () {
+              Navigator.pop(context);
+              // Utils.navigatePage(context, EditRoomScreen(id: id));
+            },
+          ),
+          CupertinoActionSheetAction(
+            child: const Text('Xoá'),
+            onPressed: () {
+              //TODO (lam sau):
+              //context.read<RoomProvider>().deleteRoom(id!);
+              Navigator.pop(context);
+            },
+          ),
+        ],
+        cancelButton: CupertinoActionSheetAction(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text('Huỷ bỏ')),
+      ),
     );
   }
 }

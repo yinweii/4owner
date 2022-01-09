@@ -44,6 +44,7 @@ class _ListHolderOutState extends State<ListHolderOut> {
                       itemCount: list.length,
                       itemBuilder: (context, index) {
                         return HolderItem(
+                          id: list[index].id,
                           name: list[index].customerName,
                           roomName: list[index].roomNumber,
                           floorName: list[index].floorNumber,

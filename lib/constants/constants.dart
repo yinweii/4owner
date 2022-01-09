@@ -18,4 +18,9 @@ class Constants {
   static const holder_outdate = 'outdate';
   static const holder_cancel = 'cancel';
   static const holder_readly = 'readly';
+
+  //
+  static const no_contract = 'no contract';
+  static const has_contract = 'have contract';
+  static const out_contract = 'out contract';
 }
