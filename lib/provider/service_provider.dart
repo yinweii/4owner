@@ -1,9 +1,12 @@
 // ignore_for_file: null_check_always_fails
 
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:min_id/min_id.dart';
+import 'package:owner_app/api_service/api_service.dart';
 import 'package:owner_app/constants/constants.dart';
 import 'package:owner_app/model/service_model.dart';
 import 'package:collection/collection.dart';
@@ -30,6 +33,9 @@ class ServiceProvider with ChangeNotifier {
   List<RoomService> _serviceAll = [];
   List<RoomService> get serviceAll => _serviceAll;
   final userUID = FirebaseAuth.instance.currentUser?.uid;
+
+  File? _file;
+  File? get file => _file;
 
   //firebase
   final _fireStore = FirebaseFirestore.instance;

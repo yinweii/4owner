@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:owner_app/constants/export.dart';
 import 'package:owner_app/screens/contract/contract_screen.dart';
 import 'package:owner_app/screens/customer/customer_screen.dart';
+import 'package:owner_app/screens/direct/direct_screen.dart';
 
 import 'package:owner_app/screens/invoice/invoice_screen.dart';
 import 'package:owner_app/screens/room_services/service_screen.dart';
@@ -177,6 +178,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     BuildItem(
+                      onPress: () =>
+                          Utils.navigatePage(context, DirectScreen()),
                       icon: Icon(
                         Icons.note_add_outlined,
                         size: 40,
