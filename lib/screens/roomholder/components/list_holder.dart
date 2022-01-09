@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:owner_app/components/loading_widget.dart';
 import 'package:owner_app/constants/constants.dart';
+import 'package:owner_app/model/room_holder.dart';
 
 import 'package:owner_app/provider/roomholder_provider.dart';
 import 'package:owner_app/screens/roomholder/components/hold_item.dart';
@@ -40,7 +41,13 @@ class _ListHolderState extends State<ListHolder> {
               } else {
                 mapType = Constants.holder_readly;
               }
-              var list = customerData.getHolderByStatus(status: mapType);
+              List<RoomHolderModel> list = [];
+              if (mapType == Constants.holder_cancel) {
+                list = customerData.getHolderByStatus(
+                    status: mapType, isCancel: true);
+              } else {
+                list = customerData.getHolderByStatus(status: mapType);
+              }
 
               return list.length == 0
                   ? Center(child: Text('Không có dữ liệu'))
@@ -55,6 +62,7 @@ class _ListHolderState extends State<ListHolder> {
                       itemCount: list.length,
                       itemBuilder: (context, index) {
                         return HolderItem(
+                          id: list[index].id,
                           name: list[index].customerName,
                           roomName: list[index].roomNumber,
                           floorName: list[index].floorNumber,

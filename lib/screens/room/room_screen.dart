@@ -34,7 +34,7 @@ class _RoomScreenState extends State<RoomScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Người thuê'),
+        title: const Text('Phòng'),
         centerTitle: true,
       ),
       body: context.watch<RoomProvider>().showLoading

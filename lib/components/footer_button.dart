@@ -22,7 +22,7 @@ class FooterButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           primary: AppColors.primary,
           shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(30))),
+              borderRadius: BorderRadius.all(Radius.circular(15))),
         ),
         onPressed: onPressed,
         child: Text(

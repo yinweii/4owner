@@ -42,7 +42,8 @@ class Customer with ChangeNotifier, Helper {
       gender: customer.gender,
       imageFirstUrl: customer.imageFirstUrl,
       imageLastUrl: customer.imageLastUrl,
-      status: true,
+      status: Constants.no_contract,
+      isHolder: true,
     );
     // setIsLoading(true);
     _listCustomer.add(newCustomer);
@@ -87,6 +88,14 @@ class Customer with ChangeNotifier, Helper {
     //setIsLoading(false);
   }
 
+  //upate isHolder
+  Future<void> updateHolder(String customerId) async {
+    await _apiService
+        .update(colect: Constants.customerDb, dataID: customerId, data: {
+      'isHolder': false,
+    });
+  }
+
   Future<void> getListCustomer() async {
     List<CustomerModel> listExtract = [];
     try {
@@ -114,12 +123,25 @@ class Customer with ChangeNotifier, Helper {
   List<CustomerModel> customerHas() {
     List<CustomerModel> list = [];
     for (var customer in _listCustomer) {
-      if (customer.status == true && (customer.idFloor ?? '').isNotEmpty) {
+      if ((customer.idFloor ?? '').isNotEmpty) {
         list.add(customer);
       }
     }
     return list;
   }
+
+  //get list customer activity and no contract
+  List<CustomerModel> customerNoContract() {
+    List<CustomerModel> list = [];
+    for (var customer in _listCustomer) {
+      if ((customer.idFloor ?? '').isNotEmpty &&
+          customer.status == Constants.no_contract) {
+        list.add(customer);
+      }
+    }
+    return list;
+  }
+
   //get list customer have contract
 
   List<CustomerModel> customerDeposit() {

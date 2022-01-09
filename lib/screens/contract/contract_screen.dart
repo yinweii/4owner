@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:owner_app/utils/utils.dart';
 
-import 'activity_screen.dart';
 import 'components/add_contract_screen.dart';
+import 'components/list_contract.dart';
 
 class ContractScreen extends StatefulWidget {
   const ContractScreen({Key? key}) : super(key: key);
@@ -60,9 +60,9 @@ class _ContractScreenState extends State<ContractScreen>
       body: TabBarView(
         controller: controller,
         children: <Widget>[
-          ActivityScreen(),
-          Container(),
-          Container(),
+          ListContract(type: 1, typeItem: 1),
+          ListContract(type: 2, typeItem: 2),
+          ListContract(type: 3, typeItem: 3),
         ],
       ),
       floatingActionButton: FloatingActionButton(
