@@ -75,9 +75,9 @@ class RoomProvider with ChangeNotifier, Helper {
       area: room.area,
       price: room.price,
       note: room.note,
-      imageUrl: '',
-      status: Constants.status_null,
-      listCustomer: [],
+      limidPerson: room.limidPerson,
+      status: Constants.room_status_null,
+      person: 0,
     );
     _listRoom.add(newRoom);
 
@@ -112,7 +112,8 @@ class RoomProvider with ChangeNotifier, Helper {
   List<RoomModel> findRoomEmpty(String? idFloor) {
     List<RoomModel> findByFloor = [];
     for (var room in _listRoom) {
-      if (room.idFloor == idFloor && room.status == Constants.status_null) {
+      if (room.idFloor == idFloor &&
+          room.status == Constants.room_status_null) {
         findByFloor.add(room);
       }
     }

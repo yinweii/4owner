@@ -12,10 +12,9 @@ class RoomModel {
   final double? area;
   final double? price;
   final String? status;
+  final String? limidPerson;
   final String? note;
-
-  final String? imageUrl;
-  final List<CustomerModel>? listCustomer;
+  final int? person;
   RoomModel({
     this.id,
     this.idFloor,
@@ -23,9 +22,9 @@ class RoomModel {
     this.area,
     this.price,
     this.status,
+    this.limidPerson,
     this.note,
-    this.imageUrl,
-    this.listCustomer,
+    this.person,
   });
 
   RoomModel copyWith({
@@ -35,9 +34,9 @@ class RoomModel {
     double? area,
     double? price,
     String? status,
+    String? limidPerson,
     String? note,
-    String? imageUrl,
-    List<CustomerModel>? listCustomer,
+    int? person,
   }) {
     return RoomModel(
       id: id ?? this.id,
@@ -46,9 +45,9 @@ class RoomModel {
       area: area ?? this.area,
       price: price ?? this.price,
       status: status ?? this.status,
+      limidPerson: limidPerson ?? this.limidPerson,
       note: note ?? this.note,
-      imageUrl: imageUrl ?? this.imageUrl,
-      listCustomer: listCustomer ?? this.listCustomer,
+      person: person ?? this.person,
     );
   }
 
@@ -60,9 +59,9 @@ class RoomModel {
       'area': area,
       'price': price,
       'status': status,
+      'limidPerson': limidPerson,
       'note': note,
-      'imageUrl': imageUrl,
-      'listCustomer': listCustomer?.map((x) => x.toMap()).toList(),
+      'person': person,
     };
   }
 
@@ -74,12 +73,9 @@ class RoomModel {
       area: map['area']?.toDouble(),
       price: map['price']?.toDouble(),
       status: map['status'],
+      limidPerson: map['limidPerson'],
       note: map['note'],
-      imageUrl: map['imageUrl'],
-      listCustomer: map['listCustomer'] != null
-          ? List<CustomerModel>.from(
-              map['listCustomer']?.map((x) => CustomerModel.fromMap(x)))
-          : null,
+      person: map['person']?.toInt(),
     );
   }
 
@@ -90,7 +86,7 @@ class RoomModel {
 
   @override
   String toString() {
-    return 'RoomModel(id: $id, idFloor: $idFloor, romName: $romName, area: $area, price: $price, status: $status, note: $note, imageUrl: $imageUrl, listCustomer: $listCustomer)';
+    return 'RoomModel(id: $id, idFloor: $idFloor, romName: $romName, area: $area, price: $price, status: $status, limidPerson: $limidPerson, note: $note, person: $person)';
   }
 
   @override
@@ -104,9 +100,9 @@ class RoomModel {
         other.area == area &&
         other.price == price &&
         other.status == status &&
+        other.limidPerson == limidPerson &&
         other.note == note &&
-        other.imageUrl == imageUrl &&
-        listEquals(other.listCustomer, listCustomer);
+        other.person == person;
   }
 
   @override
@@ -117,8 +113,8 @@ class RoomModel {
         area.hashCode ^
         price.hashCode ^
         status.hashCode ^
+        limidPerson.hashCode ^
         note.hashCode ^
-        imageUrl.hashCode ^
-        listCustomer.hashCode;
+        person.hashCode;
   }
 }

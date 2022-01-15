@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:owner_app/constants/export.dart';
 import 'package:owner_app/screens/contract/contract_screen.dart';
 import 'package:owner_app/screens/customer/customer_screen.dart';

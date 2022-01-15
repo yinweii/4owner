@@ -1,9 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:owner_app/components/footer_button.dart';
+import 'package:owner_app/constants/export.dart';
 import 'package:owner_app/provider/customer_provider.dart';
 import 'package:owner_app/utils/utils.dart';
 import 'package:provider/src/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import 'edit_customer.dart';
 
 class CustomerDetail extends StatelessWidget {
   final String? id;
@@ -24,7 +28,15 @@ class CustomerDetail extends StatelessWidget {
     var _customer = context.read<Customer>().getCustomerByID(id ?? '');
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            onPressed: () =>
+                Utils.navigatePage(context, EditCustomerScreen(id: id ?? '')),
+            icon: Icon(Icons.border_color),
+          )
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(6.0),
         child: Column(
@@ -115,6 +127,15 @@ class CustomerDetail extends StatelessWidget {
               ),
             )
           ],
+        ),
+      ),
+      bottomNavigationBar: Container(
+        height: 50,
+        margin: EdgeInsets.symmetric(vertical: 15, horizontal: 8),
+        child: FooterButton(
+          buttonColor: AppColors.red,
+          label: 'Xóa',
+          onPressed: () {},
         ),
       ),
     );

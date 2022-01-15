@@ -19,7 +19,7 @@ class _AddRoomScreenState extends State<AddRoomScreen> {
   TextEditingController _noteController = TextEditingController();
   TextEditingController _priceController = TextEditingController();
   TextEditingController _areaController = TextEditingController();
-  TextEditingController _personController = TextEditingController();
+  TextEditingController _limitedpersonController = TextEditingController();
   //key
   final _formKey = GlobalKey<FormState>();
 
@@ -32,6 +32,7 @@ class _AddRoomScreenState extends State<AddRoomScreen> {
         romName: _nameController.text,
         area: double.parse(_areaController.text),
         price: double.parse(_priceController.text),
+        limidPerson: _limitedpersonController.text,
         note: _noteController.text,
       );
       context.read<RoomProvider>().addNewRoom(widget.id!, newRoom);
@@ -75,7 +76,7 @@ class _AddRoomScreenState extends State<AddRoomScreen> {
                   type: TextInputType.number,
                 ),
                 TextFieldCustom(
-                  controller: _personController,
+                  controller: _limitedpersonController,
                   lable: 'Giới hạn người thuê',
                   requied: true,
                   type: TextInputType.number,

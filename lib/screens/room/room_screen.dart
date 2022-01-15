@@ -57,9 +57,7 @@ class _RoomScreenState extends State<RoomScreen> {
                           name: roomData.listRoom?[index].romName ?? '',
                           price: roomData.listRoom?[index].price,
                           area: roomData.listRoom?[index].area.toString(),
-                          person:
-                              roomData.listRoom?[index].listCustomer?.length ??
-                                  0,
+                          person: roomData.listRoom?[index].person ?? 0,
                         );
                       })
                   : Center(

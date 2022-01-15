@@ -72,7 +72,7 @@ class Floor with ChangeNotifier, Helper {
 
   Future<void> getFloor() async {
     try {
-      // _isLoading = isLoading(true);
+      _isLoading = isLoading(true);
       snapshot = await _apiService.getData(colect: Constants.floorsDb);
 
       //  = await _fireStore
@@ -80,7 +80,7 @@ class Floor with ChangeNotifier, Helper {
       //     .doc(userUID)
       //     .collection(Constants.floorsDb)
       //     .get();
-      //_isLoading = isLoading(false);
+      _isLoading = isLoading(false);
 
       List<FloorModel> listExtract = [];
 
@@ -90,8 +90,6 @@ class Floor with ChangeNotifier, Helper {
       }
 
       _floorList = listExtract;
-
-      //print('LIST: ${_floorList.toString()}');
     } catch (e) {
       print('FAILD: ${e.toString()}');
     }

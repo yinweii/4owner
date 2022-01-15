@@ -51,6 +51,8 @@ dependencies:
   flutter_pdfview: ^1.2.1
   path_provider: ^2.0.8
   path: ^1.8.0
+  google_fonts: ^2.2.0
+  image_cropper: ^1.4.1
 
 
 dev_dependencies:
