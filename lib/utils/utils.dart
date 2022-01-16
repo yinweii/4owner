@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
 class Utils {
@@ -28,5 +29,13 @@ class Utils {
     var f = NumberFormat("#,###", "vi_VI");
     price = f.format(price);
     return price;
+  }
+
+  static void showToast(String? message, {bool isLong: false}) {
+    if (message != null) {
+      Fluttertoast.showToast(
+          msg: message,
+          toastLength: isLong ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT);
+    }
   }
 }

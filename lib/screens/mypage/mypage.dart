@@ -4,7 +4,8 @@ import 'package:owner_app/constants/export.dart';
 import 'package:owner_app/screens/floor/floor_screen.dart';
 import 'package:owner_app/screens/home/home_screen.dart';
 import 'package:owner_app/screens/income/icome_screen.dart';
-import 'package:owner_app/screens/manager/manager_screen.dart';
+
+import 'package:owner_app/screens/orthermenu/orther_screen.dart';
 
 class MyPage extends StatefulWidget {
   const MyPage({Key? key}) : super(key: key);
@@ -18,7 +19,7 @@ class _MyPageState extends State<MyPage> {
     const HomeScreen(),
     const FloorScreen(),
     const IncomeScreen(),
-    const ManagerScreen(),
+    const OtherMenuScreen(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -31,10 +32,9 @@ class _MyPageState extends State<MyPage> {
             BottomNavigationBarItem(
                 icon: Icon(Icons.account_balance_outlined), label: 'Phòng'),
             BottomNavigationBarItem(
-                icon: Icon(Icons.account_balance_wallet_outlined),
-                label: 'Thu chi'),
+                icon: Icon(Icons.trending_up_outlined), label: 'Thu chi'),
             BottomNavigationBarItem(
-                icon: Icon(Icons.business_center_outlined), label: 'Quản lý')
+                icon: Icon(Icons.settings), label: 'Cài đặt')
           ],
         ),
         tabBuilder: (BuildContext context, index) {
