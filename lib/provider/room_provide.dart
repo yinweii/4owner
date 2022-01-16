@@ -119,4 +119,15 @@ class RoomProvider with ChangeNotifier, Helper {
 
     return findByFloor;
   }
+
+  List<RoomModel> findAllRoomEmpty() {
+    List<RoomModel> findByFloor = [];
+    for (var room in _listRoom) {
+      if (room.status == Constants.status_null) {
+        findByFloor.add(room);
+      }
+    }
+
+    return findByFloor;
+  }
 }

@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:owner_app/components/diaglogbox.dart';
+import 'package:owner_app/components/footer_button.dart';
+import 'package:owner_app/components/loading_widget.dart';
 import 'package:owner_app/constants/app_colors.dart';
+
 import 'package:owner_app/screens/authentication/register_screen.dart';
+import 'package:owner_app/utils/diaglog_util.dart';
 import 'package:owner_app/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'authservice.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
+const LOGIN = 'LOGIN';
+const REGISTER = 'REGISTER';
 
 class LogIn extends StatefulWidget {
   const LogIn({Key? key}) : super(key: key);
@@ -15,6 +25,13 @@ class LogIn extends StatefulWidget {
 class _LogInState extends State<LogIn> {
   final TextEditingController _emailTextController = TextEditingController();
   final TextEditingController _passwordTextController = TextEditingController();
+  final TextEditingController _nameTextController = TextEditingController();
+
+  bool _isLogin = true;
+  bool _isLoading = false;
+  String dropdownvalue = 'VIE';
+  var items = ['VIE', 'ENG'];
+
   @override
   void initState() {
     super.initState();
@@ -30,92 +47,152 @@ class _LogInState extends State<LogIn> {
   }
 
   Future<void> _submitLogin(BuildContext context) async {
-    await Provider.of<AuthService>(context, listen: false).signIn(
-      _emailTextController.text,
-      _passwordTextController.text,
-    );
+    setState(() {
+      _isLoading = true;
+    });
+    if (_isLogin) {
+      await Provider.of<AuthService>(context, listen: false).signIn(
+        _emailTextController.text,
+        _passwordTextController.text,
+      );
+    } else {
+      await Provider.of<AuthService>(context, listen: false).register(
+        _nameTextController.text,
+        _emailTextController.text,
+        _passwordTextController.text,
+      );
+    }
+
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
+  void _changeForm() {
+    setState(() {
+      _isLogin = !_isLogin;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const CircleAvatar(
-                backgroundColor: Colors.blue,
-                radius: 40,
-              ),
-              const SizedBox(height: 50),
-              TextFormField(
-                controller: _emailTextController,
-                decoration: const InputDecoration(
-                  prefixIcon: Icon(Icons.account_box),
-                  labelText: 'Email',
-                  border: OutlineInputBorder(),
-                  errorBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red, width: 5),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 30),
-              TextFormField(
-                controller: _passwordTextController,
-                decoration: const InputDecoration(
-                  prefixIcon: Icon(Icons.lock),
-                  labelText: 'Mật khẩu',
-                  border: OutlineInputBorder(),
-                  errorBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red, width: 5),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 30),
-              Container(
-                width: Utils.sizeWidth(context),
-                decoration: BoxDecoration(
-                  color: Colors.blueGrey,
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: TextButton(
-                  onPressed: () {
-                    _submitLogin(context);
-                  },
-                  child: const Text(
-                    'Đăng nhập',
-                    style: TextStyle(
-                        fontSize: 30,
-                        color: AppColors.white,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 30),
-              Container(
-                width: Utils.sizeWidth(context),
-                decoration: BoxDecoration(
-                  color: Colors.blueGrey,
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: TextButton(
-                  onPressed: () =>
-                      Utils.navigatePage(context, const Register()),
-                  child: const Text(
-                    'Đăng kí',
-                    style: TextStyle(
-                        fontSize: 30,
-                        color: AppColors.white,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
-            ], //
+      appBar: AppBar(
+        backgroundColor: AppColors.background,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: DropdownButton(
+              elevation: 0,
+              value: dropdownvalue,
+              icon: Icon(Icons.public_outlined, color: AppColors.blue2),
+              items: items.map((String items) {
+                return DropdownMenuItem(value: items, child: Text(items));
+              }).toList(),
+              onChanged: (String? newValue) {
+                setState(() {
+                  dropdownvalue = newValue!;
+                });
+              },
+            ),
           ),
-        ),
+        ],
       ),
+      body: _isLoading
+          ? circularProgress()
+          : Center(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      _isLogin ? LOGIN : REGISTER,
+                      style: GoogleFonts.oswald(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 40,
+                          color: AppColors.greenFF79AF91),
+                    ),
+                    Card(
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                          top: _isLogin ? 60 : 30,
+                          bottom: 60,
+                          left: 10,
+                          right: 10,
+                        ),
+                        child: Column(
+                          children: [
+                            !_isLogin
+                                ? TextFormField(
+                                    controller: _nameTextController,
+                                    decoration: const InputDecoration(
+                                      prefixIcon: Icon(Icons.account_box),
+                                      labelText: 'User name',
+                                      border: OutlineInputBorder(),
+                                      errorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.red, width: 5),
+                                      ),
+                                    ),
+                                  )
+                                : SizedBox.shrink(),
+                            const SizedBox(height: 30),
+                            TextFormField(
+                              controller: _emailTextController,
+                              decoration: const InputDecoration(
+                                prefixIcon: Icon(Icons.account_box),
+                                labelText: 'Email',
+                                border: OutlineInputBorder(),
+                                errorBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Colors.red, width: 5),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 30),
+                            TextFormField(
+                              controller: _passwordTextController,
+                              obscureText: true,
+                              decoration: const InputDecoration(
+                                prefixIcon: Icon(Icons.lock),
+                                labelText: 'Mật khẩu',
+                                border: OutlineInputBorder(),
+                                errorBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Colors.red, width: 5),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    Container(
+                      width: Utils.sizeWidth(context),
+                      height: 50,
+                      child: FooterButton(
+                          label: _isLogin ? 'Đăng nhập ' : 'Đăng kí',
+                          onPressed: () {
+                            _submitLogin(context);
+                          }),
+                    ),
+                    const SizedBox(height: 30),
+                    Container(
+                      height: 50,
+                      width: Utils.sizeWidth(context),
+                      child: FooterButton(
+                        label: _isLogin ? 'Đăng kí' : 'Đăng nhập',
+                        onPressed: () {
+                          _changeForm();
+                        },
+                      ),
+                    ),
+                  ], //
+                ),
+              ),
+            ),
     );
   }
 }
