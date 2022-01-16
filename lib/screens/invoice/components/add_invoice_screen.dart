@@ -237,18 +237,7 @@ class _AddInvoiceState extends State<AddInvoice> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
-                        width: Utils.sizeWidth(context),
-                        height: 35,
-                        decoration: BoxDecoration(
-                          color: Colors.green,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(5),
-                            topRight: Radius.circular(5),
-                          ),
-                        ),
-                        child: Center(child: Text('Thông tin')),
-                      ),
+                      _buildHeader('Thông tin'),
                       Padding(
                         padding: const EdgeInsets.symmetric(
                             vertical: 5, horizontal: 8),
@@ -432,25 +421,16 @@ class _AddInvoiceState extends State<AddInvoice> {
                       SizedBox(height: 20),
                       Padding(
                         padding: const EdgeInsets.symmetric(
-                            vertical: 20, horizontal: 10),
-                        child: Center(
-                          child: SizedBox(
-                            height: 40,
-                            width: Utils.sizeWidth(context),
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                primary: Colors.green, // background
-                                onPrimary: Colors.white, // foreground
-                              ),
-                              onPressed: () {
-                                _submitInvoice();
-                                //Navigator.pop(context);
-                              },
-                              child: Text('Lập hóa đơn'),
-                            ),
+                            vertical: 35, horizontal: 8),
+                        child: SizedBox(
+                          width: Utils.sizeWidth(context),
+                          height: 50,
+                          child: FooterButton(
+                            label: 'Lập hóa đơn',
+                            onPressed: _submitInvoice,
                           ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -633,14 +613,18 @@ class _AddInvoiceState extends State<AddInvoice> {
       width: Utils.sizeWidth(context),
       height: 35,
       decoration: BoxDecoration(
-        color: Colors.green,
+        color: AppColors.primary,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(5),
           topRight: Radius.circular(5),
         ),
       ),
       child: Center(
-        child: Text(title),
+        child: Text(
+          title,
+          style:
+              TextStyle(color: AppColors.white2, fontWeight: FontWeight.bold),
+        ),
       ),
     );
   }

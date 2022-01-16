@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:owner_app/constants/export.dart';
 import 'package:owner_app/screens/invoice/components/add_invoice_screen.dart';
 import 'package:owner_app/screens/invoice/payment_screen.dart';
 import 'package:owner_app/utils/utils.dart';
@@ -32,18 +33,18 @@ class _InvoiceScreenState extends State<InvoiceScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Hợp đồng'),
+        title: const Text('Hóa đơn'),
         centerTitle: true,
         bottom: TabBar(
+          isScrollable: true,
           indicatorColor: Colors.white,
-          automaticIndicatorColorAdjustment: true,
           controller: controller,
           tabs: <Tab>[
             Tab(
               text: 'Chưa thanh toán',
             ),
             Tab(
-              text: 'Quá hạn',
+              text: 'Quá hạn trả',
             ),
             Tab(
               text: 'Đã thanh toán',
@@ -60,6 +61,7 @@ class _InvoiceScreenState extends State<InvoiceScreen>
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: AppColors.primary,
         onPressed: () => Utils.navigatePage(context, AddInvoice()),
         child: Icon(Icons.add),
       ),

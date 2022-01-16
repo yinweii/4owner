@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:owner_app/model/contract_model.dart';
+import 'package:owner_app/provider/customer_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/src/provider.dart';
 
@@ -26,6 +27,7 @@ class _ListContractState extends State<ListContract> {
   void initState() {
     super.initState();
     context.read<Contract>().getAllContract();
+    context.read<Customer>().getListCustomer();
   }
 
   @override
@@ -63,15 +65,19 @@ class _ListContractState extends State<ListContract> {
                       },
                       itemCount: list.length,
                       itemBuilder: (context, index) {
+                        var customer = context
+                            .read<Customer>()
+                            .getCustomerByID(list[index].idCustomer ?? '');
+
                         return ContractItem(
                           typeItem: typeItem!,
                           id: list[index].id,
-                          floorNumber: list[index].customer?.floorNumber,
-                          roomNumber: list[index].customer?.roomNumber,
+                          floorNumber: customer.floorNumber,
+                          roomNumber: customer.roomNumber,
                           dateFrom: list[index].dateFrom ?? DateTime.now(),
                           dateTo: list[index].dateTo ?? DateTime.now(),
-                          customerName: list[index].customer?.name,
-                          customerId: list[index].customer?.id,
+                          customerName: customer.name,
+                          customerId: list[index].idCustomer,
                         );
                       },
                     );

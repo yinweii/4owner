@@ -57,7 +57,7 @@ class RoomHolder with ChangeNotifier, Helper {
       await _apiService.update(
           colect: Constants.roomtDb,
           dataID: holder.idRoom ?? '',
-          data: {'status': Constants.holdRoom});
+          data: {'status': Constants.room_status_hold});
 
       _isLoading = isLoading(false);
     } catch (e) {

@@ -23,12 +23,12 @@ class Contract with ChangeNotifier, Helper {
 
   QuerySnapshot? snapshot;
   final devLog = logger;
-  Future<void> addContract(ContractModel contract) async {
+  Future<void> addContract(ContractModel contract, String idRoom) async {
     var newContract = ContractModel(
       id: contract.id,
       createAt: DateTime.now(),
       updateAt: DateTime.now(),
-      customer: contract.customer,
+      idCustomer: contract.idCustomer,
       dateFrom: contract.dateFrom,
       dateTo: contract.dateTo,
       startPay: contract.startPay,
@@ -46,9 +46,16 @@ class Contract with ChangeNotifier, Helper {
 
       await _apiService.update(
         colect: Constants.customerDb,
-        dataID: contract.customer?.id ?? '',
+        dataID: contract.idCustomer ?? '',
         data: {
           'status': Constants.has_contract,
+        },
+      );
+      await _apiService.update(
+        colect: Constants.roomtDb,
+        dataID: idRoom,
+        data: {
+          'status': Constants.room_status_has,
         },
       );
     } catch (e) {
@@ -87,7 +94,7 @@ class Contract with ChangeNotifier, Helper {
       id: id,
       createAt: contract.createAt,
       updateAt: DateTime.now(),
-      customer: contract.customer,
+      idCustomer: contract.idCustomer,
       dateFrom: contract.dateFrom,
       dateTo: contract.dateTo,
       startPay: contract.startPay,

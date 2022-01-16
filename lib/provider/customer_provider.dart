@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:min_id/min_id.dart';
+
 import 'package:owner_app/api_service/api_service.dart';
 import 'package:owner_app/constants/constants.dart';
 import 'package:owner_app/constants/loading_service.dart';
 import 'package:owner_app/model/customer_model.dart';
-import 'package:owner_app/utils/firebase_path.dart';
+
 import 'package:owner_app/utils/logger.dart';
 
 class Customer with ChangeNotifier, Helper {
@@ -52,35 +52,48 @@ class Customer with ChangeNotifier, Helper {
           colect: Constants.customerDb,
           dataID: customer.id ?? '',
           data: newCustomer.toMap());
-
-      if (idRoom.isNotEmpty) {
-        _apiService.update(colect: Constants.roomtDb, dataID: idRoom, data: {
-          'status': Constants.status_has,
-          'listCustomer': FieldValue.arrayUnion(
-            [newCustomer.toMap()],
-          )
-        });
-
-        // _fireStore
-        //     .collection(Constants.userDb)
-        //     .doc(userUID)
-        //     .collection(Constants.roomtDb)
-        //     .doc(idRoom)
-        //     .update({
-        //   'status': Constants.status_has,
-        //   'listCustomer': FieldValue.arrayUnion(
-        //     [newCustomer.toMap()],
-        //   )
-        // });
-      } else {
-        return;
-      }
     } on Exception catch (e) {
       // TODO
       print(e.toString());
     }
 
     //setIsLoading(false);
+  }
+
+  Future<void> updateCustomer(
+      CustomerModel customer, String idCustomer, String idRoom) async {
+    final indexEdit =
+        _listCustomer.indexWhere((element) => element.id == idCustomer);
+    var newCustomerEdt = CustomerModel(
+      name: customer.name,
+      idFloor: customer.idFloor,
+      idRoom: customer.idRoom,
+      phoneNumber: customer.phoneNumber,
+      dateOfBirth: customer.dateOfBirth,
+      cardNumber: customer.cardNumber,
+      email: customer.email,
+      roomNumber: customer.roomNumber,
+      floorNumber: customer.floorNumber,
+      address: customer.address,
+      gender: customer.gender,
+      imageFirstUrl: customer.imageFirstUrl,
+      imageLastUrl: customer.imageLastUrl,
+      status: Constants.no_contract,
+      isHolder: true,
+    );
+
+    if (indexEdit > 0) {
+      _listCustomer[indexEdit] = newCustomerEdt;
+
+      try {
+        await _apiService.update(
+            colect: Constants.customerDb,
+            dataID: idCustomer,
+            data: newCustomerEdt.toMap());
+      } catch (e) {
+        print(e.toString());
+      }
+    }
   }
 
   //upate isHolder
@@ -155,6 +168,17 @@ class Customer with ChangeNotifier, Helper {
     List<CustomerModel> list = [];
     for (var customer in _listCustomer) {
       if (customer.status == Constants.out_contract) {
+        list.add(customer);
+      }
+    }
+    return list;
+  }
+
+  // find customer by room
+  List<CustomerModel> customerByRoom(String idRoom) {
+    List<CustomerModel> list = [];
+    for (var customer in _listCustomer) {
+      if (customer.idRoom == idRoom) {
         list.add(customer);
       }
     }

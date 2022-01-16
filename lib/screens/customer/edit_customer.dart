@@ -3,11 +3,9 @@ import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
 import 'package:min_id/min_id.dart';
-import 'package:owner_app/api_service/api_service.dart';
 import 'package:owner_app/components/custom_textfield.dart';
 import 'package:owner_app/components/loading_widget.dart';
 import 'package:owner_app/constants/export.dart';
@@ -21,19 +19,20 @@ import 'package:owner_app/utils/logger.dart';
 import 'package:owner_app/utils/utils.dart';
 import 'package:provider/provider.dart';
 
-class AddCustomerScreen extends StatefulWidget {
-  const AddCustomerScreen({Key? key}) : super(key: key);
+class EditCustomerScreen extends StatefulWidget {
+  final String? id;
+  const EditCustomerScreen({Key? key, this.id}) : super(key: key);
 
   @override
-  _AddCustomerScreenState createState() => _AddCustomerScreenState();
+  _EditCustomerScreenState createState() => _EditCustomerScreenState();
 }
 
-class _AddCustomerScreenState extends State<AddCustomerScreen>
+class _EditCustomerScreenState extends State<EditCustomerScreen>
     with SingleTickerProviderStateMixin {
-  Future<void> getFloor() async {
-    context.read<Floor>().getFloor();
-    context.read<RoomProvider>().getAllRoom();
-  }
+  // Future<void> getFloor() async {
+  //   context.read<Floor>().getFloor();
+  //   context.read<RoomProvider>().getAllRoom();
+  // }
 
   TextEditingController _nameController = TextEditingController();
   TextEditingController _phoneNumberController = TextEditingController();
@@ -46,13 +45,6 @@ class _AddCustomerScreenState extends State<AddCustomerScreen>
   final _formKey = GlobalKey<FormState>();
   final devLog = logger;
 
-  @override
-  void initState() {
-    super.initState();
-
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) => getFloor());
-  }
-
   String? _select;
   String? _selectRoom;
   bool uploading = false;
@@ -62,75 +54,53 @@ class _AddCustomerScreenState extends State<AddCustomerScreen>
 
   bool isDeposit = false;
 
-  List<File>? listFile = [];
+  CustomerModel customerModel = CustomerModel();
+  Future<void> getFloor() async {
+    context.read<Floor>().getFloor();
+    context.read<RoomProvider>().getAllRoom();
+  }
 
-  File? _selectedImageFile;
+  @override
+  void initState() {
+    super.initState();
+    customerModel = context.read<Customer>().getCustomerByID(widget.id ?? '');
+    initData();
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) => getFloor());
+  }
 
-  String? urlFirstImg;
-  String? urlLastImg;
-
-  File? _selectedImageFileLast;
-
-  bool _isLoading = false;
+  void initData() {
+    if ((widget.id ?? '').isNotEmpty) {
+      _nameController.text = customerModel.name ?? '';
+      _phoneNumberController.text = customerModel.phoneNumber ?? '';
+      _emailController.text = customerModel.email ?? '';
+      _cardNunberController.text = customerModel.cardNumber ?? '';
+      _addressController.text = customerModel.address ?? '';
+      if ((customerModel.idFloor ?? '').isEmpty) {
+        isDeposit = true;
+      } else {
+        isDeposit = false;
+      }
+      // _select = customerModel.floorNumber;
+      // _selectRoom = customerModel.roomNumber;
+    } else {
+      return;
+    }
+  }
 
   // TODO(last code): get image
-  Future<void> _onTapImage(int type) async {
-    final pickedFile = await ImagePicker().pickImage(
-      source: ImageSource.gallery,
-    );
-    if (pickedFile == null) {
-      return;
-    }
-
-    await _cropImage(File(pickedFile.path), type);
-  }
-
-  Future<void> _cropImage(File? selectedImageFile, int type) async {
-    final croppedFile = await ImageCropper.cropImage(
-      sourcePath: selectedImageFile?.path ?? '',
-      androidUiSettings: const AndroidUiSettings(
-          toolbarTitle: '',
-          initAspectRatio: CropAspectRatioPreset.original,
-          lockAspectRatio: false),
-      iosUiSettings: IOSUiSettings(
-        doneButtonTitle: 'OK',
-        cancelButtonTitle: 'Cancel',
-        aspectRatioPickerButtonHidden: true,
-      ),
-    );
-    if (croppedFile == null) {
-      return;
-    }
-    setState(() {
-      type == 1
-          ? _selectedImageFile = croppedFile
-          : _selectedImageFileLast = croppedFile;
-    });
-
-    //await _updateProfileImage(croppedFile);
-  }
+  // Future<void> chooseImage() async {
+  //   final pickedFile = await picker.getImage(source: ImageSource.gallery);
+  //   setState(
+  //     () {
+  //       _listFile.add(File(pickedFile?.path ?? ''));
+  //     },
+  //   );
+  //   if (pickedFile?.path == null) retrieveLostData();
+  // }
 
   void _saveForm() async {
     if (_formKey.currentState!.validate()) {
-      _isLoading = true;
-      // if (_selectedImageFile != null || _selectedImageFileLast != null) {
-      //   await ApiService.saveImageToStore(_selectedImageFile!)!.then((value) {
-      //     setState(() {
-      //       urlFirstImg = value;
-      //     });
-      //   });
-      //   await ApiService.saveImageToStore(_selectedImageFileLast!)!
-      //       .then((value) {
-      //     setState(() {
-      //       urlLastImg = value;
-      //     });
-      //   });
-      // } else {
-      //   return;
-      // }
-
-      var newCustomer = CustomerModel(
-        id: MinId.getId(),
+      var customerEdit = customerModel.copyWith(
         idFloor: isDeposit ? '' : (_select ?? ''),
         idRoom: isDeposit ? '' : (idRooms ?? ''),
         name: _nameController.text,
@@ -139,22 +109,19 @@ class _AddCustomerScreenState extends State<AddCustomerScreen>
         cardNumber: _cardNunberController.text,
         email: _emailController.text,
         roomNumber: _selectRoom ?? '',
-        floorNumber: isDeposit
-            ? ''
-            : (context.read<Floor>().findById(_select ?? '').name),
+        // floorNumber: isDeposit
+        //     ? ''
+        //     : (context.read<Floor>().findById(_select ?? '').name),
         address: _addressController.text,
-        gender: '',
-        imageFirstUrl: urlFirstImg ?? '',
-        imageLastUrl: urlLastImg ?? '',
       );
-      print(newCustomer.toString());
-      context.read<Customer>().addNewCustomer(newCustomer, idRooms ?? '').then(
-        (value) {
-          _isLoading = false;
-          Navigator.of(context).pop();
-        },
-      );
-      print('CUSTOMER: ${newCustomer.toString()}');
+
+      context
+          .read<Customer>()
+          .updateCustomer(customerEdit, widget.id ?? '', idRooms ?? '')
+          .then(
+            (value) => Navigator.of(context).pop(),
+          );
+      print('CUSTOMER: ${customerEdit.toString()}');
     }
   }
 
@@ -174,7 +141,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen>
           ),
         ],
       ),
-      body: _isLoading
+      body: context.watch<RoomProvider>().showLoading
           ? circularProgress()
           : Form(
               key: _formKey,
@@ -229,13 +196,13 @@ class _AddCustomerScreenState extends State<AddCustomerScreen>
                                   children: [
                                     _buildLable('Khu/tầng'),
                                     FutureBuilder(
-                                      future: getFloor(),
+                                      future: null,
                                       builder: (ctx, snapshort) =>
                                           DropdownButton(
                                         hint: Container(
                                           width: Utils.sizeWidth(context) * 0.4,
                                           child: Text(
-                                            "${(_select ?? '').isNotEmpty ? context.watch<Floor>().findById(_select!).name : ''}",
+                                            "${(_select ?? '').isNotEmpty ? context.watch<Floor>().findById(_select!).name : '${customerModel.floorNumber ?? ''}'}",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w800),
                                           ),
@@ -273,7 +240,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen>
                                       hint: Container(
                                         width: Utils.sizeWidth(context) * 0.4,
                                         child: Text(
-                                          "${(_selectRoom ?? '').isNotEmpty ? _selectRoom : ''}",
+                                          "${(_selectRoom ?? '').isNotEmpty ? _selectRoom : '${customerModel.roomNumber ?? ''}'}",
                                           style: TextStyle(
                                               fontWeight: FontWeight.w800),
                                         ),
@@ -347,23 +314,23 @@ class _AddCustomerScreenState extends State<AddCustomerScreen>
                                   dashPattern: [3, 5],
                                   strokeWidth: 2,
                                   child: Container(
-                                      height: 100,
-                                      width: 140,
-                                      child: _selectedImageFile == null
-                                          ? Center(
-                                              child: IconButton(
-                                                onPressed: () => _onTapImage(1),
-                                                icon: Icon(
-                                                    Icons.add_a_photo_outlined),
-                                              ),
-                                            )
-                                          : SizedBox(
-                                              child: Image.file(
-                                                File(_selectedImageFile?.path ??
-                                                    ''),
-                                                fit: BoxFit.cover,
-                                              ),
-                                            )),
+                                    height: 100,
+                                    width: 140,
+                                    child: customerModel.imageFirstUrl == null
+                                        ? Center(
+                                            child: IconButton(
+                                              onPressed: () {},
+                                              icon: Icon(
+                                                  Icons.add_a_photo_outlined),
+                                            ),
+                                          )
+                                        : SizedBox(
+                                            child: Image.network(
+                                              customerModel.imageFirstUrl ?? '',
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                  ),
                                 ),
                                 DottedBorder(
                                   color: Colors.red,
@@ -372,19 +339,17 @@ class _AddCustomerScreenState extends State<AddCustomerScreen>
                                   child: Container(
                                     height: 100,
                                     width: 140,
-                                    child: _selectedImageFileLast == null
+                                    child: customerModel.imageLastUrl == null
                                         ? Center(
                                             child: IconButton(
-                                              onPressed: () => _onTapImage(2),
+                                              onPressed: () {},
                                               icon: Icon(
                                                   Icons.add_a_photo_outlined),
                                             ),
                                           )
                                         : SizedBox(
-                                            child: Image.file(
-                                              File(_selectedImageFileLast
-                                                      ?.path ??
-                                                  ''),
+                                            child: Image.network(
+                                              customerModel.imageLastUrl ?? '',
                                               fit: BoxFit.cover,
                                             ),
                                           ),

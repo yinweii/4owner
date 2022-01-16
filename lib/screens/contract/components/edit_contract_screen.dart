@@ -83,7 +83,7 @@ class _EditContractScreenState extends State<EditContractScreen> {
     if (_formKey.currentState!.validate()) {
       var newContract = _contractEdit.copyWith(
         updateAt: DateTime.now(),
-        customer: customer,
+        idCustomer: customer?.id,
         dateFrom: selectedFirstDate,
         dateTo: selectedSecondDate,
         startPay: selectedDateStart,
@@ -141,7 +141,7 @@ class _EditContractScreenState extends State<EditContractScreen> {
                             DropdownButtonFormField(
                               validator: (value) =>
                                   value == null ? "Chọn người thuê " : null,
-                              hint: Text(_contractEdit.customer!.name!),
+                              hint: Text('_contractEdit.customer!.name!'),
                               value: selectedValue,
                               onChanged: (String? newValue) {
                                 setState(() {

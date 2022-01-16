@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:min_id/min_id.dart';
 import 'package:owner_app/components/custom_textfield.dart';
 import 'package:owner_app/components/loading_widget.dart';
+import 'package:owner_app/constants/export.dart';
 import 'package:owner_app/model/contract_model.dart';
 import 'package:owner_app/model/customer_model.dart';
 import 'package:owner_app/provider/contract_provider.dart';
@@ -74,7 +75,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
         id: MinId.getId(),
         createAt: DateTime.now(),
         updateAt: DateTime.now(),
-        customer: customer,
+        idCustomer: customer?.id,
         dateFrom: selectedFirstDate,
         dateTo: selectedSecondDate,
         startPay: selectedDateStart,
@@ -83,7 +84,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
       );
       await context
           .read<Contract>()
-          .addContract(newContract)
+          .addContract(newContract, customer?.idRoom ?? '')
           .then((value) => Navigator.of(context).pop());
     }
   }
@@ -115,13 +116,13 @@ class _AddContractScreenState extends State<AddContractScreen> {
                         width: Utils.sizeWidth(context),
                         height: 35,
                         decoration: BoxDecoration(
-                          color: Colors.green,
+                          color: AppColors.primary,
                           borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(5),
                             topRight: Radius.circular(5),
                           ),
                         ),
-                        child: Center(child: Text('Thong tin')),
+                        child: Center(child: Text('Thông tin')),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(
@@ -199,14 +200,14 @@ class _AddContractScreenState extends State<AddContractScreen> {
                         width: Utils.sizeWidth(context),
                         height: 35,
                         decoration: BoxDecoration(
-                          color: Colors.green,
+                          color: AppColors.primary,
                           borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(5),
                             topRight: Radius.circular(5),
                           ),
                         ),
                         child: Center(
-                          child: Text('Tien phong'),
+                          child: Text('Tiền phòng'),
                         ),
                       ),
                       Padding(

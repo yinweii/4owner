@@ -73,4 +73,13 @@ class ApiService {
     await file.writeAsBytes(bytes, flush: true);
     return file;
   }
+
+  static Future<String>? saveImageToStore(File? file) async {
+    FirebaseStorage storage = FirebaseStorage.instance;
+    Reference ref =
+        storage.ref().child('Image').child(basename(file?.path ?? ''));
+    UploadTask storageUploadTask = ref.putFile(file!);
+    String imageUrl = await (await storageUploadTask).ref.getDownloadURL();
+    return imageUrl;
+  }
 }
