@@ -1,0 +1,69 @@
+{
+    "msgap001": "Your email address appears to be malformed!",
+    "@msgap001": {
+        "type": "text",
+        "placeholders": {}
+    },
+    "msgap002": "Server error, please try again later.",
+    "@msgap002": {
+        "type": "text",
+        "placeholders": {}
+    },
+    "msgap003": "Email already used. Go to login page.",
+    "@msgap003": {
+        "type": "text",
+        "placeholders": {}
+    },
+    "msgap004": "Wrong email/password combination.",
+    "@msgap004": {
+        "type": "text",
+        "placeholders": {}
+    },
+    "msgap005": "No user found with this email.",
+    "msgap006": "An undefined Error happened.",
+    "@msgap006": {
+        "type": "text",
+        "placeholders": {}
+    },
+    "msgap007": "Email",
+    "@msgap007": {
+        "type": "text",
+        "placeholders": {}
+    },
+    "msgap008": "Password",
+    "@msgap008": {
+        "type": "text",
+        "placeholders": {}
+    },
+    "msgap009": "Name",
+    "@msgap009": {
+        "type": "text",
+        "placeholders": {}
+    },
+    "msgap010": "Log in",
+    "@msgap010": {
+        "type": "text",
+        "placeholders": {}
+    },
+    "msgap011": "Register",
+    "@msgap011": {
+        "type": "text",
+        "placeholders": {}
+    },
+    "msgap012": "Forgot password",
+    "@msgap012": {
+        "type": "text",
+        "placeholders": {}
+    },
+    "msgap013": "Total number of rooms",
+    "@msgap013": {
+        "type": "text",
+        "placeholders": {}
+    },
+    "msgap014": "Renter",
+    "msgap015": "Empty room",
+    "msgap016": "Move place",
+    "msgap017": "Services",
+    "msgap018": "Contract",
+    "msgap019": "Invoice"
+}

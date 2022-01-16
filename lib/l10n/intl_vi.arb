@@ -1,0 +1,126 @@
+{
+    "msgap001": "Email không đúng định dạng",
+    "@msgap001": {
+        "type": "text",
+        "placeholders": {}
+    },
+    "msgap002": "Đã có lỗi, vui lòng thử lại sau!",
+    "@msgap002": {
+        "type": "text",
+        "placeholders": {}
+    },
+    "msgap003": "Email đã được sử dụng",
+    "@msgap003": {
+        "type": "text",
+        "placeholders": {}
+    },
+    "msgap004": "Email/ mật khẩu không hợp lệ",
+    "@msgap004": {
+        "type": "text",
+        "placeholders": {}
+    },
+    "msgap005": "Không tìm thấy người dùng",
+    "@msgap005": {
+        "type": "text",
+        "placeholders": {}
+    },
+    "msgap006": "Đã có lỗi!",
+    "@msgap006": {
+        "type": "text",
+        "placeholders": {}
+    },
+    "msgap007": "Email",
+    "@msgap007": {
+        "type": "text",
+        "placeholders": {}
+    },
+    "msgap008": "Mật khẩu",
+    "@msgap008": {
+        "type": "text",
+        "placeholders": {}
+    },
+    "msgap009": "Họ tên",
+    "@msgap009": {
+        "type": "text",
+        "placeholders": {}
+    },
+    "msgap010": "Đăng  Nhập",
+    "@msgap010": {
+        "type": "text",
+        "placeholders": {}
+    },
+    "msgap011": "Đăng kí",
+    "@msgap011": {
+        "type": "text",
+        "placeholders": {}
+    },
+    "msgap012": "Quên mật khẩu",
+    "@msgap012": {
+        "type": "text",
+        "placeholders": {}
+    },
+    "msgap013": "Tổng số phòng",
+    "@msgap013": {
+        "type": "text",
+        "placeholders": {}
+    },
+    "msgap014": "Người thuê",
+    "msgap015": "Phòng trống",
+    "msgap016": "Chuyển đi",
+    "msgap017": "Dịch vụ",
+    "msgap018": "Hợp đồng",
+    "msgap019": "Hóa đơn",
+    "msgap020": "Giữ phòng",
+    "msgap021": "Chỉ dẫn",
+    "msgap022": "Hoạt động",
+    "msgap023": "Quá hạn",
+    "msgap024": "Đã thanh lý",
+    "msgap025": "Không có dữ liệu",
+    "msgap026": "Thông tin",
+    "msgap027": "Thời hạn",
+    "msgap028": "Từ ngày",
+    "msgap029": "Đến ngày",
+    "msgap030": "Ngày bắt đầu tính tiền",
+    "msgap031": "Tiền phòng",
+    "msgap032": "Số người ở",
+    "msgap033": "Tiền cọc",
+    "msgap034": "Chưa thanh toán",
+    "msgap035": "Quá hạn",
+    "msgap036": "Đã thanh toán",
+    "msgap037": "Hóa đơn tháng ",
+    "msgap038": "Điện",
+    "msgap039": "Nước ",
+    "msgap040": " Chỉ số cũ",
+    "msgap041": "Chỉ số mới ",
+    "msgap042": "Thanh tiền",
+    "msgap043": "Dịch vụ khác",
+    "msgap044": "Tổng hợp ",
+    "msgap045": "Tổng",
+    "msgap046": "Tiền phạt",
+    "msgap047": "Giảm giá",
+    "msgap048": "Tổng thanh toán",
+    "msgap049": "Lập hóa đơn",
+    "msgap050": "Đã có phòng",
+    "msgap051": "Chưa có phòng",
+    "msgap052": "Họ và tên",
+    "msgap053": " Số điện thoại",
+    "msgap054": "Chưa có phòng(đặt cọc)",
+    "msgap055": "Số CMND/CCCD ",
+    "msgap056": " Địa chỉ",
+    "msgap057": "Ảnh CMND/CCCD ",
+    "msgap058": "Khu/Tầng",
+    "msgap059": "Phòng ",
+    "msgap060": "Chờ phòng ",
+    "msgap061": "Quá hạn",
+    "msgap062": " Đã hủy",
+    "msgap063": "Đã tạo hợp đồng",
+    "msgap064": "Ngày vào ở",
+    "msgap065": "Xác nhận",
+    "msgap066": "Hủy bỏ ",
+    "msgap067": "Phương thức thanh toán ",
+    "msgap068": "Tiền mặt",
+    "msgap069": "Chuyển khoản",
+    "msgap070": "Mô tả",
+    "msgap071": "Thêm",
+    "msgap072": "Thu chi"
+}

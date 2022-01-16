@@ -45,3 +45,4 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 lib/**/*.g.dart
+lib/l10n/messages_*.dart
