@@ -174,6 +174,17 @@ class Customer with ChangeNotifier, Helper {
     return list;
   }
 
+  // find customer by room
+  List<CustomerModel> customerByRoom(String idRoom) {
+    List<CustomerModel> list = [];
+    for (var customer in _listCustomer) {
+      if (customer.idRoom == idRoom) {
+        list.add(customer);
+      }
+    }
+    return list;
+  }
+
   // void setIsLoading(value) {
   //   _isLoading = value;
   //   notifyListeners();

@@ -79,9 +79,7 @@ class _CreateContractScreenState extends State<CreateContractScreen> {
         id: MinId.getId(),
         createAt: DateTime.now(),
         updateAt: DateTime.now(),
-        customer: context
-            .read<Customer>()
-            .getCustomerByID(holderModel?.customerId ?? ''),
+        idCustomer: holderModel?.customerId,
         dateFrom: selectedFirstDate ?? holderModel?.startTime,
         dateTo: selectedSecondDate,
         startPay: selectedDateStart,
@@ -89,7 +87,7 @@ class _CreateContractScreenState extends State<CreateContractScreen> {
         deposit: holderModel?.depositCost,
       );
 
-      await context.read<Contract>().addContract(newContract).then((value) {
+      await context.read<Contract>().addContract(newContract, '').then((value) {
         Utils.navigateReplace(context, HoldRoomScreen());
       }, onError: (error) => DialogUtil.showError(context, error.toString()));
       await context

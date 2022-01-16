@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:owner_app/constants/export.dart';
 import 'package:owner_app/utils/utils.dart';
 
 import 'components/add_contract_screen.dart';
@@ -66,6 +67,7 @@ class _ContractScreenState extends State<ContractScreen>
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: AppColors.primary,
         onPressed: () => Utils.navigatePage(context, AddContractScreen()),
         child: Icon(Icons.add),
       ),

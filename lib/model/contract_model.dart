@@ -1,12 +1,10 @@
 import 'dart:convert';
 
-import 'package:owner_app/model/customer_model.dart';
-
 class ContractModel {
   final String? id;
   final DateTime? createAt;
   final DateTime? updateAt;
-  final CustomerModel? customer;
+  final String? idCustomer;
   final DateTime? dateFrom;
   final DateTime? dateTo;
   final DateTime? startPay;
@@ -17,7 +15,7 @@ class ContractModel {
     this.id,
     this.createAt,
     this.updateAt,
-    this.customer,
+    this.idCustomer,
     this.dateFrom,
     this.dateTo,
     this.startPay,
@@ -30,7 +28,7 @@ class ContractModel {
     String? id,
     DateTime? createAt,
     DateTime? updateAt,
-    CustomerModel? customer,
+    String? idCustomer,
     DateTime? dateFrom,
     DateTime? dateTo,
     DateTime? startPay,
@@ -42,7 +40,7 @@ class ContractModel {
       id: id ?? this.id,
       createAt: createAt ?? this.createAt,
       updateAt: updateAt ?? this.updateAt,
-      customer: customer ?? this.customer,
+      idCustomer: idCustomer ?? this.idCustomer,
       dateFrom: dateFrom ?? this.dateFrom,
       dateTo: dateTo ?? this.dateTo,
       startPay: startPay ?? this.startPay,
@@ -55,12 +53,12 @@ class ContractModel {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'createAt': createAt,
-      'updateAt': updateAt,
-      'customer': customer?.toMap(),
-      'dateFrom': dateFrom,
-      'dateTo': dateTo,
-      'startPay': startPay,
+      'createAt': createAt?.millisecondsSinceEpoch,
+      'updateAt': updateAt?.millisecondsSinceEpoch,
+      'idCustomer': idCustomer,
+      'dateFrom': dateFrom?.millisecondsSinceEpoch,
+      'dateTo': dateTo?.millisecondsSinceEpoch,
+      'startPay': startPay?.millisecondsSinceEpoch,
       'deposit': deposit,
       'numberPerson': numberPerson,
       'status': status,
@@ -70,14 +68,22 @@ class ContractModel {
   factory ContractModel.fromMap(Map<String, dynamic> map) {
     return ContractModel(
       id: map['id'],
-      createAt: map['createAt'] != null ? map['createAt'].toDate() : null,
-      updateAt: map['updateAt'] != null ? map['updateAt'].toDate() : null,
-      customer: map['customer'] != null
-          ? CustomerModel.fromMap(map['customer'])
+      createAt: map['createAt'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(map['createAt'])
           : null,
-      dateFrom: map['dateFrom'] != null ? map['dateFrom'].toDate() : null,
-      dateTo: map['dateTo'] != null ? map['dateTo'].toDate() : null,
-      startPay: map['startPay'] != null ? map['startPay'].toDate() : null,
+      updateAt: map['updateAt'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(map['updateAt'])
+          : null,
+      idCustomer: map['idCustomer'],
+      dateFrom: map['dateFrom'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(map['dateFrom'])
+          : null,
+      dateTo: map['dateTo'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(map['dateTo'])
+          : null,
+      startPay: map['startPay'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(map['startPay'])
+          : null,
       deposit: map['deposit']?.toDouble(),
       numberPerson: map['numberPerson']?.toInt(),
       status: map['status'],
@@ -91,7 +97,7 @@ class ContractModel {
 
   @override
   String toString() {
-    return 'ContractModel(id: $id, createAt: $createAt, updateAt: $updateAt, customer: $customer, dateFrom: $dateFrom, dateTo: $dateTo, startPay: $startPay, deposit: $deposit, numberPerson: $numberPerson, status: $status)';
+    return 'ContractModel(id: $id, createAt: $createAt, updateAt: $updateAt, idCustomer: $idCustomer, dateFrom: $dateFrom, dateTo: $dateTo, startPay: $startPay, deposit: $deposit, numberPerson: $numberPerson, status: $status)';
   }
 
   @override
@@ -102,7 +108,7 @@ class ContractModel {
         other.id == id &&
         other.createAt == createAt &&
         other.updateAt == updateAt &&
-        other.customer == customer &&
+        other.idCustomer == idCustomer &&
         other.dateFrom == dateFrom &&
         other.dateTo == dateTo &&
         other.startPay == startPay &&
@@ -116,7 +122,7 @@ class ContractModel {
     return id.hashCode ^
         createAt.hashCode ^
         updateAt.hashCode ^
-        customer.hashCode ^
+        idCustomer.hashCode ^
         dateFrom.hashCode ^
         dateTo.hashCode ^
         startPay.hashCode ^

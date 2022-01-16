@@ -88,6 +88,7 @@ class Floor with ChangeNotifier, Helper {
         listExtract
             .add(FloorModel.fromMap(doccument.data() as Map<String, dynamic>));
       }
+      listExtract.sort((a, b) => (a.name ?? '').compareTo(b.name ?? ''));
 
       _floorList = listExtract;
     } catch (e) {
@@ -108,6 +109,7 @@ class Floor with ChangeNotifier, Helper {
 
       _floorModel =
           FloorModel.fromMap(documentSnapshot?.data() as Map<String, dynamic>);
+
       _isLoading = isLoading(false);
       notifyListeners();
     } on Exception catch (e) {

@@ -57,6 +57,7 @@ class RoomProvider with ChangeNotifier, Helper {
       for (var docs in snapshot!.docs) {
         listExtract.add(RoomModel.fromMap(docs.data() as Map<String, dynamic>));
       }
+
       _isLoading = isLoading(false);
     } catch (e) {
       _isLoading = isLoading(false);
@@ -64,6 +65,7 @@ class RoomProvider with ChangeNotifier, Helper {
     }
 
     _listRoom = listExtract;
+
     notifyListeners();
   }
 
@@ -104,6 +106,9 @@ class RoomProvider with ChangeNotifier, Helper {
       if (room.idFloor == idFloor) {
         findByFloor.add(room);
       }
+      findByFloor.sort((a, b) => (a.romName ?? '').compareTo(b.romName ?? ''));
+      // findByFloor.sort((a, b) => (int.parse(a.romName!.split('-').last))
+      //     .compareTo(int.parse(b.romName!.split('-').last)));
     }
 
     return findByFloor;
@@ -124,7 +129,7 @@ class RoomProvider with ChangeNotifier, Helper {
   List<RoomModel> findAllRoomEmpty() {
     List<RoomModel> findByFloor = [];
     for (var room in _listRoom) {
-      if (room.status == Constants.status_null) {
+      if (room.status == Constants.room_status_null) {
         findByFloor.add(room);
       }
     }

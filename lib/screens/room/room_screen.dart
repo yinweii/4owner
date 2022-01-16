@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:owner_app/components/loading_widget.dart';
+import 'package:owner_app/constants/constants.dart';
+import 'package:owner_app/constants/constants.dart';
+import 'package:owner_app/constants/export.dart';
+import 'package:owner_app/provider/customer_provider.dart';
 
 import 'package:owner_app/provider/floor_provider.dart';
 
@@ -22,6 +26,7 @@ class RoomScreen extends StatefulWidget {
 class _RoomScreenState extends State<RoomScreen> {
   Future<void> getRoom() async {
     Provider.of<RoomProvider>(context, listen: false).getRoom(widget.id);
+    context.read<Customer>().getListCustomer();
   }
 
   @override
@@ -57,7 +62,12 @@ class _RoomScreenState extends State<RoomScreen> {
                           name: roomData.listRoom?[index].romName ?? '',
                           price: roomData.listRoom?[index].price,
                           area: roomData.listRoom?[index].area.toString(),
-                          person: roomData.listRoom?[index].person ?? 0,
+                          status: roomData.listRoom?[index].status,
+                          person: context
+                              .read<Customer>()
+                              .customerByRoom(
+                                  roomData.listRoom?[index].id ?? '')
+                              .length,
                         );
                       })
                   : Center(
@@ -79,8 +89,15 @@ class RoomItem extends StatelessWidget {
   final double? price;
   final int? person;
   final String? area;
+  final String? status;
   const RoomItem(
-      {Key? key, this.id, this.name, this.price, this.person, this.area})
+      {Key? key,
+      this.id,
+      this.name,
+      this.price,
+      this.person,
+      this.area,
+      this.status})
       : super(key: key);
 
   @override
@@ -185,26 +202,18 @@ class RoomItem extends StatelessWidget {
                 ],
               ),
             ),
-            // Positioned(
-            //   top: 6,
-            //   right: 8,
-            //   child: person! < 1
-            //       ? Text(
-            //           'Chưa \n thuê',
-            //           style: TextStyle(
-            //               fontWeight: FontWeight.bold,
-            //               color: Colors.red,
-            //               fontSize: 10),
-            //         )
-            //       : SizedBox.shrink(),
-            // ),
+            Positioned(
+              top: 6,
+              right: 8,
+              child: _buildLable(),
+            ),
           ],
         ),
       ),
     );
   }
 
-  _buildRow({Icon? icon, String? number}) {
+  Widget _buildRow({Icon? icon, String? number}) {
     return Padding(
       padding: const EdgeInsets.all(6.0),
       child: Row(
@@ -215,5 +224,23 @@ class RoomItem extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget _buildLable() {
+    if (status == Constants.room_status_hold) {
+      return Text(
+        'Đã\ncọc',
+        style: TextStyle(
+            fontWeight: FontWeight.bold, color: AppColors.blue2, fontSize: 12),
+      );
+    } else if (status == Constants.room_status_null) {
+      return Text(
+        'Trống',
+        style: TextStyle(
+            fontWeight: FontWeight.bold, color: AppColors.red2, fontSize: 12),
+      );
+    } else {
+      return SizedBox.shrink();
+    }
   }
 }
