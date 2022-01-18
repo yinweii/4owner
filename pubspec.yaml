@@ -54,6 +54,7 @@ dependencies:
   image_cropper: ^1.4.1
 
   fluttertoast: ^8.0.8
+  fl_chart: ^0.41.0
 
 dev_dependencies:
   flutter_test:
