@@ -274,8 +274,8 @@ class BuildItem extends StatelessWidget {
               icon!,
               Text(
                 text!,
-                style:
-                    const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                style: AppTextStyles.defaultBold
+                    .copyWith(fontSize: AppTextStyles.fontSize_16),
               ),
             ],
           ),
@@ -294,10 +294,19 @@ class BuildTopItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text(text!),
+        Text(
+          text!,
+          style: AppTextStyles.defaulLato.copyWith(
+            fontSize: AppTextStyles.fontSize_14,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
         Text(
           '${number!}',
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+          style: AppTextStyles.defaulLato.copyWith(
+            fontSize: AppTextStyles.fontSize_15,
+            fontWeight: FontWeight.w800,
+          ),
         ),
       ],
     );

@@ -72,8 +72,8 @@ class _ListContractState extends State<ListContract> {
                         return ContractItem(
                           typeItem: typeItem!,
                           id: list[index].id,
-                          floorNumber: customer.floorNumber,
-                          roomNumber: customer.roomNumber,
+                          floorNumber: customer.floornumber,
+                          roomNumber: customer.roomnumber,
                           dateFrom: list[index].dateFrom ?? DateTime.now(),
                           dateTo: list[index].dateTo ?? DateTime.now(),
                           customerName: customer.name,

@@ -35,7 +35,7 @@ class _EditRoomScreenState extends State<EditRoomScreen> {
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
       var newRoom = _editRoom.copyWith(
-        romName: _nameController.text,
+        roomname: _nameController.text,
         area: double.parse(_areaController.text),
         price: double.parse(_priceController.text),
         note: _noteController.text,
@@ -65,7 +65,7 @@ class _EditRoomScreenState extends State<EditRoomScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TextFieldCustom(
-                  controller: _nameController..text = _editRoom.romName ?? '',
+                  controller: _nameController..text = _editRoom.roomname ?? '',
                   lable: 'Tên phòng',
                   requied: true,
                 ),

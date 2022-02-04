@@ -91,7 +91,7 @@ class _AddHoldScreenState extends State<AddHoldScreen>
         roomNumber: context
             .read<RoomProvider>()
             .findRoomById(_selectRoom ?? '')
-            .romName,
+            .roomname,
         startTime: selectedDateStart,
       );
       print(newHoler.toString());
@@ -184,7 +184,7 @@ class _AddHoldScreenState extends State<AddHoldScreen>
                                       .map((e) {
                                     return DropdownMenuItem<String>(
                                       value: e.id,
-                                      child: new Text(e.romName ?? ''),
+                                      child: new Text(e.roomname ?? ''),
                                     );
                                   }).toList(),
                                   onChanged: (String? value) {

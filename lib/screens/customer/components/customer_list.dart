@@ -54,9 +54,9 @@ class _CustomerListState extends State<CustomerList> {
                         return CustomerCard(
                           id: temp[index].id,
                           name: temp[index].name,
-                          phoneNumber: temp[index].phoneNumber,
-                          floorName: temp[index].floorNumber,
-                          roomNumber: temp[index].roomNumber,
+                          phoneNumber: temp[index].phonenumber,
+                          floorName: temp[index].floornumber,
+                          roomNumber: temp[index].roomnumber,
                         );
                       },
                     );

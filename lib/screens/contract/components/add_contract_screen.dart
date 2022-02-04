@@ -84,7 +84,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
       );
       await context
           .read<Contract>()
-          .addContract(newContract, customer?.idRoom ?? '')
+          .addContract(newContract, customer?.idroom ?? '')
           .then((value) => Navigator.of(context).pop());
     }
   }

@@ -30,20 +30,20 @@ class Customer with ChangeNotifier, Helper {
     var newCustomer = CustomerModel(
       id: customer.id,
       name: customer.name,
-      idFloor: customer.idFloor,
-      idRoom: customer.idRoom,
-      phoneNumber: customer.phoneNumber,
+      idfloor: customer.idfloor,
+      idroom: customer.idroom,
+      phonenumber: customer.phonenumber,
       dateOfBirth: customer.dateOfBirth,
-      cardNumber: customer.cardNumber,
+      cardnumber: customer.cardnumber,
       email: customer.email,
-      roomNumber: customer.roomNumber,
-      floorNumber: customer.floorNumber,
+      roomnumber: customer.roomnumber,
+      floornumber: customer.floornumber,
       address: customer.address,
       gender: customer.gender,
-      imageFirstUrl: customer.imageFirstUrl,
-      imageLastUrl: customer.imageLastUrl,
+      imagefirsturl: customer.imagefirsturl,
+      imagelasturl: customer.imagelasturl,
       status: Constants.no_contract,
-      isHolder: true,
+      isholder: true,
     );
     // setIsLoading(true);
     _listCustomer.add(newCustomer);
@@ -52,9 +52,16 @@ class Customer with ChangeNotifier, Helper {
           colect: Constants.customerDb,
           dataID: customer.id ?? '',
           data: newCustomer.toMap());
+
+      await _apiService.update(
+          colect: Constants.roomtDb,
+          dataID: idRoom,
+          data: ({'status': Constants.room_status_has}));
     } on Exception catch (e) {
       // TODO
-      print(e.toString());
+      print(
+        e.toString(),
+      );
     }
 
     //setIsLoading(false);
@@ -66,20 +73,20 @@ class Customer with ChangeNotifier, Helper {
         _listCustomer.indexWhere((element) => element.id == idCustomer);
     var newCustomerEdt = CustomerModel(
       name: customer.name,
-      idFloor: customer.idFloor,
-      idRoom: customer.idRoom,
-      phoneNumber: customer.phoneNumber,
+      idfloor: customer.idfloor,
+      idroom: customer.idroom,
+      phonenumber: customer.phonenumber,
       dateOfBirth: customer.dateOfBirth,
-      cardNumber: customer.cardNumber,
+      cardnumber: customer.cardnumber,
       email: customer.email,
-      roomNumber: customer.roomNumber,
-      floorNumber: customer.floorNumber,
+      roomnumber: customer.roomnumber,
+      floornumber: customer.floornumber,
       address: customer.address,
       gender: customer.gender,
-      imageFirstUrl: customer.imageFirstUrl,
-      imageLastUrl: customer.imageLastUrl,
+      imagefirsturl: customer.imagefirsturl,
+      imagelasturl: customer.imagelasturl,
       status: Constants.no_contract,
-      isHolder: true,
+      isholder: true,
     );
 
     if (indexEdit > 0) {
@@ -131,7 +138,7 @@ class Customer with ChangeNotifier, Helper {
   List<CustomerModel> customerHas() {
     List<CustomerModel> list = [];
     for (var customer in _listCustomer) {
-      if ((customer.idFloor ?? '').isNotEmpty &&
+      if ((customer.idfloor ?? '').isNotEmpty &&
           customer.status != Constants.out_contract) {
         list.add(customer);
       }
@@ -143,7 +150,7 @@ class Customer with ChangeNotifier, Helper {
   List<CustomerModel> customerNoContract() {
     List<CustomerModel> list = [];
     for (var customer in _listCustomer) {
-      if ((customer.idFloor ?? '').isNotEmpty &&
+      if ((customer.idfloor ?? '').isNotEmpty &&
           customer.status == Constants.no_contract) {
         list.add(customer);
       }
@@ -156,8 +163,8 @@ class Customer with ChangeNotifier, Helper {
   List<CustomerModel> customerDeposit() {
     List<CustomerModel> list = [];
     for (var customer in _listCustomer) {
-      if ((customer.idFloor ?? '').isEmpty ||
-          (customer.idFloor ?? '').isEmpty) {
+      if ((customer.idfloor ?? '').isEmpty ||
+          (customer.idfloor ?? '').isEmpty) {
         list.add(customer);
       }
     }
@@ -178,20 +185,23 @@ class Customer with ChangeNotifier, Helper {
   List<CustomerModel> customerByRoom(String idRoom) {
     List<CustomerModel> list = [];
     for (var customer in _listCustomer) {
-      if (customer.idRoom == idRoom) {
+      if (customer.idroom == idRoom) {
         list.add(customer);
       }
     }
     return list;
   }
 
-  // void setIsLoading(value) {
-  //   _isLoading = value;
-  //   notifyListeners();
-  // }
+  Future<void> deleteCustomer(String idCustomer) async {
+    final existingCustomer =
+        _listCustomer.indexWhere((prod) => prod.id == idCustomer);
 
-  // void setMessage(message) {
-  //   _errorMessage = message;
-  //   notifyListeners();
-  // }
+    _listCustomer.remove(existingCustomer);
+    notifyListeners();
+    try {
+      await _apiService.delete(
+          colect: Constants.customerDb, dataID: idCustomer);
+      notifyListeners();
+    } catch (e) {}
+  }
 }

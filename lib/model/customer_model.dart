@@ -2,117 +2,117 @@ import 'dart:convert';
 
 class CustomerModel {
   final String? id;
-  final String? idFloor;
-  final String? idRoom;
+  final String? idfloor;
+  final String? idroom;
   final String? name;
-  final String? phoneNumber;
+  final String? phonenumber;
   final String? dateOfBirth;
-  final String? cardNumber;
+  final String? cardnumber;
   final String? email;
   final String? address;
-  final String? roomNumber;
-  final String? floorNumber;
-  final String? imageFirstUrl;
-  final String? imageLastUrl;
+  final String? roomnumber;
+  final String? floornumber;
+  final String? imagefirsturl;
+  final String? imagelasturl;
   final String? gender;
   final String? status;
-  final bool? isHolder;
+  final bool? isholder;
   CustomerModel({
     this.id,
-    this.idFloor,
-    this.idRoom,
+    this.idfloor,
+    this.idroom,
     this.name,
-    this.phoneNumber,
+    this.phonenumber,
     this.dateOfBirth,
-    this.cardNumber,
+    this.cardnumber,
     this.email,
     this.address,
-    this.roomNumber,
-    this.floorNumber,
-    this.imageFirstUrl,
-    this.imageLastUrl,
+    this.roomnumber,
+    this.floornumber,
+    this.imagefirsturl,
+    this.imagelasturl,
     this.gender,
     this.status,
-    this.isHolder,
+    this.isholder,
   });
 
   CustomerModel copyWith({
     String? id,
-    String? idFloor,
-    String? idRoom,
+    String? idfloor,
+    String? idroom,
     String? name,
-    String? phoneNumber,
+    String? phonenumber,
     String? dateOfBirth,
-    String? cardNumber,
+    String? cardnumber,
     String? email,
     String? address,
-    String? roomNumber,
-    String? floorNumber,
-    String? imageFirstUrl,
-    String? imageLastUrl,
+    String? roomnumber,
+    String? floornumber,
+    String? imagefirsturl,
+    String? imagelasturl,
     String? gender,
     String? status,
-    bool? isHolder,
+    bool? isholder,
   }) {
     return CustomerModel(
       id: id ?? this.id,
-      idFloor: idFloor ?? this.idFloor,
-      idRoom: idRoom ?? this.idRoom,
+      idfloor: idfloor ?? this.idfloor,
+      idroom: idroom ?? this.idroom,
       name: name ?? this.name,
-      phoneNumber: phoneNumber ?? this.phoneNumber,
+      phonenumber: phonenumber ?? this.phonenumber,
       dateOfBirth: dateOfBirth ?? this.dateOfBirth,
-      cardNumber: cardNumber ?? this.cardNumber,
+      cardnumber: cardnumber ?? this.cardnumber,
       email: email ?? this.email,
       address: address ?? this.address,
-      roomNumber: roomNumber ?? this.roomNumber,
-      floorNumber: floorNumber ?? this.floorNumber,
-      imageFirstUrl: imageFirstUrl ?? this.imageFirstUrl,
-      imageLastUrl: imageLastUrl ?? this.imageLastUrl,
+      roomnumber: roomnumber ?? this.roomnumber,
+      floornumber: floornumber ?? this.floornumber,
+      imagefirsturl: imagefirsturl ?? this.imagefirsturl,
+      imagelasturl: imagelasturl ?? this.imagelasturl,
       gender: gender ?? this.gender,
       status: status ?? this.status,
-      isHolder: isHolder ?? this.isHolder,
+      isholder: isholder ?? this.isholder,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'idFloor': idFloor,
-      'idRoom': idRoom,
+      'idfloor': idfloor,
+      'idroom': idroom,
       'name': name,
-      'phoneNumber': phoneNumber,
+      'phonenumber': phonenumber,
       'dateOfBirth': dateOfBirth,
-      'cardNumber': cardNumber,
+      'cardnumber': cardnumber,
       'email': email,
       'address': address,
-      'roomNumber': roomNumber,
-      'floorNumber': floorNumber,
-      'imageFirstUrl': imageFirstUrl,
-      'imageLastUrl': imageLastUrl,
+      'roomnumber': roomnumber,
+      'floornumber': floornumber,
+      'imagefirsturl': imagefirsturl,
+      'imagelasturl': imagelasturl,
       'gender': gender,
       'status': status,
-      'isHolder': isHolder,
+      'isholder': isholder,
     };
   }
 
   factory CustomerModel.fromMap(Map<String, dynamic> map) {
     return CustomerModel(
       id: map['id'],
-      idFloor: map['idFloor'],
-      idRoom: map['idRoom'],
+      idfloor: map['idfloor'],
+      idroom: map['idroom'],
       name: map['name'],
-      phoneNumber: map['phoneNumber'],
+      phonenumber: map['phonenumber'],
       dateOfBirth: map['dateOfBirth'],
-      cardNumber: map['cardNumber'],
+      cardnumber: map['cardnumber'],
       email: map['email'],
       address: map['address'],
-      roomNumber: map['roomNumber'],
-      floorNumber: map['floorNumber'],
-      imageFirstUrl: map['imageFirstUrl'],
-      imageLastUrl: map['imageLastUrl'],
+      roomnumber: map['roomnumber'],
+      floornumber: map['floornumber'],
+      imagefirsturl: map['imagefirsturl'],
+      imagelasturl: map['imagelasturl'],
       gender: map['gender'],
       status: map['status'],
-      isHolder: map['isHolder'],
+      isholder: map['isholder'],
     );
   }
 
@@ -123,7 +123,7 @@ class CustomerModel {
 
   @override
   String toString() {
-    return 'CustomerModel(id: $id, idFloor: $idFloor, idRoom: $idRoom, name: $name, phoneNumber: $phoneNumber, dateOfBirth: $dateOfBirth, cardNumber: $cardNumber, email: $email, address: $address, roomNumber: $roomNumber, floorNumber: $floorNumber, imageFirstUrl: $imageFirstUrl, imageLastUrl: $imageLastUrl, gender: $gender, status: $status)';
+    return 'CustomerModel(id: $id, idfloor: $idfloor, idroom: $idroom, name: $name, phonenumber: $phonenumber, dateOfBirth: $dateOfBirth, cardnumber: $cardnumber, email: $email, address: $address, roomnumber: $roomnumber, floornumber: $floornumber, imagefirsturl: $imagefirsturl, imagelasturl: $imagelasturl, gender: $gender, status: $status, isholder: $isholder)';
   }
 
   @override
@@ -132,38 +132,40 @@ class CustomerModel {
 
     return other is CustomerModel &&
         other.id == id &&
-        other.idFloor == idFloor &&
-        other.idRoom == idRoom &&
+        other.idfloor == idfloor &&
+        other.idroom == idroom &&
         other.name == name &&
-        other.phoneNumber == phoneNumber &&
+        other.phonenumber == phonenumber &&
         other.dateOfBirth == dateOfBirth &&
-        other.cardNumber == cardNumber &&
+        other.cardnumber == cardnumber &&
         other.email == email &&
         other.address == address &&
-        other.roomNumber == roomNumber &&
-        other.floorNumber == floorNumber &&
-        other.imageFirstUrl == imageFirstUrl &&
-        other.imageLastUrl == imageLastUrl &&
+        other.roomnumber == roomnumber &&
+        other.floornumber == floornumber &&
+        other.imagefirsturl == imagefirsturl &&
+        other.imagelasturl == imagelasturl &&
         other.gender == gender &&
-        other.status == status;
+        other.status == status &&
+        other.isholder == isholder;
   }
 
   @override
   int get hashCode {
     return id.hashCode ^
-        idFloor.hashCode ^
-        idRoom.hashCode ^
+        idfloor.hashCode ^
+        idroom.hashCode ^
         name.hashCode ^
-        phoneNumber.hashCode ^
+        phonenumber.hashCode ^
         dateOfBirth.hashCode ^
-        cardNumber.hashCode ^
+        cardnumber.hashCode ^
         email.hashCode ^
         address.hashCode ^
-        roomNumber.hashCode ^
-        floorNumber.hashCode ^
-        imageFirstUrl.hashCode ^
-        imageLastUrl.hashCode ^
+        roomnumber.hashCode ^
+        floornumber.hashCode ^
+        imagefirsturl.hashCode ^
+        imagelasturl.hashCode ^
         gender.hashCode ^
-        status.hashCode;
+        status.hashCode ^
+        isholder.hashCode;
   }
 }

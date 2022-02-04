@@ -26,18 +26,13 @@ class RoomProvider with ChangeNotifier, Helper {
   final _apiService = ApiService();
 
   final userUID = FirebaseAuth.instance.currentUser?.uid;
-  //firebase
-  final _fireStore = FirebaseFirestore.instance;
 
-  Future<void> getRoom(String? idFloor) async {
+  Future<void> getRoomByIdFloor(String? idFloor) async {
     List<RoomModel> listExtract = [];
     _isLoading = isLoading(true);
-    snapshot = await _fireStore
-        .collection(Constants.userDb)
-        .doc(userUID)
-        .collection(Constants.roomtDb)
-        .where('idFloor', isEqualTo: idFloor)
-        .get();
+    snapshot = await _apiService.findData(
+        colect: Constants.roomtDb, field: 'idfloor', param: idFloor!);
+
     _isLoading = isLoading(false);
 
     for (var docs in snapshot!.docs) {
@@ -45,6 +40,7 @@ class RoomProvider with ChangeNotifier, Helper {
     }
 
     _listRoom = listExtract;
+
     notifyListeners();
   }
 
@@ -72,14 +68,14 @@ class RoomProvider with ChangeNotifier, Helper {
   Future<void> addNewRoom(String idFloor, RoomModel room) async {
     var newRoom = RoomModel(
       id: room.id,
-      idFloor: idFloor,
-      romName: room.romName,
+      idfloor: idFloor,
+      roomname: room.roomname,
       area: room.area,
       price: room.price,
       note: room.note,
-      limidPerson: room.limidPerson,
+      limidperson: room.limidperson,
       status: Constants.room_status_null,
-      person: 0,
+      floorname: room.floorname,
     );
     _listRoom.add(newRoom);
 
@@ -103,10 +99,11 @@ class RoomProvider with ChangeNotifier, Helper {
   List<RoomModel> findListRoom(String? idFloor) {
     List<RoomModel> findByFloor = [];
     for (var room in _listRoom) {
-      if (room.idFloor == idFloor) {
+      if (room.idfloor == idFloor) {
         findByFloor.add(room);
       }
-      findByFloor.sort((a, b) => (a.romName ?? '').compareTo(b.romName ?? ''));
+      findByFloor
+          .sort((a, b) => (a.roomname ?? '').compareTo(b.roomname ?? ''));
       // findByFloor.sort((a, b) => (int.parse(a.romName!.split('-').last))
       //     .compareTo(int.parse(b.romName!.split('-').last)));
     }
@@ -117,7 +114,7 @@ class RoomProvider with ChangeNotifier, Helper {
   List<RoomModel> findRoomEmpty(String? idFloor) {
     List<RoomModel> findByFloor = [];
     for (var room in _listRoom) {
-      if (room.idFloor == idFloor &&
+      if (room.idfloor == idFloor &&
           room.status == Constants.room_status_null) {
         findByFloor.add(room);
       }

@@ -205,7 +205,7 @@ class _UpdateInvoiceScreenState extends State<UpdateInvoiceScreen> {
         id: MinId.getId(),
         idCustomer: selectedValue ?? '',
         idRoom: roomModel?.id ?? '',
-        roomName: roomModel?.romName ?? '',
+        roomName: roomModel?.roomname ?? '',
         name: customerUser?.name ?? '',
         invoiceDate: _selectedDate,
         dateFrom: selectedFirstDate,
@@ -292,7 +292,7 @@ class _UpdateInvoiceScreenState extends State<UpdateInvoiceScreen> {
 
                                   roomModel = context
                                       .read<RoomProvider>()
-                                      .findRoomById(customerUser?.idRoom ?? '');
+                                      .findRoomById(customerUser?.idroom ?? '');
                                 });
                               },
                               items: context

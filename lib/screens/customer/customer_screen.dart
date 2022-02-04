@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:owner_app/constants/export.dart';
 import 'package:owner_app/provider/customer_provider.dart';
 import 'package:owner_app/utils/utils.dart';
 
@@ -33,7 +34,10 @@ class _IndentureScreenState extends State<IndentureScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Người thuê'),
+        title: Text(
+          'Người thuê',
+          style: AppTextStyles.defaultBoldAppBar,
+        ),
         centerTitle: true,
         bottom: TabBar(
           isScrollable: true,
@@ -68,6 +72,7 @@ class _IndentureScreenState extends State<IndentureScreen>
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: AppColors.primary,
         onPressed: () => Utils.navigatePage(context, AddCustomerScreen()),
         child: Icon(Icons.add),
       ),
@@ -79,9 +84,18 @@ class _IndentureScreenState extends State<IndentureScreen>
       children: [
         Text(
           title ?? '',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+          style: AppTextStyles.defaultBold.copyWith(
+            fontSize: AppTextStyles.fontSize_15,
+            color: AppColors.white2,
+          ),
         ),
-        Text(number ?? '0')
+        Text(
+          number ?? '0',
+          style: AppTextStyles.defaultBold.copyWith(
+            fontSize: AppTextStyles.fontSize_15,
+            color: AppColors.white2,
+          ),
+        )
       ],
     );
   }

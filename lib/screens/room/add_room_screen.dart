@@ -8,7 +8,8 @@ import 'package:provider/provider.dart';
 
 class AddRoomScreen extends StatefulWidget {
   final String? id;
-  const AddRoomScreen({Key? key, this.id}) : super(key: key);
+  final String? floorname;
+  const AddRoomScreen({Key? key, this.id, this.floorname}) : super(key: key);
 
   @override
   State<AddRoomScreen> createState() => _AddRoomScreenState();
@@ -28,12 +29,13 @@ class _AddRoomScreenState extends State<AddRoomScreen> {
     if (_formKey.currentState!.validate()) {
       var newRoom = RoomModel(
         id: MinId.getId(),
-        idFloor: widget.id ?? '',
-        romName: _nameController.text,
+        idfloor: widget.id ?? '',
+        roomname: _nameController.text,
         area: double.parse(_areaController.text),
         price: double.parse(_priceController.text),
-        limidPerson: _limitedpersonController.text,
+        limidperson: _limitedpersonController.text,
         note: _noteController.text,
+        floorname: widget.floorname,
       );
       context.read<RoomProvider>().addNewRoom(widget.id!, newRoom);
 

@@ -168,7 +168,7 @@ class BuildFloorItem extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         print('IDD: $idFloor');
-        Utils.navigatePage(context, RoomScreen(id: idFloor));
+        Utils.navigatePage(context, RoomScreen(id: idFloor, floorname: name));
       },
       child: Padding(
         padding: const EdgeInsets.all(8.0),
