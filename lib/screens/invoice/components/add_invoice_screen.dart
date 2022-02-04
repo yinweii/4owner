@@ -185,7 +185,7 @@ class _AddInvoiceState extends State<AddInvoice> {
         id: MinId.getId(),
         idCustomer: selectedValue ?? '',
         idRoom: roomModel?.id ?? '',
-        roomName: roomModel?.romName ?? '',
+        roomName: roomModel?.roomname ?? '',
         name: customerUser?.name ?? '',
         invoiceDate: _selectedDate,
         dateFrom: selectedFirstDate,
@@ -259,7 +259,7 @@ class _AddInvoiceState extends State<AddInvoice> {
                                   print('CUSTOMER NAME: ${customerUser?.name}');
                                   roomModel = context
                                       .read<RoomProvider>()
-                                      .findRoomById(customerUser?.idRoom ?? '');
+                                      .findRoomById(customerUser?.idroom ?? '');
                                 });
                               },
                               items: context

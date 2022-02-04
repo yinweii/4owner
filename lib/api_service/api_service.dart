@@ -33,6 +33,19 @@ class ApiService {
     return snap;
   }
 
+  Future<QuerySnapshot> findData(
+      {required String colect,
+      required String field,
+      required String param}) async {
+    QuerySnapshot snap = await _fireStore
+        .collection(Constants.userDb)
+        .doc(userUID)
+        .collection(colect)
+        .where(field, isEqualTo: param)
+        .get();
+    return snap;
+  }
+
   Future<void> update(
       {required String colect,
       required String dataID,

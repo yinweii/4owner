@@ -71,11 +71,11 @@ class _EditCustomerScreenState extends State<EditCustomerScreen>
   void initData() {
     if ((widget.id ?? '').isNotEmpty) {
       _nameController.text = customerModel.name ?? '';
-      _phoneNumberController.text = customerModel.phoneNumber ?? '';
+      _phoneNumberController.text = customerModel.phonenumber ?? '';
       _emailController.text = customerModel.email ?? '';
-      _cardNunberController.text = customerModel.cardNumber ?? '';
+      _cardNunberController.text = customerModel.cardnumber ?? '';
       _addressController.text = customerModel.address ?? '';
-      if ((customerModel.idFloor ?? '').isEmpty) {
+      if ((customerModel.idfloor ?? '').isEmpty) {
         isDeposit = true;
       } else {
         isDeposit = false;
@@ -101,14 +101,14 @@ class _EditCustomerScreenState extends State<EditCustomerScreen>
   void _saveForm() async {
     if (_formKey.currentState!.validate()) {
       var customerEdit = customerModel.copyWith(
-        idFloor: isDeposit ? '' : (_select ?? ''),
-        idRoom: isDeposit ? '' : (idRooms ?? ''),
+        idfloor: isDeposit ? '' : (_select ?? ''),
+        idroom: isDeposit ? '' : (idRooms ?? ''),
         name: _nameController.text,
-        phoneNumber: _phoneNumberController.text,
+        phonenumber: _phoneNumberController.text,
         dateOfBirth: '',
-        cardNumber: _cardNunberController.text,
+        cardnumber: _cardNunberController.text,
         email: _emailController.text,
-        roomNumber: _selectRoom ?? '',
+        roomnumber: _selectRoom ?? '',
         // floorNumber: isDeposit
         //     ? ''
         //     : (context.read<Floor>().findById(_select ?? '').name),
@@ -202,7 +202,7 @@ class _EditCustomerScreenState extends State<EditCustomerScreen>
                                         hint: Container(
                                           width: Utils.sizeWidth(context) * 0.4,
                                           child: Text(
-                                            "${(_select ?? '').isNotEmpty ? context.watch<Floor>().findById(_select!).name : '${customerModel.floorNumber ?? ''}'}",
+                                            "${(_select ?? '').isNotEmpty ? context.watch<Floor>().findById(_select!).name : '${customerModel.floornumber ?? ''}'}",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w800),
                                           ),
@@ -240,7 +240,7 @@ class _EditCustomerScreenState extends State<EditCustomerScreen>
                                       hint: Container(
                                         width: Utils.sizeWidth(context) * 0.4,
                                         child: Text(
-                                          "${(_selectRoom ?? '').isNotEmpty ? _selectRoom : '${customerModel.roomNumber ?? ''}'}",
+                                          "${(_selectRoom ?? '').isNotEmpty ? _selectRoom : '${customerModel.roomnumber ?? ''}'}",
                                           style: TextStyle(
                                               fontWeight: FontWeight.w800),
                                         ),
@@ -252,8 +252,8 @@ class _EditCustomerScreenState extends State<EditCustomerScreen>
                                           .map((e) {
                                         idRooms = e.id;
                                         return DropdownMenuItem<String>(
-                                          value: e.romName,
-                                          child: new Text(e.romName ?? ''),
+                                          value: e.roomname,
+                                          child: new Text(e.roomname ?? ''),
                                         );
                                       }).toList(),
                                       onChanged: (String? value) {
@@ -316,7 +316,7 @@ class _EditCustomerScreenState extends State<EditCustomerScreen>
                                   child: Container(
                                     height: 100,
                                     width: 140,
-                                    child: customerModel.imageFirstUrl == null
+                                    child: customerModel.imagefirsturl == null
                                         ? Center(
                                             child: IconButton(
                                               onPressed: () {},
@@ -326,7 +326,7 @@ class _EditCustomerScreenState extends State<EditCustomerScreen>
                                           )
                                         : SizedBox(
                                             child: Image.network(
-                                              customerModel.imageFirstUrl ?? '',
+                                              customerModel.imagefirsturl ?? '',
                                               fit: BoxFit.cover,
                                             ),
                                           ),
@@ -339,7 +339,7 @@ class _EditCustomerScreenState extends State<EditCustomerScreen>
                                   child: Container(
                                     height: 100,
                                     width: 140,
-                                    child: customerModel.imageLastUrl == null
+                                    child: customerModel.imagelasturl == null
                                         ? Center(
                                             child: IconButton(
                                               onPressed: () {},
@@ -349,7 +349,7 @@ class _EditCustomerScreenState extends State<EditCustomerScreen>
                                           )
                                         : SizedBox(
                                             child: Image.network(
-                                              customerModel.imageLastUrl ?? '',
+                                              customerModel.imagelasturl ?? '',
                                               fit: BoxFit.cover,
                                             ),
                                           ),

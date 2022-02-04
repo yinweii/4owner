@@ -113,39 +113,39 @@ class _AddCustomerScreenState extends State<AddCustomerScreen>
   void _saveForm() async {
     if (_formKey.currentState!.validate()) {
       _isLoading = true;
-      // if (_selectedImageFile != null || _selectedImageFileLast != null) {
-      //   await ApiService.saveImageToStore(_selectedImageFile!)!.then((value) {
-      //     setState(() {
-      //       urlFirstImg = value;
-      //     });
-      //   });
-      //   await ApiService.saveImageToStore(_selectedImageFileLast!)!
-      //       .then((value) {
-      //     setState(() {
-      //       urlLastImg = value;
-      //     });
-      //   });
-      // } else {
-      //   return;
-      // }
+      //todo(): fix bug null file path
+      if (_selectedImageFile != null || _selectedImageFileLast != null) {
+        await ApiService.saveImageToStore(_selectedImageFile ?? null)!
+            .then((value) {
+          setState(() {
+            urlFirstImg = value;
+          });
+        });
+        await ApiService.saveImageToStore(_selectedImageFileLast ?? null)!
+            .then((value) {
+          setState(() {
+            urlLastImg = value;
+          });
+        });
+      }
 
       var newCustomer = CustomerModel(
         id: MinId.getId(),
-        idFloor: isDeposit ? '' : (_select ?? ''),
-        idRoom: isDeposit ? '' : (idRooms ?? ''),
+        idfloor: isDeposit ? '' : (_select ?? ''),
+        idroom: isDeposit ? '' : (idRooms ?? ''),
         name: _nameController.text,
-        phoneNumber: _phoneNumberController.text,
+        phonenumber: _phoneNumberController.text,
         dateOfBirth: '',
-        cardNumber: _cardNunberController.text,
+        cardnumber: _cardNunberController.text,
         email: _emailController.text,
-        roomNumber: _selectRoom ?? '',
-        floorNumber: isDeposit
+        roomnumber: _selectRoom ?? '',
+        floornumber: isDeposit
             ? ''
             : (context.read<Floor>().findById(_select ?? '').name),
         address: _addressController.text,
         gender: '',
-        imageFirstUrl: urlFirstImg ?? '',
-        imageLastUrl: urlLastImg ?? '',
+        imagefirsturl: urlFirstImg ?? '',
+        imagelasturl: urlLastImg ?? '',
       );
       print(newCustomer.toString());
       context.read<Customer>().addNewCustomer(newCustomer, idRooms ?? '').then(
@@ -285,8 +285,8 @@ class _AddCustomerScreenState extends State<AddCustomerScreen>
                                           .map((e) {
                                         idRooms = e.id;
                                         return DropdownMenuItem<String>(
-                                          value: e.romName,
-                                          child: new Text(e.romName ?? ''),
+                                          value: e.roomname,
+                                          child: new Text(e.roomname ?? ''),
                                         );
                                       }).toList(),
                                       onChanged: (String? value) {

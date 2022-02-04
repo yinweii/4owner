@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:owner_app/constants/export.dart';
+import 'package:owner_app/provider/contract_provider.dart';
 import 'package:owner_app/utils/utils.dart';
+import 'package:provider/src/provider.dart';
 
 import 'components/add_contract_screen.dart';
 import 'components/list_contract.dart';
@@ -19,6 +21,7 @@ class _ContractScreenState extends State<ContractScreen>
   @override
   void initState() {
     super.initState();
+    context.read<Contract>().getAllContract();
     controller = TabController(length: 3, vsync: this);
   }
 
@@ -30,31 +33,22 @@ class _ContractScreenState extends State<ContractScreen>
 
   @override
   Widget build(BuildContext context) {
+    var count = context.watch<Contract>();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Hợp đồng'),
+        title: Text(
+          'Hợp đồng',
+          style: AppTextStyles.defaultBoldAppBar,
+        ),
         centerTitle: true,
         bottom: TabBar(
           indicatorColor: Colors.white,
           controller: controller,
-          tabs: const <Tab>[
-            Tab(
-                child: Text(
-              'Hoạt động',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-            )),
-            Tab(
-              child: Text(
-                'Quá hạn',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              ),
-            ),
-            Tab(
-              child: Text(
-                'Đã thanh lý',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              ),
-            ),
+          tabs: <Tab>[
+            _buildTab('Hoạt động',
+                count.listContractAc(status: false, isActive: true).length),
+            _buildTab('Quá hạn', count.listContractAc().length),
+            _buildTab('Đã thanh lý', count.listContractOut().length),
           ],
         ),
       ),
@@ -70,6 +64,29 @@ class _ContractScreenState extends State<ContractScreen>
         backgroundColor: AppColors.primary,
         onPressed: () => Utils.navigatePage(context, AddContractScreen()),
         child: Icon(Icons.add),
+      ),
+    );
+  }
+
+  Tab _buildTab(String lable, int? count) {
+    return Tab(
+      child: Column(
+        children: [
+          Text(
+            lable,
+            style: AppTextStyles.defaultBold.copyWith(
+              fontSize: AppTextStyles.fontSize_15,
+              color: AppColors.white2,
+            ),
+          ),
+          Text(
+            '${count ?? 0}',
+            style: AppTextStyles.defaultBold.copyWith(
+              fontSize: AppTextStyles.fontSize_15,
+              color: AppColors.white2,
+            ),
+          ),
+        ],
       ),
     );
   }

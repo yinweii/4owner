@@ -68,7 +68,7 @@ class CustomerDetail extends StatelessWidget {
                     top: 5,
                     right: 20,
                     child: IconButton(
-                      onPressed: () => _launchUrl(_customer.phoneNumber ?? ''),
+                      onPressed: () => _launchUrl(_customer.phonenumber ?? ''),
                       icon: Icon(
                         Icons.phone_forwarded_rounded,
                         size: 40,
@@ -88,12 +88,12 @@ class CustomerDetail extends StatelessWidget {
                     children: [
                       _buildRow('Email: ', '${_customer.email}'),
                       Divider(),
-                      _buildRow('Số điện thoại: ', '${_customer.phoneNumber}'),
+                      _buildRow('Số điện thoại: ', '${_customer.phonenumber}'),
                       Divider(),
-                      _buildRow('CMND/CCCD', '${_customer.cardNumber}'),
+                      _buildRow('CMND/CCCD', '${_customer.cardnumber}'),
                       Divider(),
                       _buildRow('Phòng',
-                          '${_customer.roomNumber} | ${_customer.floorNumber}'),
+                          '${_customer.roomnumber} | ${_customer.floornumber}'),
                       Divider(),
                       Padding(
                         padding: const EdgeInsets.symmetric(
@@ -135,7 +135,10 @@ class CustomerDetail extends StatelessWidget {
         child: FooterButton(
           buttonColor: AppColors.red,
           label: 'Xóa',
-          onPressed: () {},
+          onPressed: () =>
+              context.read<Customer>().deleteCustomer(id ?? '').then(
+                    (value) => Navigator.pop(context),
+                  ),
         ),
       ),
     );

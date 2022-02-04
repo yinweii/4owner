@@ -2,13 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:owner_app/components/loading_widget.dart';
 import 'package:owner_app/constants/constants.dart';
-import 'package:owner_app/constants/constants.dart';
+
 import 'package:owner_app/constants/export.dart';
 import 'package:owner_app/provider/customer_provider.dart';
 
-import 'package:owner_app/provider/floor_provider.dart';
-
 import 'package:owner_app/provider/room_provide.dart';
+import 'package:owner_app/screens/room/room_detail.dart';
 import 'package:owner_app/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'add_room_screen.dart';
@@ -16,8 +15,9 @@ import 'edit_room_screen.dart';
 
 class RoomScreen extends StatefulWidget {
   final String? id;
+  final String? floorname;
 
-  const RoomScreen({Key? key, this.id}) : super(key: key);
+  const RoomScreen({Key? key, this.id, this.floorname}) : super(key: key);
 
   @override
   _RoomScreenState createState() => _RoomScreenState();
@@ -25,7 +25,8 @@ class RoomScreen extends StatefulWidget {
 
 class _RoomScreenState extends State<RoomScreen> {
   Future<void> getRoom() async {
-    Provider.of<RoomProvider>(context, listen: false).getRoom(widget.id);
+    context.read<RoomProvider>().getRoomByIdFloor(widget.id);
+
     context.read<Customer>().getListCustomer();
   }
 
@@ -37,6 +38,7 @@ class _RoomScreenState extends State<RoomScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print('ID FLOOR: ${widget.id}');
     return Scaffold(
       appBar: AppBar(
         title: const Text('Phòng'),
@@ -59,7 +61,7 @@ class _RoomScreenState extends State<RoomScreen> {
                       itemBuilder: (ctx, index) {
                         return RoomItem(
                           id: roomData.listRoom?[index].id ?? '',
-                          name: roomData.listRoom?[index].romName ?? '',
+                          name: roomData.listRoom?[index].roomname ?? '',
                           price: roomData.listRoom?[index].price,
                           area: roomData.listRoom?[index].area.toString(),
                           status: roomData.listRoom?[index].status,
@@ -75,8 +77,13 @@ class _RoomScreenState extends State<RoomScreen> {
                     ),
             ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () =>
-            Utils.navigatePage(context, AddRoomScreen(id: widget.id)),
+        backgroundColor: AppColors.primary,
+        onPressed: () => Utils.navigatePage(
+            context,
+            AddRoomScreen(
+              id: widget.id,
+              floorname: widget.floorname,
+            )),
         child: Icon(Icons.add),
       ),
     );
@@ -112,6 +119,7 @@ class RoomItem extends StatelessWidget {
                 child: const Text('Chi tiết'),
                 onPressed: () {
                   Navigator.pop(context);
+                  Utils.navigatePage(context, RoomDetail(id: id ?? ''));
                 },
               ),
               CupertinoActionSheetAction(

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:owner_app/constants/app_text.dart';
+import 'package:owner_app/constants/export.dart';
 import 'package:owner_app/utils/utils.dart';
 
 import '../customer_detail.dart';
@@ -21,35 +23,51 @@ class CustomerCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 4, right: 4, bottom: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
       child: GestureDetector(
         onTap: () => Utils.navigatePage(context, CustomerDetail(id: id)),
-        child: Card(
-          child: Container(
-            child: ListTile(
-              leading: CircleAvatar(
-                radius: 20,
-                child: Icon(Icons.account_circle_outlined),
+        child: Container(
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: ListTile(
+            leading: CircleAvatar(
+              radius: 20,
+              child: Icon(Icons.account_circle_outlined),
+            ),
+            title: Text(
+              '$name',
+              style: AppTextStyles.defaulLato.copyWith(
+                fontSize: AppTextStyles.fontSize_18,
+                fontWeight: FontWeight.bold,
               ),
-              title: Text(
-                '$name',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
-              ),
-              subtitle: Row(
-                children: [
-                  Text(
-                    "$floorName ",
-                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
+            ),
+            subtitle: Row(
+              children: [
+                Text(
+                  "$floorName",
+                  style: AppTextStyles.defaulLato.copyWith(
+                    fontWeight: FontWeight.w700,
+                    fontSize: AppTextStyles.fontSize_14,
                   ),
-                  SizedBox(width: 3),
-                  Text('$roomNumber',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
-                ],
-              ),
-              trailing: Text(
-                '$phoneNumber',
-                style: TextStyle(color: Colors.green),
+                ),
+                SizedBox(width: 3),
+                Text(
+                  ' $roomNumber',
+                  style: AppTextStyles.defaulLato.copyWith(
+                    fontWeight: FontWeight.w700,
+                    fontSize: AppTextStyles.fontSize_14,
+                  ),
+                ),
+              ],
+            ),
+            trailing: Text(
+              '$phoneNumber',
+              style: AppTextStyles.defaulLato.copyWith(
+                fontWeight: FontWeight.bold,
+                fontSize: AppTextStyles.fontSize_14,
+                color: AppColors.greenFF79AF91,
               ),
             ),
           ),
