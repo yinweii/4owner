@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:owner_app/components/footer_button.dart';
 import 'package:owner_app/constants/export.dart';
 import 'package:owner_app/provider/customer_provider.dart';
+import 'package:owner_app/utils/diaglog_util.dart';
 import 'package:owner_app/utils/utils.dart';
 import 'package:provider/src/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -135,10 +136,18 @@ class CustomerDetail extends StatelessWidget {
         child: FooterButton(
           buttonColor: AppColors.red,
           label: 'Xóa',
-          onPressed: () =>
-              context.read<Customer>().deleteCustomer(id ?? '').then(
-                    (value) => Navigator.pop(context),
-                  ),
+          onPressed: () => DialogUtil.cupertioDialog(
+            context: context,
+            title: 'Xóa',
+            content: 'Bạn chắc chắn muốn xóa',
+            yesAction: () =>
+                context.read<Customer>().deleteCustomer(id ?? '').then(
+              (value) {
+                context.read<Customer>().onRefesh();
+                Navigator.pop(context);
+              },
+            ),
+          ),
         ),
       ),
     );

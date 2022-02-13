@@ -4,7 +4,9 @@ import 'package:min_id/min_id.dart';
 import 'package:owner_app/model/more_service_model.dart';
 import 'package:owner_app/provider/contract_provider.dart';
 import 'package:owner_app/provider/customer_provider.dart';
+import 'package:owner_app/provider/expense_provider.dart';
 import 'package:owner_app/provider/invoice_provider.dart';
+import 'package:owner_app/provider/profile_provider.dart';
 import 'package:owner_app/provider/room_provide.dart';
 import 'package:provider/provider.dart';
 import 'constants/app_colors.dart';
@@ -39,6 +41,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (ctx) => MoreService()),
         ChangeNotifierProvider(create: (ctx) => Invoice()),
         ChangeNotifierProvider(create: (ctx) => RoomHolder()),
+        ChangeNotifierProvider(create: (ctx) => Profile()),
+        ChangeNotifierProvider(create: (ctx) => Expense()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

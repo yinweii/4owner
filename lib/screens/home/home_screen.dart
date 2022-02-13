@@ -8,6 +8,7 @@ import 'package:owner_app/provider/room_provide.dart';
 import 'package:owner_app/screens/contract/contract_screen.dart';
 import 'package:owner_app/screens/customer/customer_screen.dart';
 import 'package:owner_app/screens/direct/direct_screen.dart';
+import 'package:owner_app/screens/expense/expense_screen.dart';
 
 import 'package:owner_app/screens/invoice/invoice_screen.dart';
 import 'package:owner_app/screens/room_services/service_screen.dart';
@@ -197,13 +198,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                   context, IndentureScreen()),
                             ),
                             BuildItem(
-                                icon: Icon(
-                                  Icons.account_balance_wallet_outlined,
-                                  size: 40,
-                                  color: Colors.deepOrangeAccent,
-                                ),
-                                text: 'Khoản chi',
-                                onPress: () {}),
+                              icon: Icon(
+                                Icons.account_balance_wallet_outlined,
+                                size: 40,
+                                color: Colors.deepOrangeAccent,
+                              ),
+                              text: 'Khoản chi',
+                              onPress: () =>
+                                  Utils.navigatePage(context, ExpenseScreen()),
+                            ),
                             BuildItem(
                               icon: Icon(
                                 Icons.clean_hands,

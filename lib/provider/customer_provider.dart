@@ -131,6 +131,10 @@ class Customer with ChangeNotifier, Helper {
     notifyListeners();
   }
 
+  Future<void> onRefesh() async {
+    getListCustomer();
+  }
+
   CustomerModel getCustomerByID(String id) =>
       _listCustomer.firstWhere((element) => element.id == id);
 

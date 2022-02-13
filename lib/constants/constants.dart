@@ -8,6 +8,7 @@ class Constants {
   static const roomtDb = 'ROOM_DB';
   static const invoiceDb = 'INVOICE_DB';
   static const holdRoom = 'HOLD_DB';
+  static const expenseDb = 'EXPENSE_DB';
 
   //
   static const room_status_null = 'null';
@@ -24,4 +25,7 @@ class Constants {
   static const no_contract = 'no contract';
   static const has_contract = 'have contract';
   static const out_contract = 'out contract';
+
+  //Expense
+
 }
