@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:owner_app/components/diaglogbox.dart';
 import 'package:owner_app/components/footer_button.dart';
 import 'package:owner_app/components/loading_widget.dart';
@@ -121,7 +121,7 @@ class _LogInState extends State<LogIn> {
                     children: [
                       Text(
                         _isLogin ? LOGIN : REGISTER,
-                        style: GoogleFonts.oswald(
+                        style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 40,
                             color: AppColors.greenFF79AF91),
