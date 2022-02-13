@@ -38,4 +38,26 @@ class Utils {
           toastLength: isLong ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT);
     }
   }
+  static void showDialog({required BuildContext context ,String? title, String? message})
+ {
+   showCupertinoDialog(
+     context: context,
+     builder: (context) {
+       return CupertinoAlertDialog(
+         title: Text(title ?? ''),
+         content: Text(message ?? ''),
+         actions: [
+           CupertinoDialogAction(
+               child: Text("YES"),
+               onPressed: ()
+               {
+                 Navigator.of(context).pop();
+               }
+           ),
+           
+         ],
+       );
+     },
+   );
+ }
 }
