@@ -35,8 +35,9 @@ class _LogInState extends State<LogIn> {
   @override
   void initState() {
     super.initState();
-    _emailTextController.text = 'ad@gmail.com';
-    _passwordTextController.text = '12345678';
+    // TODO(): auto fill login
+    // _emailTextController.text = 'ad@gmail.com';
+    // _passwordTextController.text = '12345678';
   }
 
   @override
