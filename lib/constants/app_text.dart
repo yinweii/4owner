@@ -18,6 +18,7 @@ class AppTextStyles {
   static const double fontSize_20 = 20;
   static const double fontSize_24 = 24;
   static const double fontSize_28 = 28;
+  static const double fontSize_29 = 29;
 
   // static TextStyle defaultRegular400 = GoogleFonts.roboto(
   //   fontSize: fontSize_16,
