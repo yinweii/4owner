@@ -64,15 +64,9 @@ class _AddInvoiceState extends State<AddInvoice> {
 
   RoomModel? roomModel;
   List<MoreServiceModel> moreService = [];
-  // List<MoreServiceModel> moreService() {
-  //   list = context.watch<MoreService>().moreServiceList;
-  //   print('LIST: ${list.toString()}');
-  //   return list ?? [];
-  // }
 
   Future<void> getCustommer() async {
     await context.read<Customer>().getListCustomer();
-    //await context.read<RoomProvider>().getRoom();
   }
 
   // get date
@@ -213,8 +207,9 @@ class _AddInvoiceState extends State<AddInvoice> {
         discount: _giamGia.text.isNotEmpty ? double.parse(_giamGia.text) : 0,
         isPayment: false,
       );
-      context.read<Invoice>().addInvoice(newInvoice);
-      print(newInvoice.toString());
+      context.read<Invoice>().addInvoice(newInvoice).then((value) {
+        Navigator.of(context).pop();
+      });
     }
   }
 
@@ -327,7 +322,9 @@ class _AddInvoiceState extends State<AddInvoice> {
                         ),
                         child: Center(
                             child: Text(
-                          Utils.convertPrice(roomModel?.price),
+                          roomModel?.price != null
+                              ? Utils.convertPrice(roomModel?.price)
+                              : '',
                           style: AppTextStyles.defaultBold.copyWith(
                             fontSize: AppTextStyles.fontSize_24,
                           ),

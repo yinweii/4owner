@@ -45,10 +45,22 @@ class _ContractScreenState extends State<ContractScreen>
           indicatorColor: Colors.white,
           controller: controller,
           tabs: <Tab>[
-            _buildTab('Hoạt động',
-                count.listContractAc(status: false, isActive: true).length),
-            _buildTab('Quá hạn', count.listContractAc().length),
-            _buildTab('Đã thanh lý', count.listContractOut().length),
+            _buildTab(
+                'Hoạt động',
+                count
+                    .listContractActivity(
+                      status: false,
+                      isActive: true,
+                    )
+                    .length),
+            _buildTab(
+              'Quá hạn',
+              count.listContractOut().length,
+            ),
+            _buildTab(
+              'Đã thanh lý',
+              count.listContractActivity(status: true, isActive: true).length,
+            ),
           ],
         ),
       ),

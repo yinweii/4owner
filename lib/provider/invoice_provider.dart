@@ -98,35 +98,18 @@ class Invoice with ChangeNotifier, Helper {
     }
   } //get all invoice
 
-  Future<void> getAllInvoiceOutDate({bool isPay = false}) async {
-    try {
-      _isLoading = isLoading(true);
-      snapshot = await _fireStore
-          .collection(Constants.userDb) //
-          .doc(userUID)
-          .collection(Constants.invoiceDb)
-          .where('dateTo', isLessThanOrEqualTo: DateTime.now())
-          .get();
-
-      List<InvoiceModel> listExtract = [];
-
-      for (var doccument in snapshot!.docs) {
-        listExtract.add(
-            InvoiceModel.fromMap(doccument.data() as Map<String, dynamic>));
+  List<InvoiceModel> invoidceOutdate() {
+    var date = DateTime.now().subtract(Duration(days: 1, hours: 0));
+    List<InvoiceModel> invoiceOutdate = [];
+    for (var invoice in _invoiceList) {
+      if (date.compareTo(invoice.dateTo!) == 1 && invoice.isPayment == false) {
+        invoiceOutdate.add(invoice);
       }
-      print('DATA: ${snapshot!.docs}');
-      _isLoading = isLoading(false);
-      _invoiceList = listExtract;
-      notifyListeners();
-      //! log data
-      devLog.i(_invoiceList[0]);
-      _isLoading = isLoading(false);
-    } catch (e) {
-      _isLoading = isLoading(false);
-
-      print('FAILD: ${e.toString()}');
     }
-  } //get all invoice
+
+    return invoiceOutdate;
+  }
+  //get all invoice
 
   Future<void> updateInvoice(String id, InvoiceModel invoice) async {
     final indexEdit = _invoiceList.indexWhere((element) => element.id == id);
@@ -181,7 +164,7 @@ class Invoice with ChangeNotifier, Helper {
   InvoiceModel findInvoiceById(String id) =>
       _invoiceList.firstWhere((element) => element.id == id);
 
-  double electTotal(String date) {
+  double electTotal({required String date}) {
     double total = 0;
     for (var i = 0; i < _invoiceList.length; i++) {
       if (_invoiceList[i].isPayment!) {
@@ -191,33 +174,36 @@ class Invoice with ChangeNotifier, Helper {
     return total;
   }
 
-  double waterTotal(String date) {
+  double waterTotal({required String date}) {
     double _waterTotal = 0;
     for (var i = 0; i < _invoiceList.length; i++) {
       if (_invoiceList[i].isPayment!) {
         _waterTotal += invoiceList[i].waterCost ?? 0;
       }
     }
+
     return _waterTotal;
   }
 
-  double roomTotal(String date) {
+  double roomTotal({required String date}) {
     double total = 0;
     for (var i = 0; i < _invoiceList.length; i++) {
       if (_invoiceList[i].isPayment!) {
         total += invoiceList[i].roomCost ?? 0;
       }
     }
+
     return total;
   }
 
-  double moreService(String date) {
+  double moreService({required String date}) {
     double total = 0;
     for (var i = 0; i < _invoiceList.length; i++) {
       if (_invoiceList[i].isPayment!) {
         total += invoiceList[i].priceMoreService ?? 0;
       }
     }
+
     return total;
   }
 }

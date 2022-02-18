@@ -17,28 +17,32 @@ class _OutDateScreenState extends State<OutDateScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<Invoice>().getAllInvoiceOutDate();
+    context.read<Invoice>().getAllInvoice();
   }
 
   @override
   Widget build(BuildContext context) {
-    final listInvoice = context.watch<Invoice>().invoiceList;
+    final listInvoice = context.read<Invoice>().invoidceOutdate();
     return context.watch<Invoice>().showLoading
         ? Center(
             child: circularProgress(),
           )
-        : ListView.builder(
-            itemCount: listInvoice.length,
-            itemBuilder: (ctx, index) => InvoiceItem(
-              id: listInvoice[index].id,
-              customer: listInvoice[index].name,
-              roomName: listInvoice[index].roomName,
-              roomCost: Utils.convertPrice(listInvoice[index].roomCost),
-              serviceCost:
-                  Utils.convertPrice(listInvoice[index].priceMoreService),
-              discount: Utils.convertPrice(listInvoice[index].discount),
-              total: Utils.convertPrice(listInvoice[index].totalAmount),
-            ),
-          );
+        : listInvoice.isEmpty
+            ? Center(
+                child: Text('Không có dữ liệu'),
+              )
+            : ListView.builder(
+                itemCount: listInvoice.length,
+                itemBuilder: (ctx, index) => InvoiceItem(
+                  id: listInvoice[index].id,
+                  customer: listInvoice[index].name,
+                  roomName: listInvoice[index].roomName,
+                  roomCost: Utils.convertPrice(listInvoice[index].roomCost),
+                  serviceCost:
+                      Utils.convertPrice(listInvoice[index].priceMoreService),
+                  discount: Utils.convertPrice(listInvoice[index].discount),
+                  total: Utils.convertPrice(listInvoice[index].totalAmount),
+                ),
+              );
   }
 }

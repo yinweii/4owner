@@ -122,7 +122,13 @@ class _AddContractScreenState extends State<AddContractScreen> {
                             topRight: Radius.circular(5),
                           ),
                         ),
-                        child: Center(child: Text('Thông tin')),
+                        child: Center(
+                            child: Text(
+                          'Thông tin',
+                          style: AppTextStyles.defaultBold.copyWith(
+                            color: AppColors.white2,
+                          ),
+                        )),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(
@@ -207,7 +213,12 @@ class _AddContractScreenState extends State<AddContractScreen> {
                           ),
                         ),
                         child: Center(
-                          child: Text('Tiền phòng'),
+                          child: Text(
+                            'Tiền phòng',
+                            style: AppTextStyles.defaultBold.copyWith(
+                              color: AppColors.white2,
+                            ),
+                          ),
                         ),
                       ),
                       Padding(

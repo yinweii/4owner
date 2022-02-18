@@ -113,26 +113,30 @@ class _RoomServiceScreenState extends State<RoomServiceScreen> {
           ? Center(
               child: circularProgress(),
             )
-          : SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Miễn phí',
-                      style: TextStyle(fontSize: 20),
+          : (itemFee.isEmpty && item.isEmpty)
+              ? Center(
+                  child: Text('Không có dịch vụ nào'),
+                )
+              : SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Miễn phí',
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        ...item,
+                        const Text(
+                          'Trả phí',
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        ...itemFee,
+                      ],
                     ),
-                    ...item,
-                    const Text(
-                      'Trả phí',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    ...itemFee,
-                  ],
+                  ),
                 ),
-              ),
-            ),
       floatingActionButton: SizedBox(
         child: FloatingActionButton(
           onPressed: () {

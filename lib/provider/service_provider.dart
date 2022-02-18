@@ -6,10 +6,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:min_id/min_id.dart';
-import 'package:owner_app/api_service/api_service.dart';
 import 'package:owner_app/constants/constants.dart';
 import 'package:owner_app/model/service_model.dart';
-import 'package:collection/collection.dart';
 import 'package:owner_app/utils/logger.dart';
 
 class ServiceProvider with ChangeNotifier {

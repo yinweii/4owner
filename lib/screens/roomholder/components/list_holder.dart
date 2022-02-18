@@ -38,15 +38,13 @@ class _ListHolderState extends State<ListHolder> {
                 mapType = Constants.holder_waitting;
               } else if (widget.type == 2) {
                 mapType = Constants.holder_cancel;
-              } else {
-                mapType = Constants.holder_readly;
               }
-              List<RoomHolderModel> list = [];
+              List<RoomHolderModel> list = customerData.getHolderByStatus(
+                status: mapType,
+              );
               if (mapType == Constants.holder_cancel) {
                 list = customerData.getHolderByStatus(
                     status: mapType, isCancel: true);
-              } else {
-                list = customerData.getHolderByStatus(status: mapType);
               }
 
               return list.length == 0

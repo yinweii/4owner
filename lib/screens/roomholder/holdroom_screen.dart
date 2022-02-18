@@ -20,7 +20,7 @@ class _HoldRoomScreenState extends State<HoldRoomScreen>
   @override
   void initState() {
     super.initState();
-    controller = TabController(length: 4, vsync: this);
+    controller = TabController(length: 3, vsync: this);
   }
 
   @override
@@ -33,8 +33,11 @@ class _HoldRoomScreenState extends State<HoldRoomScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: Text(
+          'Đặt cọc',
+          style: AppTextStyles.defaultBoldAppBar,
+        ),
         bottom: TabBar(
-          isScrollable: true,
           indicatorColor: Colors.red,
           automaticIndicatorColorAdjustment: true,
           controller: controller,
@@ -48,9 +51,6 @@ class _HoldRoomScreenState extends State<HoldRoomScreen>
             Tab(
               text: 'Đã hủy',
             ),
-            Tab(
-              text: 'Đã tạo hợp đồng',
-            ),
           ],
         ),
       ),
@@ -60,7 +60,6 @@ class _HoldRoomScreenState extends State<HoldRoomScreen>
           ListHolder(type: 1),
           ListHolderOut(),
           ListHolder(type: 2),
-          ListHolder(type: 3),
         ],
       ),
       floatingActionButton: FloatingActionButton(

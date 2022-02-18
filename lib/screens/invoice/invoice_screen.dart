@@ -25,7 +25,7 @@ class _InvoiceScreenState extends State<InvoiceScreen>
 
   @override
   void dispose() {
-    controller!.dispose();
+    controller?.dispose();
     super.dispose();
   }
 
@@ -62,7 +62,8 @@ class _InvoiceScreenState extends State<InvoiceScreen>
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.primary,
-        onPressed: () => Utils.navigatePage(context, AddInvoice()),
+        onPressed: () => Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => AddInvoice())),
         child: Icon(Icons.add),
       ),
     );
