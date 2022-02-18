@@ -244,7 +244,30 @@ class _UpdateInvoiceScreenState extends State<UpdateInvoiceScreen> {
     print(invoiceEdit.toString());
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text(
+          'Chỉnh sửa',
+          style: AppTextStyles.defaultBoldAppBar,
+        ),
+      ),
+      bottomNavigationBar: Container(
+        height: 50,
+        margin: EdgeInsets.symmetric(vertical: 20, horizontal: 8),
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: AppColors.primary, // background
+            onPrimary: Colors.white, // foreground
+          ),
+          onPressed: () {
+            _submitInvoice();
+            //Navigator.pop(context);
+          },
+          child: Text(
+            'Lập hóa đơn',
+            style: AppTextStyles.defaultBoldAppBar.copyWith(),
+          ),
+        ),
+      ),
       body: context.watch<Customer>().showLoading
           ? Center(
               child: circularProgress(),
@@ -262,13 +285,19 @@ class _UpdateInvoiceScreenState extends State<UpdateInvoiceScreen> {
                         width: Utils.sizeWidth(context),
                         height: 35,
                         decoration: BoxDecoration(
-                          color: Colors.green,
+                          color: AppColors.primary,
                           borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(5),
                             topRight: Radius.circular(5),
                           ),
                         ),
-                        child: Center(child: Text('Thông tin')),
+                        child: Center(
+                            child: Text(
+                          'Thông tin',
+                          style: AppTextStyles.defaultBold.copyWith(
+                            color: AppColors.white2,
+                          ),
+                        )),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(
@@ -453,27 +482,6 @@ class _UpdateInvoiceScreenState extends State<UpdateInvoiceScreen> {
                       SizedBox(height: 10),
                       _buildRowTotal('Tổng thanh toán', allPay()),
                       SizedBox(height: 20),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 20, horizontal: 10),
-                        child: Center(
-                          child: SizedBox(
-                            height: 40,
-                            width: Utils.sizeWidth(context),
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                primary: Colors.green, // background
-                                onPrimary: Colors.white, // foreground
-                              ),
-                              onPressed: () {
-                                _submitInvoice();
-                                //Navigator.pop(context);
-                              },
-                              child: Text('Lập hóa đơn'),
-                            ),
-                          ),
-                        ),
-                      )
                     ],
                   ),
                 ),
@@ -656,14 +664,19 @@ class _UpdateInvoiceScreenState extends State<UpdateInvoiceScreen> {
       width: Utils.sizeWidth(context),
       height: 35,
       decoration: BoxDecoration(
-        color: Colors.green,
+        color: AppColors.primary,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(5),
           topRight: Radius.circular(5),
         ),
       ),
       child: Center(
-        child: Text(title),
+        child: Text(
+          title,
+          style: AppTextStyles.defaultBold.copyWith(
+            color: AppColors.white2,
+          ),
+        ),
       ),
     );
   }

@@ -127,6 +127,21 @@ class RoomHolder with ChangeNotifier, Helper {
     return getHolderOutdate;
   }
 
+  Future<void> onRefesh() async {
+    await getHolder();
+  }
+
+  Future<void> deleteHolder(String id) async {
+    final existingHolder = _listHolder.indexWhere((prod) => prod.id == id);
+
+    _listHolder.remove(existingHolder);
+    notifyListeners();
+    try {
+      await _apiService.delete(colect: Constants.holdRoom, dataID: id);
+      notifyListeners();
+    } catch (e) {}
+  }
+
   RoomHolderModel findHolderById(String id) => _listHolder.firstWhere(
         (element) => element.id == id,
         orElse: null,

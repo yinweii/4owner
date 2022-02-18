@@ -157,7 +157,8 @@ class Contract with ChangeNotifier, Helper {
     notifyListeners();
   }
 
-  List<ContractModel> listContractAc({bool? status, bool isActive = false}) {
+  List<ContractModel> listContractActivity(
+      {bool? status, bool isActive = false}) {
     List<ContractModel> listContractAc = [];
     var date = DateTime.now().subtract(Duration(days: 1, hours: 0));
 

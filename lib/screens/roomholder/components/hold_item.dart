@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:owner_app/constants/export.dart';
+import 'package:owner_app/provider/roomholder_provider.dart';
+import 'package:owner_app/utils/diaglog_util.dart';
 import 'package:owner_app/utils/utils.dart';
+import 'package:provider/src/provider.dart';
 
 import '../detail_holder_screen.dart';
 
@@ -110,9 +113,10 @@ class HolderItem extends StatelessWidget {
           ),
           CupertinoActionSheetAction(
             child: const Text('Xoá'),
-            onPressed: () {
-              //TODO (lam sau):
-              //context.read<RoomProvider>().deleteRoom(id!);
+            onPressed: () async {
+              context.read<RoomHolder>().deleteHolder(id ?? '').then((value) {
+                context.read<RoomHolder>().onRefesh();
+              });
               Navigator.pop(context);
             },
           ),

@@ -4,6 +4,8 @@ import 'package:min_id/min_id.dart';
 import 'package:owner_app/components/custom_textfield.dart';
 import 'package:owner_app/components/loading_widget.dart';
 import 'package:owner_app/components/two_buttons.dart';
+import 'package:owner_app/constants/app_colors.dart';
+import 'package:owner_app/constants/app_text.dart';
 import 'package:owner_app/constants/constants.dart';
 import 'package:owner_app/model/contract_model.dart';
 import 'package:owner_app/model/customer_model.dart';
@@ -124,13 +126,19 @@ class _CreateContractScreenState extends State<CreateContractScreen> {
                         width: Utils.sizeWidth(context),
                         height: 35,
                         decoration: BoxDecoration(
-                          color: Colors.green,
+                          color: AppColors.primary,
                           borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(5),
                             topRight: Radius.circular(5),
                           ),
                         ),
-                        child: Center(child: Text('Thong tin')),
+                        child: Center(
+                            child: Text(
+                          'Thông tin',
+                          style: AppTextStyles.defaultBold.copyWith(
+                            color: AppColors.white2,
+                          ),
+                        )),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(
@@ -189,14 +197,19 @@ class _CreateContractScreenState extends State<CreateContractScreen> {
                         width: Utils.sizeWidth(context),
                         height: 35,
                         decoration: BoxDecoration(
-                          color: Colors.green,
+                          color: AppColors.primary,
                           borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(5),
                             topRight: Radius.circular(5),
                           ),
                         ),
                         child: Center(
-                          child: Text('Tiền phòng'),
+                          child: Text(
+                            'Tiền phòng',
+                            style: AppTextStyles.defaultBold.copyWith(
+                              color: AppColors.white2,
+                            ),
+                          ),
                         ),
                       ),
                       Padding(

@@ -26,7 +26,7 @@ class _MyPageState extends State<MyPage> {
     return CupertinoPageScaffold(
       child: CupertinoTabScaffold(
         tabBar: CupertinoTabBar(
-          activeColor: AppColors.yellowFFE5D26A,
+          activeColor: AppColors.primary,
           items: const [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
             BottomNavigationBarItem(

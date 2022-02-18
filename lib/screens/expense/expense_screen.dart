@@ -46,6 +46,10 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: Text(
+          'Khoản chi',
+          style: AppTextStyles.defaultBoldAppBar,
+        ),
         actions: [
           IconButton(
             onPressed: () => showDialogService(context, MinId.getId()),
@@ -116,7 +120,10 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                     borderRadius: BorderRadius.circular(15),
                   ),
                   child: ListTile(
-                    leading: Icon(Icons.money),
+                    leading: Icon(
+                      Icons.monetization_on,
+                      color: AppColors.primary,
+                    ),
                     title: Text(listExpense[index].name ?? ''),
                     subtitle: Text(
                       Utils.convertPrice(listExpense[index].price),

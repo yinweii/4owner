@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:owner_app/components/row_btn.dart';
 import 'package:owner_app/constants/export.dart';
 import 'package:owner_app/provider/contract_provider.dart';
+import 'package:owner_app/provider/customer_provider.dart';
 import 'package:owner_app/screens/contract/components/edit_contract_screen.dart';
 import 'package:owner_app/utils/diaglog_util.dart';
 import 'package:owner_app/utils/utils.dart';
@@ -108,17 +109,18 @@ class _ContractItemState extends State<ContractItem> {
                           child: BuildButton(
                             name: 'Xóa',
                             color: Colors.red[300],
-                            onPress: () {
-                              // DialogUtil.cupertioDialog(
-                              //     context,
-                              //     'Thanh lý hợp đồng',
-                              //     'Bạn có chắc thanh lý hợp đồng này!', () {
-                              //   context
-                              //       .read<Contract>()
-                              //       .deleteContract(widget.id ?? '')
-                              //       .then((value) => Navigator.pop(context));
-                              // });
-                            },
+                            onPress: () => DialogUtil.cupertioDialog(
+                              context: context,
+                              content: 'Bạn muốn xoá hợp đồng này?',
+                              yesAction: () => context
+                                  .read<Contract>()
+                                  .deleteContract(widget.id!)
+                                  .then((value) {
+                                context
+                                    .read<Customer>()
+                                    .deleteCustomer(widget.customerId!);
+                              }),
+                            ),
                           ),
                         ),
                       ),
@@ -162,6 +164,7 @@ class _ContractItemState extends State<ContractItem> {
                                       .then((value) => context
                                           .read<Contract>()
                                           .onRefresh()));
+                              //todo:() remove show dialog
                               // DialogUtil.cupertioDialog(
                               //     context,
                               //     'Thanh lý hợp đồng',

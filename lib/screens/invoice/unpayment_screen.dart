@@ -42,7 +42,7 @@ class _UnPaymentScreenState extends State<UnPaymentScreen> {
                 ),
               )
             : Center(
-                child: Text('khong co hop dong ano'),
+                child: Text('Không có hoá đơn nào chưa thanh toán'),
               );
   }
 }

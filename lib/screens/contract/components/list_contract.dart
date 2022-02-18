@@ -42,15 +42,15 @@ class _ListContractState extends State<ListContract> {
               int? typeItem;
               if (widget.type == 1) {
                 typeItem = 1;
-                list =
-                    customerData.listContractAc(status: false, isActive: true);
+                list = customerData.listContractActivity(
+                    status: false, isActive: true);
               } else if (widget.type == 2) {
                 typeItem = 2;
                 list = customerData.listContractOut();
               } else {
                 typeItem = 3;
-                list = list =
-                    customerData.listContractAc(status: true, isActive: true);
+                list = list = customerData.listContractActivity(
+                    status: true, isActive: true);
               }
 
               return list.length == 0

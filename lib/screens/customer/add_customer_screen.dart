@@ -1,11 +1,8 @@
 import 'dart:io';
-
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:logger/logger.dart';
 import 'package:min_id/min_id.dart';
 import 'package:owner_app/api_service/api_service.dart';
 import 'package:owner_app/components/custom_textfield.dart';
@@ -147,28 +144,45 @@ class _AddCustomerScreenState extends State<AddCustomerScreen>
         imagefirsturl: urlFirstImg ?? '',
         imagelasturl: urlLastImg ?? '',
       );
-      print(newCustomer.toString());
+
       context.read<Customer>().addNewCustomer(newCustomer, idRooms ?? '').then(
         (value) {
           _isLoading = false;
           Navigator.of(context).pop();
         },
       );
-      print('CUSTOMER: ${newCustomer.toString()}');
     }
+  }
+
+  bool _validate() {
+    if (_nameController.text.isNotEmpty &&
+        _phoneNumberController.text.isNotEmpty &&
+        _selectedImageFile != null &&
+        _selectedImageFileLast != null) {
+      return true;
+    }
+    return false;
   }
 
   @override
   Widget build(BuildContext context) {
-    //room = context.read<RoomProvider?>()?.findListRoom(_select) ?? [];
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: Text('Add'),
+        title: Text(
+          'Thêm người thuê mới',
+          style: AppTextStyles.defaultBoldAppBar,
+        ),
         actions: [
           IconButton(
             onPressed: () {
-              _saveForm();
+              if (_validate()) {
+                _saveForm();
+              } else {
+                Utils.showDialog(
+                    context: context,
+                    message: 'Vui lòng điền đầy đủ thông tin');
+              }
             },
             icon: Icon(Icons.save_rounded),
           ),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:min_id/min_id.dart';
 import 'package:owner_app/components/custom_textfield.dart';
+import 'package:owner_app/constants/export.dart';
 import 'package:owner_app/model/room_model.dart';
-import 'package:owner_app/provider/floor_provider.dart';
 import 'package:owner_app/provider/room_provide.dart';
 import 'package:provider/provider.dart';
 
@@ -48,6 +48,10 @@ class _AddRoomScreenState extends State<AddRoomScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: Text(
+          'Thêm phòng',
+          style: AppTextStyles.defaultBoldAppBar,
+        ),
         actions: [
           IconButton(onPressed: () => _submitForm(), icon: Icon(Icons.save))
         ],

@@ -116,6 +116,10 @@ class _AddHoldScreenState extends State<AddHoldScreen>
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
+                      Text(
+                        'Tiền Cọc',
+                        style: AppTextStyles.defaultBold,
+                      ),
                       TextField(
                         controller: _depositCostController,
                         style: TextStyle(fontSize: 30),
@@ -236,12 +240,11 @@ class _AddHoldScreenState extends State<AddHoldScreen>
                           _buildLable('Phương thức thanh toán'),
                           DropdownButton(
                             hint: Text(
-                                'Choose payment'), // Not necessary for Option 1
+                                'Thanh toán'), // Not necessary for Option 1
                             value: _selectedOption,
                             onChanged: (String? newValue) {
                               setState(() {
                                 _selectedOption = newValue;
-                                print('SELECT OPTION: $_selectedOption');
                               });
                             },
                             items: _option.map((option) {
@@ -268,7 +271,6 @@ class _AddHoldScreenState extends State<AddHoldScreen>
                           onChanged: (String? newValue) {
                             setState(() {
                               selectedValue = newValue!;
-                              print('CUSTOMER: $selectedValue');
                             });
                           },
                           items: context
@@ -283,19 +285,22 @@ class _AddHoldScreenState extends State<AddHoldScreen>
                         ),
                       ),
                       SizedBox(height: 30),
-                      TwoButtonsFooter(
-                        leftButtonLabel: 'Hủy bỏ',
-                        rightButtonLabel: 'Xác nhận',
-                        leftButtonColor: Colors.grey,
-                        onLeftButtonPressed: () {},
-                        rightButtonColor: Colors.green,
-                        onRightButtonPressed: _saveHolder,
-                      ),
                     ],
                   ),
                 ),
               ),
             ),
+      bottomNavigationBar: Container(
+        height: 60,
+        child: TwoButtonsFooter(
+          leftButtonLabel: 'Hủy bỏ',
+          rightButtonLabel: 'Xác nhận',
+          leftButtonColor: Colors.grey,
+          onLeftButtonPressed: () {},
+          rightButtonColor: Colors.green,
+          onRightButtonPressed: _saveHolder,
+        ),
+      ),
     );
   }
 

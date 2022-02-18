@@ -72,8 +72,19 @@ class _OtherMenuScreenState extends State<OtherMenuScreen> {
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: ListTile(
-                      leading: Icon(Icons.help_center),
-                      title: Text('Lien he'),
+                      leading: Icon(Icons.streetview_outlined),
+                      title: Text('Thông tin chung'),
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.greenFF79AF91,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: ListTile(
+                      leading: Icon(Icons.question_answer_outlined),
+                      title: Text('Quảng cáo'),
                     ),
                   ),
                   SizedBox(height: 20),
@@ -84,18 +95,7 @@ class _OtherMenuScreenState extends State<OtherMenuScreen> {
                     ),
                     child: ListTile(
                       leading: Icon(Icons.help_center),
-                      title: Text('Lien he'),
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: AppColors.greenFF79AF91,
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: ListTile(
-                      leading: Icon(Icons.help_center),
-                      title: Text('Lien he'),
+                      title: Text('Liên hệ'),
                     ),
                   ),
                   SizedBox(height: 20),
@@ -108,7 +108,7 @@ class _OtherMenuScreenState extends State<OtherMenuScreen> {
                       ),
                       child: ListTile(
                         leading: Icon(Icons.login_outlined),
-                        title: Text('LOGOUT'),
+                        title: Text('Đăng xuất'),
                       ),
                     ),
                   ),
