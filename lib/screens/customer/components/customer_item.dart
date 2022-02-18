@@ -46,7 +46,7 @@ class CustomerCard extends StatelessWidget {
             subtitle: Row(
               children: [
                 Text(
-                  "$floorName",
+                  floorName ?? '',
                   style: AppTextStyles.defaulLato.copyWith(
                     fontWeight: FontWeight.w700,
                     fontSize: AppTextStyles.fontSize_14,
@@ -54,7 +54,7 @@ class CustomerCard extends StatelessWidget {
                 ),
                 SizedBox(width: 3),
                 Text(
-                  ' $roomNumber',
+                   roomNumber ?? '',
                   style: AppTextStyles.defaulLato.copyWith(
                     fontWeight: FontWeight.w700,
                     fontSize: AppTextStyles.fontSize_14,
@@ -63,7 +63,7 @@ class CustomerCard extends StatelessWidget {
               ],
             ),
             trailing: Text(
-              '$phoneNumber',
+              phoneNumber ?? '',
               style: AppTextStyles.defaulLato.copyWith(
                 fontWeight: FontWeight.bold,
                 fontSize: AppTextStyles.fontSize_14,

@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 
-import 'package:owner_app/components/diaglogbox.dart';
 import 'package:owner_app/components/footer_button.dart';
 import 'package:owner_app/components/loading_widget.dart';
 import 'package:owner_app/constants/app_colors.dart';
 
-import 'package:owner_app/screens/authentication/register_screen.dart';
-import 'package:owner_app/utils/diaglog_util.dart';
 import 'package:owner_app/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'authservice.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 const LOGIN = 'LOGIN';
 const REGISTER = 'REGISTER';
@@ -36,8 +32,8 @@ class _LogInState extends State<LogIn> {
   void initState() {
     super.initState();
     // TODO(): auto fill login
-    // _emailTextController.text = 'ad@gmail.com';
-    // _passwordTextController.text = '12345678';
+    _emailTextController.text = 'ad@gmail.com';
+    _passwordTextController.text = '12345678';
   }
 
   @override

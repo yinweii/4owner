@@ -33,7 +33,7 @@ class AppTextStyles {
   //   fontWeight: FontWeight.w400,
   // );
   static TextStyle defaulLato = TextStyle(
-    fontSize: fontSize_16,
+    fontSize: fontSize_16, 
     fontWeight: FontWeight.w400,
   );
   // static TextStyle defaultFont = GoogleFonts.roboto(
@@ -49,7 +49,7 @@ class AppTextStyles {
   //   fontWeight: FontWeight.bold,
   //   fontSize: fontSize_16,
   // );
-  static TextStyle defaultBold = TextStyle(
+  static TextStyle defaultBold = TextStyle( 
     fontWeight: FontWeight.bold,
     fontSize: fontSize_16,
   );

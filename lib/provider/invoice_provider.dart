@@ -1,11 +1,13 @@
+import 'dart:core';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:intl/intl.dart';
 import 'package:owner_app/api_service/api_service.dart';
 import 'package:owner_app/constants/constants.dart';
 import 'package:owner_app/constants/loading_service.dart';
 import 'package:owner_app/model/invoice_model.dart';
-import 'package:owner_app/model/more_service_model.dart';
 import 'package:owner_app/utils/logger.dart';
 
 class Invoice with ChangeNotifier, Helper {
@@ -170,12 +172,6 @@ class Invoice with ChangeNotifier, Helper {
           colect: Constants.invoiceDb,
           dataID: id ?? '',
           data: {'isPayment': true});
-      // _fireStore
-      //     .collection(Constants.userDb)
-      //     .doc(userUID)
-      //     .collection(Constants.invoiceDb)
-      //     .doc(id)
-      //     .update({'isPayment': true});
     } catch (e) {
       print(e.toString());
     }
@@ -184,4 +180,44 @@ class Invoice with ChangeNotifier, Helper {
   //find invoice by id
   InvoiceModel findInvoiceById(String id) =>
       _invoiceList.firstWhere((element) => element.id == id);
+
+  double electTotal(String date) {
+    double total = 0;
+    for (var i = 0; i < _invoiceList.length; i++) {
+      if (_invoiceList[i].isPayment!) {
+        total += invoiceList[i].priceEclect ?? 0;
+      }
+    }
+    return total;
+  }
+
+  double waterTotal(String date) {
+    double _waterTotal = 0;
+    for (var i = 0; i < _invoiceList.length; i++) {
+      if (_invoiceList[i].isPayment!) {
+        _waterTotal += invoiceList[i].waterCost ?? 0;
+      }
+    }
+    return _waterTotal;
+  }
+
+  double roomTotal(String date) {
+    double total = 0;
+    for (var i = 0; i < _invoiceList.length; i++) {
+      if (_invoiceList[i].isPayment!) {
+        total += invoiceList[i].roomCost ?? 0;
+      }
+    }
+    return total;
+  }
+
+  double moreService(String date) {
+    double total = 0;
+    for (var i = 0; i < _invoiceList.length; i++) {
+      if (_invoiceList[i].isPayment!) {
+        total += invoiceList[i].priceMoreService ?? 0;
+      }
+    }
+    return total;
+  }
 }

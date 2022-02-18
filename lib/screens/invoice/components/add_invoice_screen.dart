@@ -7,6 +7,7 @@ import 'package:owner_app/components/custom_textfield.dart';
 import 'package:owner_app/components/footer_button.dart';
 import 'package:owner_app/components/loading_widget.dart';
 import 'package:owner_app/constants/app_colors.dart';
+import 'package:owner_app/constants/app_text.dart';
 import 'package:owner_app/model/customer_model.dart';
 import 'package:owner_app/model/invoice_model.dart';
 import 'package:owner_app/model/more_service_model.dart';
@@ -206,9 +207,10 @@ class _AddInvoiceState extends State<AddInvoice> {
         moreService: moreService,
         priceMoreService: nn,
         total: totalRoonget, //totalRoon(),
-        punishPrice: double.parse(_tienPhat.text),
+        punishPrice:
+            _tienPhat.text.isNotEmpty ? double.parse(_tienPhat.text) : 0,
         totalAmount: allPayget, //allPay(),
-        discount: double.parse(_giamGia.text),
+        discount: _giamGia.text.isNotEmpty ? double.parse(_giamGia.text) : 0,
         isPayment: false,
       );
       context.read<Invoice>().addInvoice(newInvoice);
@@ -252,11 +254,9 @@ class _AddInvoiceState extends State<AddInvoice> {
                               onChanged: (String? newValue) {
                                 setState(() {
                                   selectedValue = newValue!;
-                                  print('CUSTOMMER ID: ${selectedValue}');
                                   customerUser = context
                                       .read<Customer>()
                                       .getCustomerByID(selectedValue!);
-                                  print('CUSTOMER NAME: ${customerUser?.name}');
                                   roomModel = context
                                       .read<RoomProvider>()
                                       .findRoomById(customerUser?.idroom ?? '');
@@ -316,22 +316,24 @@ class _AddInvoiceState extends State<AddInvoice> {
                       ),
                       SizedBox(height: 20),
                       _buildHeader('Tiền phòng'),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 8),
-                        child: Column(
-                          children: [
-                            TextFieldCustom(
-                              controller: _priceController
-                                ..text = roomModel?.price.toString() ?? '',
-                              lable: 'Tiền phòng',
-                              requied: true,
-                              type: TextInputType.number,
-                            ),
-                            SizedBox(height: 6),
-                          ],
+                      SizedBox(height: 20),
+                      Container(
+                        height: 48,
+                        width: double.infinity,
+                        margin: EdgeInsets.symmetric(horizontal: 6),
+                        decoration: BoxDecoration(
+                          color: AppColors.white,
+                          borderRadius: BorderRadius.circular(15),
                         ),
+                        child: Center(
+                            child: Text(
+                          Utils.convertPrice(roomModel?.price),
+                          style: AppTextStyles.defaultBold.copyWith(
+                            fontSize: AppTextStyles.fontSize_24,
+                          ),
+                        )),
                       ),
+                      SizedBox(height: 20),
                       _buildHeader('Dịch vụ'),
                       Padding(
                         padding: const EdgeInsets.symmetric(
