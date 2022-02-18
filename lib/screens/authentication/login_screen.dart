@@ -56,7 +56,12 @@ class _LogInState extends State<LogIn> {
         Utils.showDialog(
           context: context,
           title: 'Lỗi',
-          message: context.read<AuthService>().errorMessage.toString(),
+          message: context
+              .read<AuthService>()
+              .errorMessage
+              ?.split(']')
+              .last
+              .toString(),
         );
       }
     } else {
